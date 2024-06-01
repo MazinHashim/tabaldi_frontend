@@ -1,24 +1,51 @@
-import logo from './logo.svg';
+import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import Unauthorized from './pages/Unauthorized';
+import PhoneVerification from './pages/PhoneVerification';
+import Login from './pages/Login';
 import './App.css';
+import { AuthProvider } from './providers/AuthProvider';
+import RequiredAuth from './layouts/RequiredAuth';
+import AdminHome from './pages/admin/AdminHome';
+import AddOrEditVendorProfile from './pages/admin/AddOrEditVendorProfile';
+import VendorsList from './pages/admin/VendorsList';
+import OrdersList from './pages/vendor/CustomerOrdersList';
+import ProductsList from './pages/vendor/ProductsList';
+import VendorHome from './pages/vendor/VendorHome';
+import ProductDetails from './pages/vendor/ProductDetails';
+import OrderDetails from './pages/vendor/OrderDetails';
+import AddOrEditProduct from './pages/vendor/AddOrEditProduct';
+import CategoriesList from './pages/vendor/CategoriesList';
 
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route>
+      <Route path="/login" element={<Login />} />
+      <Route path="/verify" element={<PhoneVerification />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/" element={<RequiredAuth routeRole={"SUPERADMIN"}/>}>
+        <Route index element={<AdminHome />}/>
+        <Route path='admin' element={<AdminHome />}/>
+        <Route path='vendors' element={<VendorsList />} />
+        <Route path='vendor-info' element={<AddOrEditVendorProfile />} />
+      </Route>
+
+      <Route path="/" element={<RequiredAuth routeRole={"VENDOR"} />}>
+        <Route path='vendor' element={<VendorHome />}/>
+        <Route path='products' element={<ProductsList/>} />
+        <Route path='product-details' element={<ProductDetails/>} />
+        <Route path='product-info' element={<AddOrEditProduct />}/>
+        <Route path='categories' element={<CategoriesList/>}/>
+        <Route path='orders' element={<OrdersList/>}/>
+        <Route path='order-details' element={<OrderDetails/>}/>
+        <Route path='invoices' element={<VendorHome />}/>
+      </Route>
+    </Route>
+  ));
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <RouterProvider router={router}/>
+    </AuthProvider>
   );
 }
 
