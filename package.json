@@ -23,6 +23,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build:qa": "env-cmd -f .env.qa npm run-script build",
+    "build:prod": "env-cmd -f .env.prod npm run-script build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -45,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "tailwindcss": "^3.4.3"
   }
 }
