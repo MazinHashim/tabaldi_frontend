@@ -6,15 +6,15 @@ import orderProfile from '../../img/vendor_profile.png'
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import useFetchFileData from '../../apis/useFetchFileData';
-import { useAuth, useOrdersData } from '../../hooks/appHooks';
+import { useOrdersData } from '../../hooks/appHooks';
 import { allStatuses, statusBGColor, statusTextColor } from '../../utils/OrderStatusUtils';
-import axios from '../../apis/axios';
+import useAxiosPrivate from '../../apis/useAxiosPrivate';
 const CHANGE_STATUS_URL="/orders/change/status"
 const OrderDetails = () => {
     const{t, i18n} = useTranslation();
     // const tRecord = t("orderRecord")
     const statusRef = useRef(null)
-    const {auth} = useAuth()
+    const axiosPrivate = useAxiosPrivate();
     const [isLoading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
@@ -44,9 +44,8 @@ const OrderDetails = () => {
             try{
                 const params = `/${selectedOrder[0].orderId}?status=${statusRef.current.value}`;
                 setLoading(true)
-                const orderChangedResponse = await axios.get(CHANGE_STATUS_URL+params,
-                    {headers: { 'Accept-Language': i18n.language,
-                        'Content-Type': 'application/json', "Authorization": `Bearer ${auth.token}`}}
+                const orderChangedResponse = await axiosPrivate.get(CHANGE_STATUS_URL+params,
+                    {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
                 );
                 setLoading(false)
                 const otherOrders=orders.filter(ord=>ord.orderId!==selectedOrder[0].orderId);
@@ -165,7 +164,7 @@ const OrderDetails = () => {
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
                     <td className="capitalize text-start">grand total: </td>
-                    <td className='p-2 text-end'>{selectedOrder[0].total+15} AED</td>
+                    <td className='p-2 text-end'>{selectedOrder[0].total} AED</td>
                 </tr>
             </tbody>
             </table>

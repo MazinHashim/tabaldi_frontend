@@ -69,7 +69,7 @@ const AdminHome = () => {
           </div>}
         </div>
       </div>
-      <RecentOrdersTable state={state} title={"Recent Orders"}/>
+      <RecentOrdersTable state={state} orders={state.data?.details?.orders} title={"Recent Orders"}/>
       <FrequentCustomersTable state={state} title={"Most Frequently Customers"}/>
       <FrequentVendorsTable state={state} title={"Most Frequently Vendors"}/>
     </div>

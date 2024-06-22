@@ -2,7 +2,7 @@ import React from 'react'
 import { statusBGColor, statusTextColor } from '../../utils/OrderStatusUtils';
 import AppLoading from '../../utils/AppLoading';
 
-const RecentOrdersTable = ({state, title}) => {
+const RecentOrdersTable = ({state, orders, title}) => {
   return (
     <div className="flex flex-col shadow-4 p-2 rounded-2xl mt-14">
         <div className="flex justify-between my-3">
@@ -28,8 +28,10 @@ const RecentOrdersTable = ({state, title}) => {
                     <AppLoading/>
                     </td></tr>
                 : !state.data?.details
-                ? <tr><td colSpan={7} className='p-10'>{state.data.message}</td></tr>
-                : state.data?.details.orders.map((order)=>{
+                ? <tr><td colSpan={7} className='p-10'>{state.data?.message}</td></tr>
+                : orders.length===0
+                ? <tr><td colSpan={7} className='p-10'>No {title}</td></tr>
+                : orders.map((order)=>{
                   return <tr key={order.orderId}>
                       <td className="whitespace-nowrap p-4 font-medium">#{order.orderNumber}</td>
                       <td className="whitespace-nowrap p-4 text-start">{order.cartItems[0].product.name}</td>

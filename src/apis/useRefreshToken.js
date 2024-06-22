@@ -8,13 +8,12 @@ const useRefreshToken = () => {
 
     const refresh = async () => {
     console.log("CALLING REFRESH TOKEN...");
-        const response = await axios.get(`${REFRESH_URL}/${auth.refreshToken}`);
+        const response = await axios.get(`${REFRESH_URL}/${auth.refreshToken}`, {headers: {"Access-Control-Allow-Origin":"*"}});
         setAuth(prev => {
             console.log(JSON.stringify(prev));
-            console.log(response.data.token);
-            return {...prev, token: response.data.token};
+            return {...prev, token: response.data.token, refreshToken: response.data.refreshToken};
         });
-        return response.data.token
+        return {token: response.data.token, refreshToken: response.data.refreshToken}
     }
   return refresh;
 }

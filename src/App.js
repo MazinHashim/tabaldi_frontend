@@ -15,6 +15,7 @@ import ProductDetails from './pages/vendor/ProductDetails';
 import OrderDetails from './pages/vendor/OrderDetails';
 import AddOrEditProduct from './pages/vendor/AddOrEditProduct';
 import CategoriesList from './pages/vendor/CategoriesList';
+import InvoicesList from './pages/vendor/InvoicesList';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,7 +38,7 @@ const router = createBrowserRouter(
         <Route path='categories' element={<CategoriesList/>}/>
         <Route path='orders' element={<OrdersList/>}/>
         <Route path='order-details' element={<OrderDetails/>}/>
-        <Route path='invoices' element={<VendorHome />}/>
+        <Route path='invoices' element={<InvoicesList />}/>
       </Route>
     </Route>
   ));

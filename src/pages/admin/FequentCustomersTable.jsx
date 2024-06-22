@@ -28,7 +28,7 @@ const FrequentCustomersTable = ({state, title}) => {
                     <AppLoading/>
                     </td></tr>
                 : !state.data?.details
-                ? <tr><td colSpan={7} className='p-10'>{state.data.message}</td></tr>
+                ? <tr><td colSpan={7} className='p-10'>{state.data?.message}</td></tr>
                 : state.data?.details.frequentCustomers.map((frequentCustomer)=>{
                   return <tr key={frequentCustomer.customer.customerId}>
                       <td className="whitespace-nowrap p-4 font-medium">{`${frequentCustomer.customer.firstName} ${frequentCustomer.customer.lastName}`}</td>

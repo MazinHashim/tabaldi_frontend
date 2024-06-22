@@ -11,8 +11,8 @@ const FormInput = (props) => {
     <div className={props.containerstyle}>
         <label htmlFor={name} className="text-sm">{label}</label>
         {!textArea
-        ? <input {...inputProps} name={name} id={name} onChange={onChange} onBlur={handleBlur} blured={blured.toString()} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" />
-        : <textarea {...inputProps} name={name} id={name} onChange={onChange} onBlur={handleBlur} blured={blured.toString()}  className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"></textarea>}
+        ? <input {...inputProps} name={name} id={name} onChange={onChange?(e)=>onChange(e):null} onBlur={handleBlur} blured={blured.toString()} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" />
+        : <textarea {...inputProps} name={name} id={name} onChange={(e)=>onChange?onChange(e):null} onBlur={handleBlur} blured={blured.toString()}  className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"></textarea>}
         <p className='text-xs text-red-500 form-error-msg'>{errorMessage}</p>
     </div>
   )

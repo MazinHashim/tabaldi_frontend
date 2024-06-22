@@ -1,16 +1,17 @@
 import React, { useRef } from 'react'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import FormInput from '../../utils/FormInput';
 import * as validator from '../../utils/validators/CategoryValidator';
 import { useAuth } from '../../hooks/appHooks';
 import { useTranslation } from 'react-i18next';
-import axios from '../../apis/axios';
+import useAxiosPrivate from '../../apis/useAxiosPrivate';
 const ADD_CATEGORY_INFO_URL = "/categories/save";
 
 const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
   const { auth } = useAuth();
   const{t, i18n} = useTranslation();
+  const axiosPrivate = useAxiosPrivate()
   const publishRef = useRef(null);
   const tCategoryInfo = t("categoryFormInfo")
   const categoryInputs = validator.translateInputText(tCategoryInfo)
@@ -28,8 +29,8 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
     var isValidForm = validator.validateCategoryBeforeSubmit(formData, isEdit);
     if(isValidForm){
       try {
-          const infoResponse = await axios.post(ADD_CATEGORY_INFO_URL, formData,
-              {headers: {'Accept-Language': i18n.language, "Authorization": `Bearer ${auth.token}`}}
+          const infoResponse = await axiosPrivate.post(ADD_CATEGORY_INFO_URL, formData,
+              {headers: {'Accept-Language': i18n.language}}
           );
           setChangeData(infoResponse?.data.category, isEdit)
           if(!isEdit){ 

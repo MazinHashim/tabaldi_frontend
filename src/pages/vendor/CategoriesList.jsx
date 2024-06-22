@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { GrDeploy } from "react-icons/gr";
 import { FaPen, FaTrash } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
-import axios from '../../apis/axios';
 import { useTranslation } from 'react-i18next';
 import AppLoading from '../../utils/AppLoading';
 import EditModal from '../modals/EditModal';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import AddOrEditCategory from './AddOrEditCategory';
+import useAxiosPrivate from '../../apis/useAxiosPrivate';
 const CATEGORY_LIST_URL = "/vendors/{id}/categories";
 const TOGGLE_PUBLISH_URL = "/categories/toggle/publish"
 const CATEGORY_DELETE_URL = "/categories/delete"
@@ -18,6 +18,7 @@ const CategoriesList = () => {
 
     const {auth} = useAuth()
     const{t, i18n} = useTranslation();
+    const axiosPrivate = useAxiosPrivate()
     const [editModal, setShowEditModal] = useState({category: null, status: false});
     const [deleteModal, setShowDeleteModal] = useState({categoryId: null, status: false});
     const [isLoading, setLoading] = useState(false);
@@ -36,9 +37,8 @@ const CategoriesList = () => {
         try{
             setLoading(true)
             const params = `/${categoryId}`;
-            const statusChangedResponse = await axios.get(TOGGLE_PUBLISH_URL+params,
-                {headers: { 'Accept-Language': i18n.language,
-                    'Content-Type': 'application/json', "Authorization": `Bearer ${auth.token}`}}
+            const statusChangedResponse = await axiosPrivate.get(TOGGLE_PUBLISH_URL+params,
+                {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
             );
             setLoading(false)
             const otherCategories=categoryList.filter(cate=>cate.category.categoryId!==categoryId);
@@ -57,9 +57,8 @@ const CategoriesList = () => {
         console.log("categoryId"+categoryId)
         try{
             setLoading(true)
-            const categoryDeletedResponse = await axios.delete(CATEGORY_DELETE_URL+`/${categoryId}`,
-                {headers: { 'Accept-Language': i18n.language,
-                    'Content-Type': 'application/json', "Authorization": `Bearer ${auth.token}`}}
+            const categoryDeletedResponse = await axiosPrivate.delete(CATEGORY_DELETE_URL+`/${categoryId}`,
+                {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
             );
             setLoading(false)
             const otherCategories=categoryList.filter(cate=>cate.category.categoryId!==categoryId)

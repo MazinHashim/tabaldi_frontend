@@ -52,8 +52,7 @@ const useAxiosFetchApi = (initialUrl, initialData, authToken) => {
       dispatch({ type: 'FETCH_INIT' });
       const headers = {
         'Accept-Language': i18n.language,
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`,
+        "Content-Type": "application/json"
       };
       try {
         const result = await axiosPrivate.get(url, { headers });

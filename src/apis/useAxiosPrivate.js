@@ -13,6 +13,9 @@ const useAxiosPrivate = () => {
                 if(!config.headers['Authorization']){
                     config.headers['Authorization'] = `Bearer ${auth.token}`;
                 }
+                if(!config.headers['Access-Control-Allow-Origin']){
+                    config.headers['Access-Control-Allow-Origin'] = `*`;
+                }
                 return config;
             }, (error) => Promise.reject(error)
         );
@@ -30,6 +33,8 @@ const useAxiosPrivate = () => {
                     console.log(`BREAER TOKEN RESETING ${error?.response?.status}`);  
                     prevRequest.sent = true;
                     const newAuth = await refresh();
+                    localStorage.setItem("refresh_token", newAuth.refreshToken)
+                    localStorage.setItem("session_token", newAuth.token)
                     prevRequest.headers["Authorization"] = `Bearer ${newAuth.token}`;
                     return axiosPrivate(prevRequest);
                 }

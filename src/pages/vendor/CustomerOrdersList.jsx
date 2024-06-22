@@ -66,7 +66,7 @@ const OrdersList = () => {
                                 <td className="whitespace-nowrap p-4 font-medium">{order.orderNumber}</td>
                                 <td className="whitespace-nowrap p-4">{`${order.customer.firstName} ${order.customer.lastName}`}</td>
                                 <td className="whitespace-nowrap p-4">{order.orderDate}</td>
-                                <td className="whitespace-nowrap p-4">Paypal</td>
+                                <td className="whitespace-nowrap p-4">Cash on Delivery</td>
                                 <td className="whitespace-nowrap p-4">
                                     <span className={"font-bold py-1 px-2 "
                                     + statusTextColor(order.status) + " "

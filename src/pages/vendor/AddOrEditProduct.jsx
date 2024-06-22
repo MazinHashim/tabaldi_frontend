@@ -1,17 +1,18 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import FormInput from '../../utils/FormInput';
 import * as validator from '../../utils/validators/ProductValidator ';
-import axios from '../../apis/axios';
 import { useAuth } from '../../hooks/appHooks';
 import { useTranslation } from 'react-i18next';
 import useAxiosFetchApi from '../../hooks/useFetch';
+import useAxiosPrivate from '../../apis/useAxiosPrivate';
 const FETCH_CATEGORY_URL = "/vendors/{id}/categories";
 const ADD_PRODUCT_INFO_URL = "/products/save";
 
 const AddOrEditProduct = ({currentProduct, productImages, isEdit=false}) => {
   const { auth } = useAuth();
+  const axiosPrivate = useAxiosPrivate()
   const{t, i18n} = useTranslation();
   const tProductInfo = t("productFormInfo")
   const productInputs = validator.translateInputText(tProductInfo)
@@ -31,8 +32,8 @@ const AddOrEditProduct = ({currentProduct, productImages, isEdit=false}) => {
         var productId = (isEdit?currentProduct.productId:null);
         const fd = new FormData();
         validator.fillProductFormData(fd, formData, images, productId, vendorId)
-          const infoResponse = await axios.post(ADD_PRODUCT_INFO_URL, fd,
-              {headers: {'Accept-Language': i18n.language, "Authorization": `Bearer ${auth.token}`}}
+          const infoResponse = await axiosPrivate.post(ADD_PRODUCT_INFO_URL, fd,
+              {headers: {'Accept-Language': i18n.language}}
           );
           if(!isEdit){ 
             e.target.querySelectorAll('input').forEach(input => {
@@ -91,9 +92,9 @@ const AddOrEditProduct = ({currentProduct, productImages, isEdit=false}) => {
               </div>
               <FormInput 
                 key={productInputs[5].id}
-                {...{...productInputs[5], 
-                  onChange: (e)=>setImages(e.target.files)
-                  , containerstyle: "md:w-[30%] my-4", required: !isEdit && productInputs[5].name==="images"}}
+                onChange={(e)=>{setImages(e.target.files); console.log(JSON.stringify(images))}}
+                {...{...productInputs[5],
+                  containerstyle: "md:w-[30%] my-4", required: !isEdit && productInputs[5].name==="images"}}
                 />
           </div>
           <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">

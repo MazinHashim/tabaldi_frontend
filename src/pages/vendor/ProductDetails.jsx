@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FaPen, FaRegPlusSquare, FaTrash } from "react-icons/fa";
-import { useAuth, useProductsData } from '../../hooks/appHooks';
+import { useProductsData } from '../../hooks/appHooks';
 import productProfile from '../../img/vendor_profile.png'
 import { useTranslation } from 'react-i18next';
 import ConfirmationModal from '../modals/ConfirmationModal';
@@ -10,8 +10,8 @@ import EditProductModal from '../modals/EditModal';
 import { ToastContainer, toast } from 'react-toastify';
 import AddOrEditProduct from './AddOrEditProduct';
 import * as validator from '../../utils/validators/OptionValidator';
-import axios from '../../apis/axios';
 import FormInput from '../../utils/FormInput';
+import useAxiosPrivate from '../../apis/useAxiosPrivate';
 const PRODUCTS_ROUTE_URL = "/products";
 const PRODUCT_DELETE_URL = "/products/delete";
 const ADD_OPTION_INFO_URL = "/options/save"
@@ -25,12 +25,12 @@ const ProductDetails = () => {
     const [newGroup, setIsNewGroup] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const{t, i18n} = useTranslation();
+    const axiosPrivate = useAxiosPrivate()
     const tCard = t("vendorCard")
     const tOptionInfo = t("optionFormInfo")
     const optionInputs = validator.translateInputText(tOptionInfo)
     const productId=location.state.productId;
     const images=location.state.images;
-    const {auth} = useAuth();
     const navigate = useNavigate()
     const { products, setProducts } = useProductsData();
     useEffect(() => {
@@ -55,9 +55,8 @@ const ProductDetails = () => {
     async function handleOnProductDelete(productId) {
          try{
             setLoading(true)
-            const productDeletedResponse = await axios.delete(PRODUCT_DELETE_URL+`/${productId}`,
-                {headers: { 'Accept-Language': i18n.language,
-                    'Content-Type': 'application/json', "Authorization": `Bearer ${auth.token}`}}
+            const productDeletedResponse = await axiosPrivate.delete(PRODUCT_DELETE_URL+`/${productId}`,
+                {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
             );
             setLoading(false)
             const afterDelete=products.filter(remain=>remain.productId!==productId);
@@ -81,8 +80,8 @@ const ProductDetails = () => {
         if(isValidForm){
             try {
                 setLoading(true)
-                const infoResponse = await axios.post(ADD_OPTION_INFO_URL, formData,
-                    {headers: {'Accept-Language': i18n.language, "Authorization": `Bearer ${auth.token}`}}
+                const infoResponse = await axiosPrivate.post(ADD_OPTION_INFO_URL, formData,
+                    {headers: {'Accept-Language': i18n.language}}
                 );
                 setLoading(false)
                 e.target.querySelectorAll('input').forEach(input => {
@@ -111,9 +110,8 @@ const ProductDetails = () => {
         console.log("optionId"+optionId)
         try{
             setLoading(true)
-            const optionDeletedResponse = await axios.delete(OPTION_DELETE_URL+`/${optionId}`,
-                {headers: { 'Accept-Language': i18n.language,
-                    'Content-Type': 'application/json', "Authorization": `Bearer ${auth.token}`}}
+            const optionDeletedResponse = await axiosPrivate.delete(OPTION_DELETE_URL+`/${optionId}`,
+                {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
             );
             setLoading(false)
             const afterDelete=selectedProduct[0].options.filter(op=>op.optionId!==optionId)
@@ -152,7 +150,7 @@ const ProductDetails = () => {
                                 {selectedProduct[0].options
                                 .filter(op=>op.groupFlag===group)
                                 .map(option =>{
-                                    return <div><div className='px-1 flex justify-between items-center min-w-16 capitalize bg-secondary-color text-white text-center rounded-lg pl-1 m-2'>
+                                    return <div key={option.optionId}><div className='px-1 flex justify-between items-center min-w-16 capitalize bg-secondary-color text-white text-center rounded-lg pl-1 m-2'>
                                             <span>{option.name}</span>
                                             <IoMdCloseCircleOutline className='inline cursor-pointer' onClick={()=>handleDeleteOption(option.optionId)}/>
                                         </div></div>

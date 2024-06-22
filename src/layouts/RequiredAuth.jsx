@@ -4,12 +4,12 @@ import logo from '../img/tabaldi_logo.png';
 import {useAuth} from '../hooks/appHooks';
 import useAxiosFetchApi from '../hooks/useFetch';
 import AppLoading from '../utils/AppLoading';
-import axios from '../apis/axios';
 import { adminMenue, vendorMenue } from '../utils/NavigationMenue';
 import LanguageSelector from '../utils/LanguageSelector';
 import { useTranslation } from 'react-i18next';
 import { CategoryProvider, OrderProvider, ProductProvider } from '../providers/AuthProvider';
 import { IoLogOutOutline } from "react-icons/io5";
+import useAxiosPrivate from '../apis/useAxiosPrivate';
 
 const USER_PROFILE_URL = "/users/profile?vendorUserId=";
 const LOGOUT_URL = "/users/logout";
@@ -19,6 +19,7 @@ const RequiredAuth = ({routeRole}) => {
     const token = auth.token;
     const refreshToken = auth.refreshToken;
     const{t, i18n} = useTranslation();
+    const axiosPrivate = useAxiosPrivate()
     const [state] = useAxiosFetchApi(USER_PROFILE_URL, {}, token);
     const [vendorState, setVendorProfileUrl] = useAxiosFetchApi(null, {}, token);
     const location = useLocation();
@@ -36,18 +37,14 @@ const RequiredAuth = ({routeRole}) => {
     
     if(userProfile){
         userRole = userProfile.role;
-        console.log(userProfile);
+        // console.log(userProfile);
     }
     
     const handleUserLogout = async (e)=>{
         e.preventDefault();
-        const headers= {
-            'Content-Type': 'application/json',
-            'Accept-Language': i18n.language,
-            "Authorization": `Bearer ${token}`,
-        };
+        const headers= {'Content-Type': 'application/json', 'Accept-Language': i18n.language};
         try {
-            const response = await axios.get(LOGOUT_URL,{headers});
+            const response = await axiosPrivate.get(LOGOUT_URL,{headers});
             console.log(JSON.stringify(response?.data));
             setAuth(null);
             localStorage.removeItem("session_token")

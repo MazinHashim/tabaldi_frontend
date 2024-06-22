@@ -7,8 +7,8 @@ import * as validator from '../../utils/validators/VendorValidator';
 import * as otpValidator from '../../utils/validators/OtpValidator';
 import SendOTPModal from '../modals/SendOTPModal';
 import axios from '../../apis/axios';
-import { useAuth } from '../../hooks/appHooks';
 import { useTranslation } from 'react-i18next';
+import useAxiosPrivate from '../../apis/useAxiosPrivate';
 const SEND_OTP_URL = "/users/send/otp";
 const VENDOR_ADD_USER_URL = "/vendors/add/user";
 const VENDOR_ADD_INFO_URL = "/vendors/save";
@@ -16,8 +16,8 @@ const VENDOR_ADD_INFO_URL = "/vendors/save";
 const AddOrEditVendorProfile = ({currentVendor, vendorImages, isEdit=false, onEdit}) => {
   const [showModal, setShowModal] = useState(false);
   const [ vendor, setVendorData ] = useState();
-  const { auth } = useAuth();
   const{t, i18n} = useTranslation();
+  const axiosPrivate = useAxiosPrivate()
   const tVendorIfno = t("vendorFormIfno")
   const vendorInputs = validator.translateInputText(tVendorIfno)
   const handleSendOTP = async (e) =>{
@@ -57,17 +57,16 @@ const AddOrEditVendorProfile = ({currentVendor, vendorImages, isEdit=false, onEd
         var userId = (isEdit?currentVendor.user.userId:null);
         var vendorId = (isEdit?currentVendor.vendorId:null);
         if(!isEdit) {
-          const userResponse = await axios.post(VENDOR_ADD_USER_URL,
+          const userResponse = await axiosPrivate.post(VENDOR_ADD_USER_URL,
               JSON.stringify({phone: vendor.phone, email: vendor.email, agreeTermsConditions: true, keyRef: vendor.keyRef, otpCode: formData.otpCode}),
-              {headers: { 'Accept-Language': i18n.language,
-                'Content-Type': 'application/json', "Authorization": `Bearer ${auth.token}`}}
+              {headers: { 'Accept-Language': i18n.language,}}
           );
           userId = userResponse.data?.userId;
         }
         const fd = new FormData();
         validator.fillVendorFormData(fd, isEdit?formData:vendor, userId, vendorId)
-        const infoResponse = await axios.post(VENDOR_ADD_INFO_URL, fd,
-            {headers: {'Accept-Language': i18n.language, "Authorization": `Bearer ${auth.token}`}}
+        const infoResponse = await axiosPrivate.post(VENDOR_ADD_INFO_URL, fd,
+            {headers: {'Accept-Language': i18n.language}}
         );
         if(!isEdit){ 
           e.target.querySelectorAll('input').forEach(input => {

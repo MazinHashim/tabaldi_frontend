@@ -81,7 +81,7 @@ export const productInfoInputs = [
   ];
 
 export function validateProductBeforeSubmit(productData, productImages, isEdit) {
-  console.log("spaces cuases false images "+productPatterns.imagesRegx.test(productImages))
+  console.log("spaces cuases false images "+productImages[0].name)
   console.log("spaces cuases false description "+productPatterns.descriptionRegx.test(productData.description))
   
     return productPatterns.nameRegx.test(productData.name)&&
@@ -90,7 +90,7 @@ export function validateProductBeforeSubmit(productData, productImages, isEdit) 
     // productPatterns.descriptionRegx.test(productData.description)&&
     productPatterns.companyProfitRegx.test(productData.companyProfit)&&
     productData.categoryId!==null&&
-    (isEdit || productPatterns.imagesRegx.test(productImages[0].name));
+    (isEdit || productImages[0].name!==null);
 }
 export function fillProductFormData(fd, fromData, productImages, productId, vendorId){
   fd.append("productPayload", JSON.stringify({
