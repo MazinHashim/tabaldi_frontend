@@ -13,5 +13,6 @@ export const adminMenue =
 [
     { screenId: 13, arTitle: "الصفة الرئيسية", title: "Home", route: "admin" },
     { screenId: 14, arTitle: "قائمة البائعين", title: "Vendors", route: "vendors" },
-    { screenId: 15, arTitle: "إضافة بائع", title: "Add Vendor", route: "vendor-info" }
+    { screenId: 15, arTitle: "إضافة بائع", title: "Add Vendor", route: "vendor-info" },
+    { screenId: 16, arTitle: "الطلبات المعلقة", title: "Pending Orders", route: "orders/pending" },
 ];

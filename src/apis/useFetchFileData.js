@@ -11,7 +11,7 @@ const useFetchFileData = () => {
       JSON.stringify(body)
         const response = await axiosPrivate.post(`${FILES_DATA_URL}`, body,
       { 'Accept-Language': i18n.language, 'Content-Type': 'application/json' });
-        return response.data.filesData
+        return response.data?.filesData
     }
   return files;
 }

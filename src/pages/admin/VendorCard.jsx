@@ -8,6 +8,7 @@ import ConfirmationModal from '../modals/ConfirmationModal';
 import InformationModal from '../modals/InformationModal';
 import { ToastContainer } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 const VendorCard = ({vendor, index, onDelete, onEdit, profileImages, identityImages, licenseImages}) => {
     const [showEditModal, setShowEditModal] = useState(false);
@@ -21,11 +22,15 @@ const VendorCard = ({vendor, index, onDelete, onEdit, profileImages, identityIma
         <div className='flex justify-between'>
             {profileImages[index]?<img className="rounded-xl" width={100} src={profileImages[index]?.data?`data:image/png;base64, ${profileImages[index]?.data}`:vendorProfile} alt="Profile" />
                 :<img className="rounded-xl" width={100} src={vendorProfile} />}
-            <div>
-                <button className='bg-primary-200 mx-1' onClick={()=>setShowIdentityModal(true)}><HiOutlinePaperClip /></button>
-                <button className='bg-green-200 mx-1' onClick={()=>{
-                    setShowEditModal(true)}}><FaPen /></button>
-                <button className='bg-red-200 mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
+            <div className="flex flex-col items-stretch">
+                <div className='mb-1'>
+                    <button className='bg-primary-200 mx-1' onClick={()=>setShowIdentityModal(true)}><HiOutlinePaperClip /></button>
+                    <button className='bg-green-200 mx-1' onClick={()=>{
+                        setShowEditModal(true)}}><FaPen /></button>
+                    <button className='bg-red-200 mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
+                </div>
+                <Link className='bg-green-200 text-sm text-center mx-1' to={"products"} state={{vendor}}>
+                View Products</Link>
             </div>
         </div>
         <div className="flex-col space-y-2 justify-self-end">

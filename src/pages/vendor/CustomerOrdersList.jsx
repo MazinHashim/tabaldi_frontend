@@ -5,13 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import { statusBGColor, statusTextColor } from '../../utils/OrderStatusUtils';
 import AppLoading from '../../utils/AppLoading';
 const ORDER_LIST_URL = "/vendors/{id}/orders";
+const PENDING_ORDER_LIST_URL = "/orders/pending";
 
-const OrdersList = () => {
+const OrdersList = ({routeRole}) => {
 
+    var ordersUrl = PENDING_ORDER_LIST_URL;
     const { auth } = useAuth();
-    const vendorOrdersUrl = ORDER_LIST_URL.replace("{id}", `${auth.vendorId}`);
+    if(routeRole!=="SUPERADMIN"){
+        ordersUrl = ORDER_LIST_URL.replace("{id}", `${auth.vendorId}`);
+    }
     const sessionToken = auth.token;
-    const [state] = useAxiosFetchApi(vendorOrdersUrl, {}, sessionToken);
+    const [state] = useAxiosFetchApi(ordersUrl, {}, sessionToken);
     const orderList = state.data?.list;
     const { setOrders } = useOrdersData();
     const navigate = useNavigate()
@@ -21,7 +25,7 @@ const OrdersList = () => {
     }, [state.data, setOrders])
 
     function goToOrderDetails(orderId) {
-        navigate('/order-details', {state: {orderId}});
+        navigate((routeRole!=="SUPERADMIN"?"":"/orders")+'/order-details', {state: {orderId}});
     }
 
   return (

@@ -9,7 +9,10 @@ import useFetchFileData from '../../apis/useFetchFileData';
 import { useOrdersData } from '../../hooks/appHooks';
 import { allStatuses, statusBGColor, statusTextColor } from '../../utils/OrderStatusUtils';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
+import useAxiosFetchApi from '../../hooks/useFetch';
+import AppLoading from '../../utils/AppLoading';
 const CHANGE_STATUS_URL="/orders/change/status"
+const INVOICE_URL = "/invoices/order"
 const OrderDetails = () => {
     const{t, i18n} = useTranslation();
     // const tRecord = t("orderRecord")
@@ -23,6 +26,8 @@ const OrderDetails = () => {
     const [productImages, setProductImages] = useState(null);
     const { orders, setOrders } = useOrdersData();
     const selectedOrder = orders.filter((ord)=> ord.orderId===orderId);
+    const [state] = useAxiosFetchApi(INVOICE_URL.concat(`/${orderId}`), {}, null);
+    const invoice = state.data?.invoice;
     useEffect(()=>{
         const fetchData = async () => {
             if(!productImages) {
@@ -57,6 +62,8 @@ const OrderDetails = () => {
             }
         }
     }
+    const bgColor=invoice?.status==="PAID"?"bg-green-200":"bg-red-200";
+    const txtColor=invoice?.status==="PAID"?"text-green-600":"text-red-600";
   return (
     <>
     <ToastContainer />
@@ -65,7 +72,10 @@ const OrderDetails = () => {
             <h2>Order Details</h2>
             <button className="bg-secondary-color text-white" onClick={()=>navigate(-1)}>Back to all Orders</button>
         </div>
-        <div className='border border-gray-300 rounded-xl shadow-3 mb-10 py-4'>
+        {state.isLoading?<AppLoading/>
+        : !invoice
+        ? <p>{state.data.message??state.error.message}</p>
+        : <div className='border border-gray-300 rounded-xl shadow-3 mb-10 py-4'>
             <div className="m-2 px-4">
                 <div className="flex justify-between">
                     <div className='flex items-center'>
@@ -106,7 +116,9 @@ const OrderDetails = () => {
                         <p>Order No: {selectedOrder[0].orderNumber}</p>
                         <p>Order Date: {selectedOrder[0].orderDate}</p>
                         <p>Number of items: {selectedOrder[0].cartItems.length} {"items"}</p>
-                        <p>Order Total: {selectedOrder[0].total} AED</p>
+                        <p>Order Total: {selectedOrder[0].total} AED 
+                            <span className={`lowercase mx-2 text-sm px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
+                                {invoice.status}</span></p>
                     </div>
                 </div>
             </div>
@@ -126,13 +138,13 @@ const OrderDetails = () => {
                 return <><tr key={item.itemId} className='border-b border-gray-100'>
                     <td className="whitespace-nowrap">
                         {!img?"loading...":
-                        <img className="rounded-md w-12 h-12 m-1" 
+                        <img className="rounded-md w-15 h-16 m-2" 
                         src={img[0].data
                             ?`data:image/png;base64, ${img[0].data}`
                             :orderProfile}
                         alt={`${img[0].id}`} />}
                     </td>
-                    <td className="whitespace-nowrap font-medium text-start">{item.product.name}</td>
+                    <td className="whitespace-nowrap font-medium text-start ps-7">{item.product.name}</td>
                     <td className="whitespace-nowrap font-medium p-2">{item.quantity}</td>
                     <td className="whitespace-nowrap font-medium p-2">{item.price}</td>
                     <td className="whitespace-nowrap font-medium p-2 text-end">{item.quantity*item.price} AED</td>
@@ -153,18 +165,28 @@ const OrderDetails = () => {
                 })}
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
-                    <td className="border-b border-gray-300 capitalize text-start">subtotal: </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{selectedOrder[0].total} AED</td>
+                    <td className="border-b border-gray-300 capitalize text-start">subtotal </td>
+                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.subtotal} AED</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
-                    <td className="border-b border-gray-300 capitalize text-start">shipping cost: </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{"15"} AED</td>
+                    <td className="border-b border-gray-300 capitalize text-start">discount </td>
+                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.discount} AED</td>
+                </tr>
+                <tr className='font-bold'>
+                    <td colSpan={3}></td>
+                    <td className="border-b border-gray-300 capitalize text-start">shipping cost </td>
+                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.shippingCost} AED</td>
+                </tr>
+                <tr className='font-bold'>
+                    <td colSpan={3}></td>
+                    <td className="border-b border-gray-300 capitalize text-start">VAT </td>
+                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.taxes} AED</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
                     <td className="capitalize text-start">grand total: </td>
-                    <td className='p-2 text-end'>{selectedOrder[0].total} AED</td>
+                    <td className='p-2 text-end'>{invoice.summary.total} AED</td>
                 </tr>
             </tbody>
             </table>
@@ -179,7 +201,7 @@ const OrderDetails = () => {
                     <button className="bg-primary-color text-white">Save Notes</button>
                 </div>
             </div>
-        </div>
+        </div>}
     </div>
     </>
   )

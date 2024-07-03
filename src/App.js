@@ -27,7 +27,11 @@ const router = createBrowserRouter(
         <Route index element={<AdminHome />}/>
         <Route path='admin' element={<AdminHome />}/>
         <Route path='vendors' element={<VendorsList />} />
+        <Route path='vendors/products' element={<ProductsList routeRole={"SUPERADMIN"}/>} />
+        <Route path='vendors/products/product-details' element={<ProductDetails/>} />
         <Route path='vendor-info' element={<AddOrEditVendorProfile />} />
+        <Route path='orders/pending' element={<OrdersList routeRole={"SUPERADMIN"}/>}/>
+        <Route path='orders/order-details' element={<OrderDetails/>}/>
       </Route>
 
       <Route path="/" element={<RequiredAuth routeRole={"VENDOR"} />}>

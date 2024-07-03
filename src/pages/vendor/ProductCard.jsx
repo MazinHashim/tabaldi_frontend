@@ -3,7 +3,7 @@ import productProfile from '../../img/vendor_profile.png'
 import { useTranslation } from 'react-i18next';
 import useFetchFileData from '../../apis/useFetchFileData';
 import { useNavigate } from 'react-router-dom';
-const ProductCard = ({product, index}) => {
+const ProductCard = ({product, index, routeRole}) => {
     const{t,} = useTranslation();
     const navigate = useNavigate()
     const tCard = t("productCard")
@@ -11,7 +11,7 @@ const ProductCard = ({product, index}) => {
     const [productImages, setProductImages] = useState(null);
 
     function goToProductDetails(productId) {
-        navigate('/product-details', {state: { productId, images: productImages }});
+        navigate((routeRole!=="SUPERADMIN"?"/":"")+'product-details', {state: { productId, images: productImages }});
     }
 
     useEffect(()=>{
