@@ -12,6 +12,7 @@ import AddOrEditProduct from './AddOrEditProduct';
 import * as validator from '../../utils/validators/OptionValidator';
 import FormInput from '../../utils/FormInput';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
+import { baseURL } from '../../apis/axios';
 const PRODUCTS_ROUTE_URL = "/products";
 const PRODUCT_DELETE_URL = "/products/delete";
 const ADD_OPTION_INFO_URL = "/options/save"
@@ -30,7 +31,6 @@ const ProductDetails = () => {
     const tOptionInfo = t("optionFormInfo")
     const optionInputs = validator.translateInputText(tOptionInfo)
     const productId=location.state.productId;
-    const images=location.state.images;
     const navigate = useNavigate()
     const { products, setProducts } = useProductsData();
     useEffect(() => {
@@ -38,8 +38,8 @@ const ProductDetails = () => {
             navigate(PRODUCTS_ROUTE_URL, { replace: true })
         }
     }, [navigate, productId])
-    const selectedProduct = products.filter((prod)=> prod.productId===productId);
-    const groups = [...new Set(selectedProduct[0].options
+    const selectedProduct = products.find((prod)=> prod.productId===productId);
+    const groups = [...new Set(selectedProduct?.options
     .filter(op=>op.groupFlag!=null)
     .map(op=> op.groupFlag))];
 
@@ -87,10 +87,10 @@ const ProductDetails = () => {
                 e.target.querySelectorAll('input').forEach(input => {
                     input.value = '';
                 });
-                const optionWithNewOne = [...selectedProduct[0].options
+                const optionWithNewOne = [...selectedProduct?.options
                             .filter(op=>op.optionId!==infoResponse?.data.option.optionId)
                             , infoResponse?.data.option];
-                setProducts([{...selectedProduct[0], options: optionWithNewOne},
+                setProducts([{...selectedProduct, options: optionWithNewOne},
                     ...products.filter((prod)=>prod.productId!==productId),
                 ]);
                 console.log(JSON.stringify(infoResponse?.data.option));
@@ -114,8 +114,8 @@ const ProductDetails = () => {
                 {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
             );
             setLoading(false)
-            const afterDelete=selectedProduct[0].options.filter(op=>op.optionId!==optionId)
-            setProducts([{...selectedProduct[0] ,options: [...afterDelete]},
+            const afterDelete=selectedProduct?.options.filter(op=>op.optionId!==optionId)
+            setProducts([{...selectedProduct ,options: [...afterDelete]},
                     ...products.filter((prod)=>prod.productId!==productId)])
             toast.success(optionDeletedResponse?.data.message);
         } catch (error) {
@@ -125,29 +125,30 @@ const ProductDetails = () => {
     }
   return (
     <>
+    <ToastContainer />
         <div className='flex flex-col justify-center items-start space-y-8'>
             <div className='flex justify-between items-center'>
-                <h2>{selectedProduct[0].name}</h2>
+                <h2>{selectedProduct?.name}</h2>
                 <h4 className='uppercase primary-color border border-green-300 rounded-lg px-1 mx-3'>
-                    {selectedProduct[0].category.name}
+                    {selectedProduct?.category.name}
                 </h4>
                 <h4 className='uppercase primary-color border border-green-300 rounded-lg px-1 mx-3'>
-                    {`${tOptionInfo["companyProfit"]} ${selectedProduct[0].companyProfit} %`}
+                    {`${tOptionInfo["companyProfit"]} ${selectedProduct?.companyProfit} %`}
                 </h4>
                 <button className='bg-danger-200 mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
                 <button className='bg-primary-200 mx-1' onClick={()=>setShowEditModal(true)}><FaPen /></button>
             </div>
             <div className='flex justify-between items-start w-full'>
                 <div className='flex flex-col w-3/4 space-y-10'>
-                    <p className='text-gray-400'>{selectedProduct[0].description}.</p>
-                    <p className='text-6xl'>{selectedProduct[0].price.toFixed(2)}<span className='text-2xl'>{tCard["aedUnit"]}</span></p>
+                    <p className='text-gray-400'>{selectedProduct?.description}.</p>
+                    <p className='text-6xl'>{selectedProduct?.price.toFixed(2)}<span className='text-2xl'>{tCard["aedUnit"]}</span></p>
                     <div>  
                         <h4>{tOptionInfo["productChar"]}</h4>
                         {groups.map(group=>{
                         return <div className='options my-7 border-2 border-slate-200 border-dashed rounded-3xl p-4'>
                             <div className='flex flex-wrap items-center'>
                                 <p className='text-gray-500 capitalize w-full'>{group}</p>
-                                {selectedProduct[0].options
+                                {selectedProduct?.options
                                 .filter(op=>op.groupFlag===group)
                                 .map(option =>{
                                     return <div key={option.optionId}><div className='px-1 flex justify-between items-center min-w-16 capitalize bg-secondary-color text-white text-center rounded-lg pl-1 m-2'>
@@ -181,7 +182,7 @@ const ProductDetails = () => {
                         <h4 className='mb-1'>{tOptionInfo["productAddons"]}</h4>
                         <div className='flex flex-wrap items-start options border-2 border-slate-200 border-dashed rounded-3xl p-4'>
                             
-                            {selectedProduct[0].options
+                            {selectedProduct?.options
                             .filter(op=>op.groupFlag==null)
                             .map((option) =>{
                                 return <div className='flex items-center capitalize bg-secondary-color text-white rounded-lg m-2'>
@@ -208,30 +209,28 @@ const ProductDetails = () => {
                     </div>
                 </div>
                 <div className='product-details flex flex-wrap justify-end'>
-                    {!images ? "Loading..." :
-                    images.map((image)=>{
+                    {!selectedProduct?.images ? "Loading..." :
+                    selectedProduct.images.map((image)=>{
                     return <>
                         <img className="rounded-xl h-[10rem] w-5/12 m-1" 
-                    src={image.data
-                        ?`data:image/png;base64, ${image.data}`
+                    src={image
+                        ?`${baseURL}/files/get/file/${image}`
                         :productProfile}
-                    alt={`${selectedProduct[0].name}`} />
+                    alt={`${selectedProduct?.name}`} />
                     </>})}
                 </div>
             </div>
         </div>
         <EditProductModal showModal={showEditModal} setShowModal={setShowEditModal} target="Product">
-            <ToastContainer/>
-            <AddOrEditProduct key={selectedProduct[0].productId}
+            <AddOrEditProduct key={selectedProduct?.productId}
             isEdit={true}
-            currentProduct={selectedProduct[0]}
-            productImages={images} />
+            currentProduct={selectedProduct} />
         </EditProductModal>
         <ConfirmationModal
             title={"Confirm Product Delete"}
             btnColor={"bg-danger"}
             message={"Are you sure for deleting this product?"}
-            onAction={()=>{handleOnProductDelete(selectedProduct[0].productId); setShowDeleteModal(false)}}
+            onAction={()=>{handleOnProductDelete(selectedProduct?.productId); setShowDeleteModal(false)}}
             showModal={showDeleteModal}
             setShowModal={setShowDeleteModal}/>
     </>

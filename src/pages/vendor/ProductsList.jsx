@@ -38,7 +38,7 @@ const ProductsList = ({routeRole}) => {
             :!state.data?.list
             ?<div className='flex justify-center items-center h-[70vh] capitalize w-full'>{state.data?.message??state.error?.message}</div>
             :productList.map((product, index)=>{
-            return <ProductCard key={product.productId} routeRole={routeRole} product={product} index={index}/>})
+            return <ProductCard key={product.productId} routeRole={routeRole} product={product}/>})
             }
         </div>
     </>

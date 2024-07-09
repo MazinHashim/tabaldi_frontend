@@ -1,3 +1,5 @@
+ import *as Yup from 'yup'
+
  export const productPatterns = {
     nameRegx: /^[A-Za-z]{2,16}\s[A-Za-z]{2,16}\s[A-Za-z]{2,16}$/,
     descriptionRegx: /^[A-Za-z0-9\._%+\-]{0,100}$/,
@@ -92,17 +94,49 @@ export function validateProductBeforeSubmit(productData, productImages, isEdit) 
     productData.categoryId!==null&&
     (isEdit || productImages[0].name!==null);
 }
-export function fillProductFormData(fd, fromData, productImages, productId, vendorId){
+
+export const validationSchema =(productData, isEditing, requiredMessage)=> {return Yup.object({
+    name: Yup.string().required(requiredMessage),
+    companyProfit: Yup.number().typeError(productData.companyProfit.numbersOnly)
+    .min(1, productData.companyProfit.startFromOne)
+    .required(requiredMessage),
+    description: Yup.string().nullable(),
+    quantity: Yup.number().typeError(productData.quantity.numbersOnly)
+    .min(1, productData.quantity.startFromOne)
+    .required(requiredMessage),
+    price: Yup.number().typeError(productData.price.numbersOnly)
+    .min(1, productData.price.startFromOne)
+    .required(requiredMessage),
+    categoryId: Yup.number().required(requiredMessage),
+    images: Yup.mixed().when([], {
+    is: () => !isEditing,
+    then: ()=> Yup.mixed()
+      .test(
+        'fileSize',
+        'حجم الصورة غير مدعوم',
+        value => value && value.size <= 1024 * 1024 * 25 // 25 MB
+      )
+      .test(
+        'fileType',
+        `الملفات المدعومة png, jpg, jpeg, فقط`,
+        value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
+      ),
+      otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
+    }),
+})}
+
+export function fillProductFormData(fd, formData, productImages, productId, vendorId){
   fd.append("productPayload", JSON.stringify({
             productId: productId,
             vendorId: vendorId,
-            name: fromData.name,
-            price: fromData.price,
-            quantity: fromData.quantity,
-            companyProfit: fromData.companyProfit,
-            description: fromData.description===""?null:fromData.description,
-            categoryId: fromData.categoryId
+            name: formData.name,
+            price: formData.price,
+            quantity: formData.quantity,
+            companyProfit: formData.companyProfit,
+            description: formData.description===""?null:formData.description,
+            categoryId: formData.categoryId
           }))
+  if(productImages.length===0)fd.append('productImages', formData.images);
   for (let i = 0; i < productImages.length; i++) {
     fd.append('productImages', productImages[i]);
   }

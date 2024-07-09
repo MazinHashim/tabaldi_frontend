@@ -1,6 +1,7 @@
 import i18n from "i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 import {initReactI18next} from "react-i18next"
+import { number } from "yup";
 
 i18n.use(LanguageDetector).use(initReactI18next).init({
     debug: true,
@@ -9,6 +10,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
     resources: {
         en: {
             translation: {
+                requiredMessage: "Should not be empty",
                 login: {
                     title: "Login",
                     subtitle: "Login to your account",
@@ -28,38 +30,42 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     editVendorTitle: "Edit Vendor",
                     fullName: {
                         label: "Full Name*",
-                        errorMessage: "Must be 3 names and only 2 to 16 characters per name"
+                        most3Words: "Must be 3 names and only 2 to 16 characters per name",
+                        placeholder: "Eg: Ahmed mohammed Khalid",
                     },
                     phone: {
                         label: "Phone Number*",
-                        errorMessage: "Must be 10 digits only and start with 05"
+                        phoneFormat: "Must be 10 digits only and start with 05",
+                        placeholder: "Eg: 0512345678",
                     },
                     email: {
                         label: "Email*",
-                        errorMessage: "Must be a valid email address"
+                        emailFormat: "Must be a valid email address",
+                        placeholder: "Eg: example@email.com",
                     },
                     maxKilometerDelivery: {
                         label: "Max Kilometer Delivery",
-                        errorMessage: "Must be only digits",
+                        numbersOnly: "Should be only digits",
+                        placeholder: "Eg: 10",
                         title: "optional, this indicates you have delivery service"
                     },
                     minChargeLongDistance: {
                         label: "Min Charge For Long Distances",
-                        errorMessage: "Must be only digits",
+                        numbersOnly: "Should be only digits",
+                        placeholder: "Eg: 10",
                         title: "optional, this indicates you deliver for long distances"
                     },
                     vendorType: {
                         label: "Vendor Type*",
-                        errorMessage: "Must be 2-20 characters and digits only"
+                        lengthInvalid: "Must be 2-20 characters and digits only",
+                        placeholder: "Eg: grocery",
                     },
                     profileImage: { label: "Profile Image" },
                     licenseImage: {
                         label: "License Image*",
-                        errorMessage: "Image must be selected"
                     },
                     identityImage: {
                         label: "Identity Image*",
-                        errorMessage: "Image must be selected"
                     },
                     addBtn: "ADD",
                     editBtn: "EDIT"
@@ -76,31 +82,35 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     editProductTitle: "Edit Product",
                     name: {
                         label: "Name*",
-                        errorMessage: "Name should consist of at most 3 words"
+                        charMost: "Name should consist of at most 3 words",
+                        placeholder: "Eg: Labtop",
                     },
                     companyProfit: {
                         label: "Company Profit*",
-                        errorMessage: "Must be only digits"
+                        numbersOnly: "Should be only digits",
+                        startFromOne: "Should start from 1",
+                        placeholder: "Eg: 10",
                     },
                     quantity: {
                         label: "Quantity*",
-                        errorMessage: "Must be only digits"
+                        numbersOnly: "Should be only digits",
+                        placeholder: "Eg: 5",
                     },
                     price: {
                         label: "Price",
-                        errorMessage: "Must be only digits"
+                        numbersOnly: "Should be only digits",
+                        placeholder: "Eg: 10",
                     },
-                    category: {
+                    categoryId: {
                         label: "Select Category*",
-                        errorMessage: "Must select one category"
+                        
                     },
                     images: {
-                        label: "Product Images*",
-                        errorMessage: "Images are required"
+                        label: "Product Images*"
                     },
                     description: { 
                         label: "Description" ,
-                        errorMessage: "Images are required"
+                        placeholder: "Description"
                     },
                     addBtn: "ADD",
                     editBtn: "EDIT",
@@ -141,6 +151,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
         },
         ar: {
             translation: {
+                requiredMessage: "يجب أن لا يكون فارغاً",
                 login: {
                     title: "تسجيل الدخول",
                     subtitle: "قم بتسجيل الدخول على حسابك",
@@ -160,38 +171,44 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     editVendorTitle: "تعديل البائع",
                     fullName: {
                         label: "الإسم بالكامل*",
-                        errorMessage: "يجب أن يكون ثلاثي ويتراوح عدد الأحرف من 2 إلى 16 حرفًا فقط لكل اسم"
+                        most3Words: "يجب أن يكون ثلاثي ويتراوح عدد الأحرف من 2 إلى 16 حرفًا فقط لكل اسم",
+                        placeholder: "مثال: أحمد محمد حالد",
                     },
                     phone: {
                         label: "رقم الهاتف*",
-                        errorMessage: "يجب أن يتكون من 10 أرقام فقط ويبدأ بـ 05"
+                        phoneFormat: "يجب أن يتكون من 10 أرقام فقط ويبدأ بـ 05",
+                        placeholder: "Eg: 0512345678",
                     },
                     email: {
                         label: "البريد الإلكتروني*",
-                        errorMessage: "يجب أن تكون صيغة البريد إلكتروني صحيحة"
+                        eamilFormat: "يجب أن تكون صيغة البريد إلكتروني صحيحة",
+                        placeholder: "Eg: example@email.com",
                     },
                     maxKilometerDelivery: {
                         label: "أقصي مسافة توصيل (بالكيلومترات)",
-                        errorMessage: "يجب أن يكون أرقامًا فقط",
+                        numbersOnly: "يجب أن يكون أرقامًا فقط",
+                        placeholder: "Eg: 10",
+                        startFromOne: "يبدأ من 1 إختياري",
                         title: "اختياري فهذا يدل على أن لديك خدمة التوصيل"
                     },
                     minChargeLongDistance: {
                         label: "الحد الأدنى للشحن لمسافات طويلة",
-                        errorMessage: "يجب أن يكون أرقامًا فقط",
+                        numbersOnly: "يجب أن يكون أرقامًا فقط",
+                        startFromOne: "يبدأ من 1 إختياري",
+                        placeholder: "Eg: 10",
                         title: "اختياري، فهذا يشير إلى أنك تقوم بالتوصيل لمسافات طويلة"
                     },
                     vendorType: {
                         label: "نوع محل البيع*",
-                        errorMessage: "يجب أن يتكون من 2 إلى 20 حرفًا ورقمًا فقط"
+                        lengthInvalid: "يجب أن يتكون من 2 إلى 20 حرفًا ورقمًا فقط",
+                        placeholder: "Eg: grocery",
                     },
                     profileImage: { label: "صورة البروفايل" },
                     licenseImage: {
                         label: "صورة الرخصة*",
-                        errorMessage: "يجب إختيار الصورة"
                     },
                     identityImage: {
                         label: "صورة الهوية*",
-                        errorMessage: "يجب إختيار الصورة"
                     },
                     addBtn: "إضافة",
                     editBtn: "تعديل",
@@ -208,21 +225,28 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     editProductTitle: "تعديل المنتج",
                     name: {
                         label: "إسم المنتج*",
-                        errorMessage: "يجب أن لا يتجاوز 3 كلمات"
+                        charMost: "يجب أن لا يتجاوز 3 كلمات",
+                        placeholder: "مثال: اللابتوب",
                     },
                     companyProfit: {
                         label: "فائدة الشركة*",
-                        errorMessage: "يجب أن يكون أرقامًا فقط"
+                        numbersOnly: "يجب أن يكون أرقامًا فقط",
+                        startFromOne: "يبدأ من 1",
+                        placeholder: "مثال: 10",
                     },
                     quantity: {
                         label: "الكمية المتوفرة*",
-                        errorMessage: "يجب أن يكون أرقامًا فقط"
+                        numbersOnly: "يجب أن يكون أرقامًا فقط",
+                        startFromOne: "يبدأ من 1",
+                        placeholder: "مثال: 5",
                     },
                     price: {
                         label: "سعر المنتج",
-                        errorMessage: "يجب أن يكون أرقامًا فقط"
+                        numbersOnly: "يجب أن يكون أرقامًا فقط",
+                        startFromOne: "يبدأ من 1",
+                        placeholder: "مثال: 10",
                     },
-                    category: {
+                    categoryId: {
                         label: "إختيار نوع المنتج*",
                         errorMessage: "يجب إختيار النوع"
                     },
@@ -230,7 +254,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "صور المنتج*",
                         errorMessage: "يجب إرفاق صورة واحدة على الأقل"
                     },
-                    description: { label: "وصف المنتج", errorMessage: "يجب إرفاق صورة واحدة على الأقل" },
+                    description: { label: "وصف المنتج", placeholder: "وصف المنتج" },
                     addBtn: "إضافة",
                     editBtn: "تعديل",
                 },

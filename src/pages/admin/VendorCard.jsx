@@ -6,11 +6,11 @@ import EditVendorModal from '../modals/EditModal';
 import AddOrEditVendorProfile from './AddOrEditVendorProfile';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import InformationModal from '../modals/InformationModal';
-import { ToastContainer } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { baseURL } from '../../apis/axios';
 
-const VendorCard = ({vendor, index, onDelete, onEdit, profileImages, identityImages, licenseImages}) => {
+const VendorCard = ({vendor, onDelete, onEdit}) => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showIdentityModal, setShowIdentityModal] = useState(false);
@@ -20,8 +20,8 @@ const VendorCard = ({vendor, index, onDelete, onEdit, profileImages, identityIma
     <>
     <div key={vendor.vendorId} className='flex-col space-y-2 mb-16 w-full lg:w-5/12 shadow-3 p-2 m-2 rounded-xl'>
         <div className='flex justify-between'>
-            {profileImages[index]?<img className="rounded-xl" width={100} src={profileImages[index]?.data?`data:image/png;base64, ${profileImages[index]?.data}`:vendorProfile} alt="Profile" />
-                :<img className="rounded-xl" width={100} src={vendorProfile} />}
+            {vendor.profileImage?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${vendor.profileImage}`} alt="Profile" />
+                :<img className="rounded-xl" width={100} src={vendorProfile} alt='Profile'/>}
             <div className="flex flex-col items-stretch">
                 <div className='mb-1'>
                     <button className='bg-primary-200 mx-1' onClick={()=>setShowIdentityModal(true)}><HiOutlinePaperClip /></button>
@@ -53,17 +53,10 @@ const VendorCard = ({vendor, index, onDelete, onEdit, profileImages, identityIma
         </div>
     </div>
     <EditVendorModal showModal={showEditModal} setShowModal={setShowEditModal} target="Vendor">
-        <ToastContainer/>
         <AddOrEditVendorProfile key={vendor.vendorId}
         isEdit={true}
         onEdit={onEdit}
-        currentVendor={vendor}
-        vendorImages={{
-            profileImage: profileImages[index],
-            identityImage: identityImages[index],
-            licenseImage: licenseImages[index]
-            
-        }} />
+        currentVendor={vendor} />
     </EditVendorModal>
     <ConfirmationModal
         title={"Confirm Vendor Delete"}
@@ -78,8 +71,8 @@ const VendorCard = ({vendor, index, onDelete, onEdit, profileImages, identityIma
         showModal={showIdentityModal}
         setShowModal={setShowIdentityModal}>
             <div className='flex justify-between'>
-                <img className='w-[45%] h-72 rounded-xl' src={licenseImages[index]?.data?`data:image/png;base64, ${licenseImages[index]?.data}`:vendorProfile} alt="license" />
-                <img className='w-[45%] h-72 rounded-xl' src={identityImages[index]?.data?`data:image/png;base64, ${identityImages[index]?.data}`:vendorProfile} alt="identity" />
+                <img className='w-[45%] h-72 rounded-xl' src={`${baseURL}/files/get/file/${vendor.licenseImage}`} alt="license" />
+                <img className='w-[45%] h-72 rounded-xl' src={`${baseURL}/files/get/file/${vendor.identityImage}`} alt="identity" />
             </div>
         </InformationModal>
     </>

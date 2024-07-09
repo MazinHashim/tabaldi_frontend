@@ -1,4 +1,6 @@
- export const otpPattern = /^[0-9]{4,4}$/
+import *as Yup from 'yup'
+
+export const otpPattern = /^[0-9]{4,4}$/
 
 export const OTPInput = 
     {
@@ -14,6 +16,12 @@ export const OTPInput =
       required: true,
     };
 
+export const validationSchema =(requiredMessage)=> {return Yup.object({
+    otpCode: Yup.string()
+    .matches(/^\d{4}$/, "Must be exactly 4 digits")
+    .required(requiredMessage)
+    .typeError("Must be a number")
+})}
 export function validateOtpCodeBeforeSubmit(inputValue) {
     return otpPattern.test(inputValue);
 }

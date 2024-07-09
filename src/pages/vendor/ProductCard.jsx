@@ -1,38 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import productProfile from '../../img/vendor_profile.png'
 import { useTranslation } from 'react-i18next';
-import useFetchFileData from '../../apis/useFetchFileData';
 import { useNavigate } from 'react-router-dom';
-const ProductCard = ({product, index, routeRole}) => {
+import { baseURL } from '../../apis/axios';
+const ProductCard = ({product, routeRole}) => {
     const{t,} = useTranslation();
     const navigate = useNavigate()
     const tCard = t("productCard")
-    const files = useFetchFileData()
-    const [productImages, setProductImages] = useState(null);
 
     function goToProductDetails(productId) {
-        navigate((routeRole!=="SUPERADMIN"?"/":"")+'product-details', {state: { productId, images: productImages }});
+        navigate((routeRole!=="SUPERADMIN"?"/":"")+'product-details', {state: { productId }});
     }
 
-    useEffect(()=>{
-        const fetchData = async () => {
-            if(!productImages) {
-                const result = await files({filePaths: product.images.map((img, i)=>
-                    {return {id: `product${index}${i}`, path: img}}
-                )});
-                setProductImages(result) }};
-
-        fetchData();
-    }, [product, index, files, productImages])
   return (
     <>
     <div key={product.productId} className='flex flex-col justify-between h-[27rem] bg-gray-50 mb-16 w-full lg:w-3/12 m-1 shadow-xl rounded-xl'>
         
         <img className="rounded-xl justify-stretch w-full h-[13rem]"
-        src={productImages && productImages[0].data
-            ?`data:image/png;base64, ${productImages[0].data}`
+        src={product.images && product.images[0]
+            ?`${baseURL}/files/get/file/${product.images[0]}`
             :productProfile}
-        alt={`Product ${index}`} />
+        alt={`Product 0`} />
         <div className="flex justify-between px-2">
             <h4 className='uppercase primary-color'>{product.category.name}</h4>
             <h3 className='uppercase'>{`${product.price} ${tCard["aedUnit"]}`}</h3>

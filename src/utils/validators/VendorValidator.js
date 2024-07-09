@@ -1,4 +1,6 @@
- export const vendorPatterns = {
+import *as Yup from 'yup'
+
+export const vendorPatterns = {
     fullNameRegx: /^[A-Za-z]{2,16}\s[A-Za-z]{2,16}\s[A-Za-z]{2,16}$/,
     phoneRegx: /^05+[0-9]{8,8}$/,
     emailRegx: /^[A-Za-z0-9\._%+\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,4}$/,
@@ -100,19 +102,72 @@ export const vendorInfoInputs = [
     },
   ];
 
-export function validateVendorBeforeSubmit(vendorData, isEdit) {
+// export function validateVendorBeforeSubmit(vendorData, isEdit) {
   
-    return vendorPatterns.fullNameRegx.test(vendorData.fullName)&&
-    (isEdit || vendorPatterns.phoneRegx.test(vendorData.phone))&&
-    (isEdit || vendorPatterns.emailRegx.test(vendorData.email))&&
-    vendorPatterns.maxKiloRegx.test(vendorData.maxKilometerDelivery)&&
-    vendorPatterns.minChargeRegx.test(vendorData.minChargeLongDistance)&&
-    vendorPatterns.vendorTypeRegx.test(vendorData.vendorType)&&
-    (vendorData.profileImage.name===""||
-    vendorPatterns.fileNameRegx.test(vendorData.profileImage.name))&&
-    (isEdit || vendorPatterns.fileNameRegx.test(vendorData.identityImage.name))&&
-    (isEdit || vendorPatterns.fileNameRegx.test(vendorData.licenseImage.name));
-}
+//     return vendorPatterns.fullNameRegx.test(vendorData.fullName)&&
+//     (isEdit || vendorPatterns.phoneRegx.test(vendorData.phone))&&
+//     (isEdit || vendorPatterns.emailRegx.test(vendorData.email))&&
+//     vendorPatterns.maxKiloRegx.test(vendorData.maxKilometerDelivery)&&
+//     vendorPatterns.minChargeRegx.test(vendorData.minChargeLongDistance)&&
+//     vendorPatterns.vendorTypeRegx.test(vendorData.vendorType)&&
+//     (vendorData.profileImage.name===""||
+//     vendorPatterns.fileNameRegx.test(vendorData.profileImage.name))&&
+//     (isEdit || vendorPatterns.fileNameRegx.test(vendorData.identityImage.name))&&
+//     (isEdit || vendorPatterns.fileNameRegx.test(vendorData.licenseImage.name));
+// }
+
+export const validationSchema =(vendorData, isEditing, requiredMessage)=> {return Yup.object({
+    fullName: Yup.string().required(requiredMessage),
+    phone: Yup.string().when([], {
+      is: () => !isEditing,
+      then: ()=> Yup.string().required(requiredMessage),
+      otherwise: ()=> Yup.mixed().notRequired(),
+    }),
+    email: Yup.string().when([], {
+      is: () => !isEditing,
+      then: ()=> Yup.string().email(vendorData.email.emailFormat).required(requiredMessage),
+      otherwise: ()=> Yup.mixed().notRequired(),
+    }),
+    maxKilometerDelivery: Yup.number().typeError(vendorData.maxKilometerDelivery.numbersOnly)
+    .min(1, vendorData.maxKilometerDelivery.startFromOne)
+    .required(requiredMessage),
+    minChargeLongDistance: Yup.number().typeError(vendorData.minChargeLongDistance.numbersOnly)
+    .min(1, vendorData.minChargeLongDistance.startFromOne)
+    .required(requiredMessage),
+    vendorType: Yup.string().required(requiredMessage),
+    profileImage: Yup.mixed().notRequired(), // No validation when editing
+    identityImage : Yup.mixed().when([], {
+    is: () => !isEditing,
+    then: ()=> Yup.mixed()
+      .test(
+        'fileSize',
+        'حجم الصورة غير مدعوم',
+        value => value && value.size <= 1024 * 1024 * 25 // 25 MB
+      )
+      .test(
+        'fileType',
+        `الملفات المدعومة png, jpg, jpeg, فقط`,
+        value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
+      ),
+      otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
+    }),
+    licenseImage : Yup.mixed().when([], {
+    is: () => !isEditing,
+    then: ()=> Yup.mixed()
+      .test(
+        'fileSize',
+        'حجم الصورة غير مدعوم',
+        value => value && value.size <= 1024 * 1024 * 25 // 25 MB
+      )
+      .test(
+        'fileType',
+        `الملفات المدعومة png, jpg, jpeg, فقط`,
+        value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
+      ),
+      otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
+    }),
+})}
+
 export function fillVendorFormData(fd, vendor, userId, vendorId){
   fd.append("VendorPayload", JSON.stringify({
             vendorId: vendorId,
