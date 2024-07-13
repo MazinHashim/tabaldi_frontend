@@ -5,6 +5,7 @@ import ProductCard from './ProductCard';
 import { useEffect } from 'react';
 import AppLoading from '../../utils/AppLoading';
 import { useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 const PRODUCT_LIST_URL = "/vendors/{id}/products";
 
 const ProductsList = ({routeRole}) => {
@@ -29,16 +30,31 @@ const ProductsList = ({routeRole}) => {
             setAuth({...vendor, token, refreshToken})
         }
     }, [vendor])
+
+    function onTogglePublishing(published, productId) {
+        const otherProducts=productList.filter(prod=>prod.productId!==productId);
+        const selectedProduct=productList.find(prod=>prod.productId===productId);
+        setChangeData([...otherProducts, {...selectedProduct, published: published}])
+    }
   return (
     <>
+        <ToastContainer />
         <div className='flex flex-wrap w-full justify-between'>
             {state.isLoading?<div className="w-full h-[70vh] flex justify-center items-center">
                 <AppLoading/>
                 </div>
             :!state.data?.list
             ?<div className='flex justify-center items-center h-[70vh] capitalize w-full'>{state.data?.message??state.error?.message}</div>
-            :productList.map((product, index)=>{
-            return <ProductCard key={product.productId} routeRole={routeRole} product={product}/>})
+            :productList
+            .sort((a, b) => {
+                if (a.name < b.name) return -1;
+                if (a.name > b.name) return 1;
+                return 0
+            }).map((product)=>{
+            return <ProductCard key={product.productId}
+            routeRole={routeRole}
+            product={product}
+            onTogglePublishing={onTogglePublishing}/>})
             }
         </div>
     </>

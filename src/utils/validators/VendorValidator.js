@@ -120,19 +120,25 @@ export const validationSchema =(vendorData, isEditing, requiredMessage)=> {retur
     fullName: Yup.string().required(requiredMessage),
     phone: Yup.string().when([], {
       is: () => !isEditing,
-      then: ()=> Yup.string().required(requiredMessage),
+      then: ()=> Yup.string()
+      .matches(/^(009665|\+9665|05)\d{8}$/,vendorData.phone?.phoneFormat)
+      .required(requiredMessage),
       otherwise: ()=> Yup.mixed().notRequired(),
     }),
     email: Yup.string().when([], {
       is: () => !isEditing,
-      then: ()=> Yup.string().email(vendorData.email.emailFormat).required(requiredMessage),
+      then: ()=> Yup.string().email(vendorData.email?.emailFormat).required(requiredMessage),
       otherwise: ()=> Yup.mixed().notRequired(),
     }),
-    maxKilometerDelivery: Yup.number().typeError(vendorData.maxKilometerDelivery.numbersOnly)
-    .min(1, vendorData.maxKilometerDelivery.startFromOne)
+    maxKilometerDelivery: Yup.number().typeError(vendorData.maxKilometerDelivery?.numbersOnly)
+    .min(1, vendorData.maxKilometerDelivery?.startFromOne)
     .required(requiredMessage),
-    minChargeLongDistance: Yup.number().typeError(vendorData.minChargeLongDistance.numbersOnly)
-    .min(1, vendorData.minChargeLongDistance.startFromOne)
+    closingTime: Yup.string()
+    .matches(/^(\d{2}:\d{2})$/, vendorData.closingTime?.invalidFormat).required(requiredMessage),
+    openingTime: Yup.string()
+    .matches(/^(\d{2}:\d{2})$/, vendorData.openingTime?.invalidFormat).required(requiredMessage),
+    minChargeLongDistance: Yup.number().typeError(vendorData.minChargeLongDistance?.numbersOnly)
+    .min(1, vendorData.minChargeLongDistance?.startFromOne)
     .required(requiredMessage),
     vendorType: Yup.string().required(requiredMessage),
     profileImage: Yup.mixed().notRequired(), // No validation when editing
@@ -175,6 +181,8 @@ export function fillVendorFormData(fd, vendor, userId, vendorId){
             vendorType: vendor.vendorType.toUpperCase(),
             maxKilometerDelivery: vendor.maxKilometerDelivery===""?null:vendor.maxKilometerDelivery,
             minChargeLongDistance: vendor.minChargeLongDistance===""?null:vendor.minChargeLongDistance,
+            openingTime: vendor.openingTime,
+            closingTime: vendor.closingTime,
             userId: userId
           }))
         fd.append("profileImage", vendor.profileImage)

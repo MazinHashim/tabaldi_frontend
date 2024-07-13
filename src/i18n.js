@@ -1,7 +1,6 @@
 import i18n from "i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 import {initReactI18next} from "react-i18next"
-import { number } from "yup";
 
 i18n.use(LanguageDetector).use(initReactI18next).init({
     debug: true,
@@ -31,34 +30,34 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     fullName: {
                         label: "Full Name*",
                         most3Words: "Must be 3 names and only 2 to 16 characters per name",
-                        placeholder: "Eg: Ahmed mohammed Khalid",
+                        placeholder: "مثال: Ahmed mohammed Khalid",
                     },
                     phone: {
                         label: "Phone Number*",
                         phoneFormat: "Must be 10 digits only and start with 05",
-                        placeholder: "Eg: 0512345678",
+                        placeholder: "مثال: 0512345678",
                     },
                     email: {
                         label: "Email*",
                         emailFormat: "Must be a valid email address",
-                        placeholder: "Eg: example@email.com",
+                        placeholder: "مثال: example@email.com",
                     },
                     maxKilometerDelivery: {
                         label: "Max Kilometer Delivery",
                         numbersOnly: "Should be only digits",
-                        placeholder: "Eg: 10",
+                        placeholder: "مثال: 10",
                         title: "optional, this indicates you have delivery service"
                     },
                     minChargeLongDistance: {
                         label: "Min Charge For Long Distances",
                         numbersOnly: "Should be only digits",
-                        placeholder: "Eg: 10",
+                        placeholder: "مثال: 10",
                         title: "optional, this indicates you deliver for long distances"
                     },
                     vendorType: {
                         label: "Vendor Type*",
                         lengthInvalid: "Must be 2-20 characters and digits only",
-                        placeholder: "Eg: grocery",
+                        placeholder: "مثال: grocery",
                     },
                     profileImage: { label: "Profile Image" },
                     licenseImage: {
@@ -67,6 +66,16 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     identityImage: {
                         label: "Identity Image*",
                     },
+                    openingTime: {
+                        label: "Opening Time*",
+                        invalidFormat: "Invalid time format",
+                        placeholder: "مثال: pm 07:00",
+                    },
+                    closingTime: {
+                        label: "Closing Time*",
+                        invalidFormat: "Invalid time format",
+                        placeholder: "مثال: pm 09:00",
+                    },
                     addBtn: "ADD",
                     editBtn: "EDIT"
                 },
@@ -74,6 +83,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     notProvided: "Not Provided",
                     maxDeliveQuestion: "maximum kilometer for delivery?",
                     minChargeQuestion: "minimum charges for a long distaces?",
+                    openingTxt: "opening",
+                    closingTxt: "closing",
+                    outOfService:"Out of service",
+                    working: "Working",
                     kmUnit: " KM",
                     aedUnit: " AED"
                 },
@@ -172,22 +185,22 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     fullName: {
                         label: "الإسم بالكامل*",
                         most3Words: "يجب أن يكون ثلاثي ويتراوح عدد الأحرف من 2 إلى 16 حرفًا فقط لكل اسم",
-                        placeholder: "مثال: أحمد محمد حالد",
+                        placeholder: "مثال: أحمد محمد خالد",
                     },
                     phone: {
                         label: "رقم الهاتف*",
                         phoneFormat: "يجب أن يتكون من 10 أرقام فقط ويبدأ بـ 05",
-                        placeholder: "Eg: 0512345678",
+                        placeholder: "مثال: 0512345678",
                     },
                     email: {
                         label: "البريد الإلكتروني*",
                         eamilFormat: "يجب أن تكون صيغة البريد إلكتروني صحيحة",
-                        placeholder: "Eg: example@email.com",
+                        placeholder: "مثال: example@email.com",
                     },
                     maxKilometerDelivery: {
                         label: "أقصي مسافة توصيل (بالكيلومترات)",
                         numbersOnly: "يجب أن يكون أرقامًا فقط",
-                        placeholder: "Eg: 10",
+                        placeholder: "مثال: 10",
                         startFromOne: "يبدأ من 1 إختياري",
                         title: "اختياري فهذا يدل على أن لديك خدمة التوصيل"
                     },
@@ -195,13 +208,13 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "الحد الأدنى للشحن لمسافات طويلة",
                         numbersOnly: "يجب أن يكون أرقامًا فقط",
                         startFromOne: "يبدأ من 1 إختياري",
-                        placeholder: "Eg: 10",
+                        placeholder: "مثال: 10",
                         title: "اختياري، فهذا يشير إلى أنك تقوم بالتوصيل لمسافات طويلة"
                     },
                     vendorType: {
                         label: "نوع محل البيع*",
                         lengthInvalid: "يجب أن يتكون من 2 إلى 20 حرفًا ورقمًا فقط",
-                        placeholder: "Eg: grocery",
+                        placeholder: "مثال: grocery",
                     },
                     profileImage: { label: "صورة البروفايل" },
                     licenseImage: {
@@ -210,6 +223,16 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     identityImage: {
                         label: "صورة الهوية*",
                     },
+                    openingTime: {
+                        label: "يعمل من الساعة*",
+                        invalidFormat: "صيغة الساعة غير صحيحة",
+                        placeholder: "مثال:pm 07:00",
+                    },
+                    closingTime: {
+                        label: "يغلق في الساعة*",
+                        invalidFormat: "صيغة الساعة غير صحيحة",
+                        placeholder: "مثال:pm 09:00",
+                    },
                     addBtn: "إضافة",
                     editBtn: "تعديل",
                 },
@@ -217,6 +240,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     notProvided: "غير متوفر",
                     maxDeliveQuestion: "أقصى مسافة للتوصيل؟",
                     minChargeQuestion: "أقل أجرة للمسافات البعيدة؟",
+                    openingTxt: "من",
+                    closingTxt: "إلى",
+                    outOfService:"خارج الخدمة",
+                    working: "يعمل",
                     kmUnit: " كم",
                     aedUnit: " درهم"
                 },

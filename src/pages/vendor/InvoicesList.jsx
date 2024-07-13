@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import useAxiosFetchApi from '../../hooks/useFetch';
 import { ToastContainer } from 'react-toastify';
 import AppLoading from '../../utils/AppLoading';
-import { FaPen } from "react-icons/fa";
 
 const INVOICE_LIST_URL = "/vendors/{id}/invoices";
 
 const InvoicesList = () => {
   const {auth} = useAuth()
     const{t, i18n} = useTranslation();
+    const tCard = t("productCard")
     const vendorInvoicesUrl = INVOICE_LIST_URL.replace("{id}", `${auth.vendorId}`);
     const sessionToken = auth.token;
     const [state] = useAxiosFetchApi(vendorInvoicesUrl, {}, sessionToken);
@@ -58,21 +58,19 @@ const InvoicesList = () => {
                           const bgColor=invoice.status==="PAID"?"bg-green-200":"bg-red-200";
                           const txtColor=invoice.status==="PAID"?"text-green-600":"text-red-600";
                       return <tr key={invoice.invoiceId}>
-                        <td className="whitespace-nowrap py-4 font-medium capitalize">{invoice.invoiceNumber}</td>
-                        <td className="whitespace-nowrap py-4">{invoice.paymentMethod}</td>
-                        <td className="whitespace-nowrap py-4">{invoice.issueDate}</td>
-                        <td className="whitespace-nowrap py-4">{invoice.summary.total}</td>
-                        <td className="whitespace-nowrap py-4">
+                        <td className="whitespace-nowrap p-5 font-medium capitalize">{invoice.invoiceNumber}</td>
+                        <td className="whitespace-nowrap p-5">{invoice.paymentMethod}</td>
+                        <td className="whitespace-nowrap p-5">{invoice.fissueDate}</td>
+                        <td className="whitespace-nowrap p-5">{invoice.summary.total} {tCard["aedUnit"]}</td>
+                        <td className="whitespace-nowrap p-5">
                                 <span className={`px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
                                     {invoice.status.toLowerCase()}
                                 </span>
                             </td>
-                        <td className="whitespace-nowrap py-4 w-1/4">
+                        <td className="whitespace-nowrap py-4">
                           <button 
                           onClick={()=>console.log("Mazin")}
-                          className='bg-success-200 mx-1'>
-                              <FaPen/> View Order
-                          </button>
+                          className='bg-success-200 mx-1'>View Order</button>
                         </td>
                       </tr>
                       })}

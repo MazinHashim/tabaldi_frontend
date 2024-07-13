@@ -25,7 +25,6 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
     e.preventDefault();
     const data = new FormData(e.target);
     const vendorData = Object.fromEntries(data.entries());
-
     try {
       await validator.validationSchema(tVendorInfo, isEdit, t("requiredMessage"))
       .validate(vendorData, {abortEarly: false});
@@ -165,6 +164,18 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
               <label htmlFor="licenseImage" className="text-lg">{tVendorInfo.licenseImage?.label}</label>
               <input type="file" name="licenseImage" id="licenseImage" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.licenseImage?.placeholder} />
               {errors?.licenseImage&&<div className='text-red-600'>{errors?.licenseImage}</div>}
+            </div>
+          </div>
+          <div className='flex flex-col md:flex-row flex-wrap justify-between'>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="openingTime" className="text-lg">{tVendorInfo.openingTime?.label}</label>
+              <input type="time" name="openingTime" id="openingTime" defaultValue={currentVendor?.openingTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.openingTime?.placeholder}/>
+              {errors?.openingTime&&<div className='text-red-600'>{errors?.openingTime}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="closingTime" className="text-lg">{tVendorInfo.closingTime?.label}</label>
+              <input type="time" name="closingTime" id="closingTime" defaultValue={currentVendor?.closingTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.closingTime?.placeholder} />
+              {errors?.closingTime&&<div className='text-red-600'>{errors?.closingTime}</div>}
             </div>
           </div>
           {isEdit && 

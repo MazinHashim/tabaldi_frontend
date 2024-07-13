@@ -31,7 +31,7 @@ const RequiredAuth = ({routeRole}) => {
     useEffect(()=>{
         if(state.data?.user && state.data?.user.role !=="SUPERADMIN"){
             setVendorProfileUrl("/vendors/profile")
-            setAuth({...vendorState.data?.vendor, token, refreshToken})
+            setAuth({...vendorState.data?.vendor, token, refreshToken, role: state.data?.user.role})
         }
     }, [state.data, vendorState, token, refreshToken, setAuth, setVendorProfileUrl,])
     

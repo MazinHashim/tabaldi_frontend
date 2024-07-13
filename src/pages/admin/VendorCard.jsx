@@ -9,6 +9,7 @@ import InformationModal from '../modals/InformationModal';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { baseURL } from '../../apis/axios';
+import { GrDeploy } from 'react-icons/gr';
 
 const VendorCard = ({vendor, onDelete, onEdit}) => {
     const [showEditModal, setShowEditModal] = useState(false);
@@ -19,17 +20,22 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
   return (
     <>
     <div key={vendor.vendorId} className='flex-col space-y-2 mb-16 w-full lg:w-5/12 shadow-3 p-2 m-2 rounded-xl'>
+        <div className='flex justify-end'>
+            <p className={`px-2 ${vendor.working?"bg-green-700":"bg-red-700"} text-white rounded-lg text-sm inline-block`}>
+                {vendor.working?tCard["working"]:tCard["outOfService"]}
+            </p>
+        </div>
         <div className='flex justify-between'>
             {vendor.profileImage?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${vendor.profileImage}`} alt="Profile" />
                 :<img className="rounded-xl" width={100} src={vendorProfile} alt='Profile'/>}
             <div className="flex flex-col items-stretch">
                 <div className='mb-1'>
-                    <button className='bg-primary-200 mx-1' onClick={()=>setShowIdentityModal(true)}><HiOutlinePaperClip /></button>
-                    <button className='bg-green-200 mx-1' onClick={()=>{
+                    <button className='boder border-gray-400 shadow-none mx-1' onClick={()=>setShowIdentityModal(true)}><HiOutlinePaperClip /></button>
+                    <button className='boder border-gray-400 shadow-none mx-1' onClick={()=>{
                         setShowEditModal(true)}}><FaPen /></button>
-                    <button className='bg-red-200 mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
+                    <button className='boder border-gray-400 shadow-none mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
                 </div>
-                <Link className='bg-green-200 text-sm text-center mx-1' to={"products"} state={{vendor}}>
+                <Link className='boder border-gray-400 shadow-none text-sm text-center mx-1' to={"products"} state={{vendor}}>
                 View Products</Link>
             </div>
         </div>
@@ -49,6 +55,11 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
                 <strong className='text-white px-1 bg-slate-400 rounded-lg'>
                     {vendor.minChargeLongDistance?vendor.minChargeLongDistance + tCard["aedUnit"]
                     : tCard["notProvided"]}</strong>
+            </div>
+
+            <div className="text-sm flex justify-between font-bold">
+                <p className='text-green-600'>{tCard["openingTxt"]} {vendor.fopeningTime}</p>
+                <p className='text-red-600'>{tCard["closingTxt"]} {vendor.fclosingTime}</p>
             </div>
         </div>
     </div>

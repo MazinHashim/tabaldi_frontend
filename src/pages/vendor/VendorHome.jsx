@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PiArrowFatLinesRightFill } from "react-icons/pi";
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/appHooks';
@@ -10,26 +10,60 @@ import { HiCurrencyDollar, HiMiniShoppingCart } from 'react-icons/hi2';
 import { FaBoxOpen } from "react-icons/fa";
 import RecentOrdersTable from '../admin/RecentOrdersTable';
 import FrequentProductsTable from './FrequentProductsTable';
+import { GrDeploy } from 'react-icons/gr';
+import useAxiosPrivate from '../../apis/useAxiosPrivate';
+import { toast, ToastContainer } from 'react-toastify';
 
 const HOME_DETAILS_URL = "/details/vendor/home/{id}";
-
+const TOGGLE_PUBLISH_URL = "/vendors/toggle/working"
 const VendorHome = () => {
-  const { auth } = useAuth();
+  const { auth, setAuth } = useAuth();
+  const axiosPrivate = useAxiosPrivate()
+  const [isLoading, setLoading] = useState(false);
   const homeDetailsUrl = HOME_DETAILS_URL.replace("{id}", `${auth.vendorId}`);
   const [state, setUrl] = useAxiosFetchApi(null, {}, auth.token);
   const details = state.data?.details;
-  const { i18n} = useTranslation();
+  const {t, i18n} = useTranslation();
+  const tCard = t("vendorCard")
   useEffect(()=>{
     setUrl(homeDetailsUrl)
   }, [auth.vendorId, homeDetailsUrl, setUrl])
+
+  async function toggleVendorWorkingStatus(productId){
+    try{
+        setLoading(true)
+        const params = `/${productId}`;
+        const statusChangedResponse = await axiosPrivate.get(TOGGLE_PUBLISH_URL+params,
+            {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
+        );
+        setLoading(false)
+        setAuth({...auth, working: statusChangedResponse?.data.published});
+        toast.success(statusChangedResponse?.data.message);
+    } catch (error) {
+        setLoading(false)
+        toast.error(error.response?.data.message);
+    }
+  }
   return (
     <div className='flex flex-col mb-6'>
+      <ToastContainer />
       <div className='flex justify-between items-center my-4'>
         <div className='flex justify-center items-center'>
           <img src={vendorProfile} alt="vendor" className='rounded-full' width={100}/>
-          <h2 className='font-medium mx-3'>{auth.fullName}</h2>
+          <div>
+            <h2 className='font-medium mx-3'>{auth.fullName}</h2>
+            <span className='px-3 ms-2 text-gray-500 text-sm'>
+              {`${tCard['openingTxt']} ${auth.fopeningTime} - ${tCard['closingTxt']} ${auth.fclosingTime}`}
+            </span>
+          </div>
+          <span className='px-3 ms-2 rounded-lg bg-gray-600 text-white text-sm'>{auth.vendorType}</span>
         </div>
-        <h5 className='px-3 rounded-lg bg-gray-600 text-white'>{auth.vendorType}</h5>
+        <button 
+        onClick={()=>isLoading?null:toggleVendorWorkingStatus(auth.vendorId)}
+        className={`${auth.working?"bg-green-200":"bg-red-200"} text-sm`} title={"Working Vendor"}>
+            {auth.working?tCard["working"]:tCard["outOfService"]}
+            <GrDeploy className='inline-block mx-2'/>
+        </button>
       </div>
       <hr />
       <div className='flex justify-between items-center text-center my-6'>
