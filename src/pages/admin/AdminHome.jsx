@@ -38,7 +38,7 @@ const AdminHome = () => {
               <h3 className='font-medium'>Earnings</h3>
               <HiCurrencyDollar className='text-green-300' size={45}/>
             </div>
-            <h2 className='font-semibold mt-3'>{details.earnings} AED</h2>
+            <h2 className='font-semibold mt-3'>{details?.earnings} AED</h2>
             <p>Monthly revenue</p>
           </div>}
         </div>
@@ -52,8 +52,8 @@ const AdminHome = () => {
               <h3 className='font-medium'>Orders</h3>
               <HiMiniShoppingCart className='bg-amber-200 text-white p-1.5 rounded-full' size={40}/>
             </div>
-            <h2 className='font-semibold mt-3'>{details.numberOfOrders}</h2>
-            <p>{details.newOrdersPerDay}+ New Sales</p>
+            <h2 className='font-semibold mt-3'>{details?.numberOfOrders}</h2>
+            <p>{details?.newOrdersPerDay}+ New Sales</p>
           </div>}
         </div>
         <div className="flex flex-col w-[30%] p-4 rounded-2xl shadow-lg bg-gray-50 border border-gray-100">
@@ -64,8 +64,8 @@ const AdminHome = () => {
               <h3 className='font-medium'>Customers</h3>
               <IoPeopleCircle className='text-blue-300' size={45}/>
             </div>
-            <h2 className='font-semibold mt-3'>{details.numberOfCustomers}</h2>
-            <p>{details.newCustomersPer2Days}+ in 2 days</p>
+            <h2 className='font-semibold mt-3'>{details?.numberOfCustomers}</h2>
+            <p>{details?.newCustomersPer2Days}+ in 2 days</p>
           </div>}
         </div>
       </div>

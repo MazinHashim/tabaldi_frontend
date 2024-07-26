@@ -20,14 +20,14 @@ const VendorHome = () => {
   const { auth, setAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate()
   const [isLoading, setLoading] = useState(false);
-  const homeDetailsUrl = HOME_DETAILS_URL.replace("{id}", `${auth.vendorId}`);
-  const [state, setUrl] = useAxiosFetchApi(null, {}, auth.token);
+  const homeDetailsUrl = HOME_DETAILS_URL.replace("{id}", `${auth?.vendorId}`);
+  const [state, setUrl] = useAxiosFetchApi(null, {}, auth?.token);
   const details = state.data?.details;
   const {t, i18n} = useTranslation();
   const tCard = t("vendorCard")
   useEffect(()=>{
     setUrl(homeDetailsUrl)
-  }, [auth.vendorId, homeDetailsUrl, setUrl])
+  }, [auth?.vendorId, homeDetailsUrl, setUrl])
 
   async function toggleVendorWorkingStatus(productId){
     try{
@@ -51,17 +51,17 @@ const VendorHome = () => {
         <div className='flex justify-center items-center'>
           <img src={vendorProfile} alt="vendor" className='rounded-full' width={100}/>
           <div>
-            <h2 className='font-medium mx-3'>{auth.fullName}</h2>
+            <h2 className='font-medium mx-3'>{auth?.fullName}</h2>
             <span className='px-3 ms-2 text-gray-500 text-sm'>
-              {`${tCard['openingTxt']} ${auth.fopeningTime} - ${tCard['closingTxt']} ${auth.fclosingTime}`}
+              {`${tCard['openingTxt']} ${auth?.fopeningTime} - ${tCard['closingTxt']} ${auth?.fclosingTime}`}
             </span>
           </div>
-          <span className='px-3 ms-2 rounded-lg bg-gray-600 text-white text-sm'>{auth.vendorType}</span>
+          <span className='px-3 ms-2 rounded-lg bg-gray-600 text-white text-sm'>{auth?.vendorType}</span>
         </div>
         <button 
-        onClick={()=>isLoading?null:toggleVendorWorkingStatus(auth.vendorId)}
-        className={`${auth.working?"bg-green-200":"bg-red-200"} text-sm`} title={"Working Vendor"}>
-            {auth.working?tCard["working"]:tCard["outOfService"]}
+        onClick={()=>isLoading?null:toggleVendorWorkingStatus(auth?.vendorId)}
+        className={`${auth?.working?"bg-green-200":"bg-red-200"} text-sm`} title={"Working Vendor"}>
+            {auth?.working?tCard["working"]:tCard["outOfService"]}
             <GrDeploy className='inline-block mx-2'/>
         </button>
       </div>

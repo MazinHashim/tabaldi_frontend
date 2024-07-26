@@ -34,7 +34,7 @@ const FrequentCustomersTable = ({state, title}) => {
                       <td className="whitespace-nowrap p-4 font-medium">{`${frequentCustomer.customer.firstName} ${frequentCustomer.customer.lastName}`}</td>
                       <td className="whitespace-nowrap p-4 text-start">{frequentCustomer.customer.user.email??"Not Entered"}</td>
                       <td className="whitespace-nowrap p-4">{frequentCustomer.customer.user.phone}</td>
-                      <td className="whitespace-nowrap p-4">{frequentCustomer.customer.createdAt.split(".")[0].replace("T", " ")}</td>
+                      <td className="whitespace-nowrap p-4">{frequentCustomer.customer.createdAt?.split(".")[0].replace("T", " ")}</td>
                       <td className="whitespace-nowrap p-4">{frequentCustomer.customer.gender}</td>
                       <td className="whitespace-nowrap p-4">{frequentCustomer.customer.dateOfBirth}</td>
                       <td className="whitespace-nowrap p-4">{frequentCustomer.frequency}</td>
