@@ -168,6 +168,11 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
           </div>
           <div className='flex flex-col md:flex-row flex-wrap justify-between'>
             <div className="md:w-1/4 my-6">
+              <label htmlFor="coverImage" className="text-lg">{tVendorInfo.coverImage?.label}</label>
+              <input type="file" name="coverImage" id="coverImage" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.coverImage?.placeholder} />
+              {errors?.coverImage&&<div className='text-red-600'>{errors?.coverImage}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
               <label htmlFor="openingTime" className="text-lg">{tVendorInfo.openingTime?.label}</label>
               <input type="time" name="openingTime" id="openingTime" defaultValue={currentVendor?.openingTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.openingTime?.placeholder}/>
               {errors?.openingTime&&<div className='text-red-600'>{errors?.openingTime}</div>}

@@ -60,6 +60,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         placeholder: "مثال: grocery",
                     },
                     profileImage: { label: "Profile Image" },
+                    coverImage: { label: "Cover Image" },
                     licenseImage: {
                         label: "License Image*",
                     },
@@ -217,6 +218,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         placeholder: "مثال: grocery",
                     },
                     profileImage: { label: "صورة البروفايل" },
+                    coverImage: { label: "صورة الخلفية" },
                     licenseImage: {
                         label: "صورة الرخصة*",
                     },
