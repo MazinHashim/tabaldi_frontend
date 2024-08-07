@@ -193,7 +193,7 @@ const OrderDetails = () => {
             <div className="flex px-7 py-2">
                 <div className="w-1/2">
                     <h4>Payment Info</h4>
-                    <p>Cash on Delivery</p>
+                    <p>{invoice.paymentMethod==="CASH"?"Cash on Delivery":invoice.paymentMethod}</p>
                 </div>
                 <div className="w-1/2">
                     <h3 className='my-2'>Notes</h3>

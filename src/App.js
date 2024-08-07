@@ -16,6 +16,7 @@ import OrderDetails from './pages/vendor/OrderDetails';
 import AddOrEditProduct from './pages/vendor/AddOrEditProduct';
 import CategoriesList from './pages/vendor/CategoriesList';
 import InvoicesList from './pages/vendor/InvoicesList';
+import AdvertisementsList from './pages/admin/AdvertisementsList';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
         <Route index element={<AdminHome />}/>
         <Route path='admin' element={<AdminHome />}/>
         <Route path='vendors' element={<VendorsList />} />
+        <Route path='advertisements' element={<AdvertisementsList />} />
         <Route path='vendors/products' element={<ProductsList routeRole={"SUPERADMIN"}/>} />
         <Route path='vendors/products/product-details' element={<ProductDetails/>} />
         <Route path='vendor-info' element={<AddOrEditVendorProfile />} />

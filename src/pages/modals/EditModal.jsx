@@ -12,7 +12,7 @@ const EditModal = ({showModal, setShowModal, target, children}) => {
     <div>
       {/* <!-- Modal --> */}
       <TEModal show={showModal} setShow={setShowModal} staticBackdrop>
-        <TEModalDialog size="lg">
+        <TEModalDialog size="xl">
           <TEModalContent>
             <TEModalHeader>
               {/* <!--Modal title--> */}

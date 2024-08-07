@@ -35,8 +35,8 @@ export const validationSchema =(vendorData, isEditing, requiredMessage)=> {retur
     .min(1, vendorData.minChargeLongDistance?.startFromOne)
     .required(requiredMessage),
     vendorType: Yup.string().required(requiredMessage),
-    coverImage: Yup.mixed().notRequired(), // No validation when editing
-    profileImage: Yup.mixed().notRequired(), // No validation when editing
+    coverImage: Yup.mixed().notRequired(),
+    profileImage: Yup.mixed().notRequired(),
     identityImage : Yup.mixed().when([], {
     is: () => !isEditing,
     then: ()=> Yup.mixed()

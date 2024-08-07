@@ -91,6 +91,29 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     kmUnit: " KM",
                     aedUnit: " AED"
                 },
+                advertisementFormIfno: {
+                    addAdvertisementTitle: "Add Advertisement",
+                    editAdvertisementTitle: "Edit Advertisement",
+                    title: {
+                        label: "Title*",
+                        placeholder: "Eg: Eid Offer",
+                    },
+                    subtitle: {
+                        label: "Subtitle",
+                        placeholder: "Eg: Best eid offer",
+                    },
+                    url: {
+                        label: "Redirection link",
+                        placeholder: "Eg: https://extarnal-src.com/ads-info",
+                    },
+                    vendorId: {
+                        label: "Choose Vendor",
+                        placeholder: "مثال: إختر البائع",
+                    },
+                    adsImage: { label: "Advertise Image" },
+                    addBtn: "ADD",
+                    editBtn: "EDIT",
+                },
                 productFormInfo: {
                     addProductTitle: "Add New Product",
                     editProductTitle: "Edit Product",
@@ -248,6 +271,29 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     working: "يعمل",
                     kmUnit: " كم",
                     aedUnit: " درهم"
+                },
+                advertisementFormIfno: {
+                    addAdvertisementTitle: "إضافة إعلان",
+                    editAdvertisementTitle: "تعديل إعلان",
+                    title: {
+                        label: "العنوان*",
+                        placeholder: "مثال: عرض العيد",
+                    },
+                    subtitle: {
+                        label: "وصف الإعلان*",
+                        placeholder: "مثال:أفضل العروض للعيد",
+                    },
+                    url: {
+                        label: "رابط الإنتقال",
+                        placeholder: "مثال: https://extarnal-src.com/ads-info",
+                    },
+                    vendorId: {
+                        label: "إختر البائع",
+                        placeholder: "مثال: إختر البائع",
+                    },
+                    adsImage: { label: "صورة الإعلان" },
+                    addBtn: "إضافة",
+                    editBtn: "تعديل",
                 },
                 productFormInfo: {
                     addProductTitle: "إضافة منتج جديد",
