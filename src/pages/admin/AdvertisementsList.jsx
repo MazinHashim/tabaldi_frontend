@@ -93,22 +93,22 @@ const AdvertisementsList = () => {
                         <option value={false}>Hidden</option>
                     </select>
                 </div>
-                <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 px-6">
+                <div className="overflow-x-scroll sm:-mx-3 lg:-mx-2">
+                    <div className="inline-block min-w-full py-2">
                     <div className="overflow-hidden">
                         <table className="min-w-full text-center text-sm font-light">
                         <thead
                             className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                             <tr key={"head-1"}>
-                            <th scope="col" className="py-4">Title</th>
-                            <th scope="col" className="py-4">Subtitle</th>
-                            <th scope="col" className="py-4">Advertisement Image</th>
-                            <th scope="col" className="py-4">Expire In</th>
-                            <th scope="col" className="py-4">Link</th>
-                            <th scope="col" className="py-4">Vendor</th>
-                            <th scope="col" className="py-4">Type</th>
-                            <th scope="col" className="py-4">Visibility</th>
-                            <th scope="col" className="py-1">Action</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Title</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Subtitle</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Advertisement Image</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Expire In</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Link</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Vendor</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Type</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Visibility</th>
+                            <th scope="col" className="whitespace-nowrap  p-1">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -127,16 +127,19 @@ const AdvertisementsList = () => {
                                 const bgColor=advertisement.shown?"bg-green-200":"bg-red-200";
                                 const txtColor=advertisement.shown?"text-green-600":"text-red-600";
                             return <tr key={advertisement.advertisementId}>
-                                <td className="whitespace-nowrap py-4 font-medium capitalize">{advertisement.title}</td>
-                                <td className="whitespace-nowrap py-4">{advertisement.subtitle}</td>
-                                <td className="whitespace-nowrap py-4">
+                                <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.title}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.subtitle??"_"}</td>
+                                <td className="whitespace-nowrap p-4">
                                     <img className='w-[45%] rounded-lg' src={`${baseURL}/files/get/file/${advertisement.adsImage}`} alt="ads" />
                                 </td>
-                                <td>{advertisement.fexpireIn}</td>
-                                <td><a href={advertisement.url}>Show</a></td>
-                                <td>{advertisement.vendor?.fullName}</td>
-                                <td>{advertisement.vendor==null?"External":"Internal"}</td>
-                                <td className="whitespace-nowrap py-4">
+                                <td className="whitespace-nowrap p-4">{advertisement.fexpireIn}</td>
+                                <td className="whitespace-nowrap p-4">
+                                    {advertisement.url
+                                    ? <a className='bg-gray-200' target='_blank' href={advertisement.url}>Show</a>
+                                    : "_"}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.vendor?.fullName??"_"}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.vendor==null?"External":"Internal"}</td>
+                                <td className="whitespace-nowrap p-4">
                                     <span className={`px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
                                         {advertisement.shown?"Visiable":"Hidden"}
                                     </span>

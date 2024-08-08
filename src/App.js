@@ -17,6 +17,7 @@ import AddOrEditProduct from './pages/vendor/AddOrEditProduct';
 import CategoriesList from './pages/vendor/CategoriesList';
 import InvoicesList from './pages/vendor/InvoicesList';
 import AdvertisementsList from './pages/admin/AdvertisementsList';
+import Policies from './pages/Policies';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/verify" element={<PhoneVerification />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/policy" element={<Policies />} />
       <Route path="/" element={<RequiredAuth routeRole={"SUPERADMIN"}/>}>
         <Route index element={<AdminHome />}/>
         <Route path='admin' element={<AdminHome />}/>
