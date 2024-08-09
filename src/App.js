@@ -25,7 +25,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/verify" element={<PhoneVerification />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="/policy" element={<Policies />} />
+      <Route path="/privacy-and-policy" element={<Policies />} />
       <Route path="/" element={<RequiredAuth routeRole={"SUPERADMIN"}/>}>
         <Route index element={<AdminHome />}/>
         <Route path='admin' element={<AdminHome />}/>
