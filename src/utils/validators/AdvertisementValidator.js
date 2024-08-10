@@ -1,13 +1,14 @@
 import *as Yup from 'yup'
 
-export const validationSchema =(advertisementData, isEditing, requiredMessage)=> {return Yup.object({
+export const validationSchema =(advertisementData, isEditing, formData, requiredMessage)=> {return Yup.object({
     title: Yup.string().required(requiredMessage),
     subtitle: Yup.string().notRequired(),
     vendorId: Yup.number().nullable().notRequired(),
-    url: Yup.string()
-      .matches(/^https?:\/\/[^\s/$.?#].[^\s]*$/,advertisementData.url?.urlFormat)
-      .nullable()
-      .notRequired(),
+    url: Yup.string().when([], {
+      is: () => formData.url,
+      then: ()=> Yup.string().matches(/^https?:\/\/[^\s/$.?#].[^\s]*$/,advertisementData.url?.urlFormat),
+      otherwise: ()=> Yup.string().notRequired()
+    }),
     adsImage : Yup.mixed().when([], {
     is: () => !isEditing,
     then: ()=> Yup.mixed()

@@ -151,14 +151,14 @@ const OrderDetails = () => {
                 </tr>
                 {!item.selectedOptions?"":
                 item.selectedOptions.map(option=>{
-                    <tr className='border-b border-gray-300'>
-                        <><td className="whitespace-nowrap"></td>
+                    return <tr className='border-b border-gray-300'>
+                        <td className="whitespace-nowrap"></td>
                         <td className="whitespace-nowrap capitalize text-start">
                             <IoCheckmarkDone className='inline p-1 secondary-color' size={25}/>
                             {option.name}</td>
                         <td className="whitespace-nowrap px-2">_</td>
                         <td className="whitespace-nowrap px-2">{option.fee??"_"}</td>
-                        <td className="whitespace-nowrap px-2 text-end">{option.fee??"_"} AED</td></>
+                        <td className="whitespace-nowrap px-2 text-end">{option.fee??"_"} AED</td>
                     </tr>
                 })}
                 </>

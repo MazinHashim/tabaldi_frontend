@@ -26,7 +26,7 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
     const data = new FormData(e.target);
     const formData = Object.fromEntries(data.entries());
     try {
-      await validator.validationSchema(tAdvertisementInfo, isEdit, t("requiredMessage"))
+      await validator.validationSchema(tAdvertisementInfo, isEdit, formData, t("requiredMessage"))
       .validate(formData, {abortEarly: false});
       var advertisementId = (isEdit?currentAdvertisement.advertisementId:null);
       const fd = new FormData();
