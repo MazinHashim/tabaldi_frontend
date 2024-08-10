@@ -150,17 +150,17 @@ const OrderDetails = () => {
                     <td className="whitespace-nowrap font-medium p-2 text-end">{item.quantity*item.price} AED</td>
                 </tr>
                 {!item.selectedOptions?"":
-                <tr className='border-b border-gray-300'>
-                    {item.selectedOptions.map(option=>{
-                        return <><td className="whitespace-nowrap"></td>
+                item.selectedOptions.map(option=>{
+                    <tr className='border-b border-gray-300'>
+                        <><td className="whitespace-nowrap"></td>
                         <td className="whitespace-nowrap capitalize text-start">
                             <IoCheckmarkDone className='inline p-1 secondary-color' size={25}/>
                             {option.name}</td>
                         <td className="whitespace-nowrap px-2">_</td>
                         <td className="whitespace-nowrap px-2">{option.fee??"_"}</td>
                         <td className="whitespace-nowrap px-2 text-end">{option.fee??"_"} AED</td></>
-                    })}
-                </tr>}
+                    </tr>
+                })}
                 </>
                 })}
                 <tr className='font-bold'>

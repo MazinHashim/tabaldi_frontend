@@ -1,13 +1,13 @@
 
 import React from 'react'
-import logo from "../img/tabaldi_logo.png"
+import logo from "../img/rateenalogo.jfif"
 
 const Policies = () => {
   return (
     <>
       <div className='w-3/4 mx-auto my-10' style={{direction: 'rtl'}}>
-        {/* <img src={logo} width={150} height={150} alt='logo' /> */}
-        <h2 className='mt-5'>سياسة رتينة / الشروط والأحكام :</h2>
+        <img src={logo} width={150} alt='logo' />
+        <h2>سياسة رتينة / الشروط والأحكام :</h2>
         <p>تتيح لك منصة "رتينة" إمكانية البحث عن مجموعة واسعة من المتاجر، بما في ذلك المطاعم والبقالات، والاطلاع على قوائم منتجاتها. كما يمكنك تتبع حالة طلباتك ودفع قيمتها بسهولة، إما نقدًا أو عبر بطاقات الائتمان. نؤكد لك أننا لا نقوم بتصنيع أو بيع أي من المنتجات المعروضة، بل نقدم منصة تسويقية شاملة لصاحب المتجر وخدمة توصيل للعميل.</p>
         <h3>مسؤوليتنا:</h3>
         <ul>
