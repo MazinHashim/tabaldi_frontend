@@ -11,6 +11,7 @@ import ConfirmationModal from '../modals/ConfirmationModal';
 import AddOrEditAdvertisement from '../admin/AddOrEditAdvertisement';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { baseURL } from '../../apis/axios';
+import InformationModal from '../modals/InformationModal';
 const ADVERTISEMENT_LIST_URL = "/advertisements";
 const TOGGLE_PUBLISH_URL = "/advertisements/toggle/showing"
 const ADVERTISEMENT_DELETE_URL = "/advertisements/delete"
@@ -22,6 +23,7 @@ const AdvertisementsList = () => {
     const axiosPrivate = useAxiosPrivate()
     const [editModal, setShowEditModal] = useState({advertisement: null, status: false});
     const [deleteModal, setShowDeleteModal] = useState({advertisementId: null, status: false});
+    const [imagesModal, setShowImagesModal] = useState({advertisement: null, status: false});
     const [isLoading, setLoading] = useState(false);
     const sessionToken = auth.token;
     const [state,_, setChangeData] = useAxiosFetchApi(ADVERTISEMENT_LIST_URL, {}, sessionToken);
@@ -102,11 +104,11 @@ const AdvertisementsList = () => {
                             <tr key={"head-1"}>
                             <th scope="col" className="whitespace-nowrap  p-4">Title</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Subtitle</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Advertisement Image</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Expire In</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Link</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Vendor</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Type</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Advertisement Images</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Visibility</th>
                             <th scope="col" className="whitespace-nowrap  p-1">Action</th>
                             </tr>
@@ -129,16 +131,19 @@ const AdvertisementsList = () => {
                             return <tr key={advertisement.advertisementId}>
                                 <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.title}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.subtitle??"_"}</td>
-                                <td className="whitespace-nowrap p-4">
-                                    <img className='w-[45%] rounded-lg' src={`${baseURL}/files/get/file/${advertisement.adsImage}`} alt="ads" />
-                                </td>
                                 <td className="whitespace-nowrap p-4">{advertisement.fexpireIn}</td>
                                 <td className="whitespace-nowrap p-4">
                                     {advertisement.url
-                                    ? <a className='bg-gray-200' target='_blank' href={advertisement.url}>Show</a>
+                                    ? <a className='bg-gray-200 text-xs' target='_blank' href={advertisement.url} rel="noreferrer">Visit</a>
                                     : "_"}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.vendor?.fullName??"_"}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.vendor==null?"External":"Internal"}</td>
+                                <td className="whitespace-nowrap p-4">
+                                    {/* <img className='w-[45%] rounded-lg' src={`${baseURL}/files/get/file/${advertisement.adsImage1}`} alt="ads1" /> */}
+                                    <button 
+                                    onClick={()=>setShowImagesModal({advertisement: advertisement, status: true})}
+                                    className='bg-gray-200 text-xs'>Show Images</button>
+                                </td>
                                 <td className="whitespace-nowrap p-4">
                                     <span className={`px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
                                         {advertisement.shown?"Visiable":"Hidden"}
@@ -170,7 +175,7 @@ const AdvertisementsList = () => {
                 </div>
             </div>
         </div>
-        <EditModal showModal={editModal.status} setShowModal={setShowEditModal} target="advertisement">
+        <EditModal showModal={editModal.status} setShowModal={setShowEditModal} target="Advertisement">
             <AddOrEditAdvertisement key={editModal.advertisement?.advertisementId}
             isEdit={editModal.advertisement!=null}
             setChangeData={onSetChangedData}
@@ -183,6 +188,17 @@ const AdvertisementsList = () => {
             onAction={()=>{handleOnAdvertisementDelete(deleteModal.advertisementId); setShowDeleteModal({...deleteModal, status: false})}}
             showModal={deleteModal.status}
             setShowModal={setShowDeleteModal}/>
+        <InformationModal
+        title={"Advertisement Images"}
+        btnColor={"bg-info"}
+        showModal={imagesModal.status}
+        setShowModal={setShowImagesModal}>
+            <div className='flex justify-between'>
+                <img className='w-[45%] h-72 rounded-xl' src={`${baseURL}/files/get/file/${imagesModal.advertisement?.adsImage1}`} alt="ads1" />
+                <img className='w-[45%] h-72 rounded-xl' src={`${baseURL}/files/get/file/${imagesModal.advertisement?.adsImage2}`} alt="ads2" />
+                <img className='w-[45%] h-72 rounded-xl' src={`${baseURL}/files/get/file/${imagesModal.advertisement?.adsImage3}`} alt="ads3" />
+            </div>
+        </InformationModal>
     </>
   )
 }

@@ -30,34 +30,34 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     fullName: {
                         label: "Full Name*",
                         most3Words: "Must be 3 names and only 2 to 16 characters per name",
-                        placeholder: "مثال: Ahmed mohammed Khalid",
+                        placeholder: "Eg: Rateena",
                     },
                     phone: {
                         label: "Phone Number*",
                         phoneFormat: "Must be 10 digits only and start with 05",
-                        placeholder: "مثال: 0512345678",
+                        placeholder: "Eg: 0512345678",
                     },
                     email: {
                         label: "Email*",
                         emailFormat: "Must be a valid email address",
-                        placeholder: "مثال: example@email.com",
+                        placeholder: "Eg: example@email.com",
                     },
                     maxKilometerDelivery: {
                         label: "Max Kilometer Delivery",
                         numbersOnly: "Should be only digits",
-                        placeholder: "مثال: 10",
+                        placeholder: "Eg: 10",
                         title: "optional, this indicates you have delivery service"
                     },
                     minChargeLongDistance: {
                         label: "Min Charge For Long Distances",
                         numbersOnly: "Should be only digits",
-                        placeholder: "مثال: 10",
+                        placeholder: "Eg: 10",
                         title: "optional, this indicates you deliver for long distances"
                     },
                     vendorType: {
                         label: "Vendor Type*",
-                        lengthInvalid: "Must be 2-20 characters and digits only",
-                        placeholder: "مثال: grocery",
+                        notSupported: "Vendor type not supported",
+                        placeholder: "Eg: GROCERY",
                     },
                     profileImage: { label: "Profile Image" },
                     coverImage: { label: "Cover Image" },
@@ -70,12 +70,12 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     openingTime: {
                         label: "Opening Time*",
                         invalidFormat: "Invalid time format",
-                        placeholder: "مثال: pm 07:00",
+                        placeholder: "Eg: pm 07:00",
                     },
                     closingTime: {
                         label: "Closing Time*",
                         invalidFormat: "Invalid time format",
-                        placeholder: "مثال: pm 09:00",
+                        placeholder: "Eg: pm 09:00",
                     },
                     addBtn: "ADD",
                     editBtn: "EDIT"
@@ -110,7 +110,9 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "Choose Vendor",
                         placeholder: "مثال: إختر البائع",
                     },
-                    adsImage: { label: "Advertise Image" },
+                    adsImage1: { label: "Image 1*" },
+                    adsImage2: { label: "Image 2*" },
+                    adsImage3: { label: "Image 3*" },
                     addBtn: "ADD",
                     editBtn: "EDIT",
                 },
@@ -209,7 +211,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     fullName: {
                         label: "الإسم بالكامل*",
                         most3Words: "يجب أن يكون ثلاثي ويتراوح عدد الأحرف من 2 إلى 16 حرفًا فقط لكل اسم",
-                        placeholder: "مثال: أحمد محمد خالد",
+                        placeholder: "مثال: رتينة",
                     },
                     phone: {
                         label: "رقم الهاتف*",
@@ -237,8 +239,8 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     },
                     vendorType: {
                         label: "نوع محل البيع*",
-                        lengthInvalid: "يجب أن يتكون من 2 إلى 20 حرفًا ورقمًا فقط",
-                        placeholder: "مثال: grocery",
+                        notSupported: "نوع المحل فير مدعوم",
+                        placeholder: "مثال: GROCERY",
                     },
                     profileImage: { label: "صورة البروفايل" },
                     coverImage: { label: "صورة الخلفية" },
@@ -291,7 +293,9 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "إختر البائع",
                         placeholder: "مثال: إختر البائع",
                     },
-                    adsImage: { label: "صورة الإعلان" },
+                    adsImage1: { label: "صورة رقم 1*" },
+                    adsImage2: { label: "صورة رقم 2*" },
+                    adsImage3: { label: "صورة رقم 3*" },
                     addBtn: "إضافة",
                     editBtn: "تعديل",
                 },

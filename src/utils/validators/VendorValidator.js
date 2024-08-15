@@ -1,14 +1,9 @@
 import *as Yup from 'yup'
 
-export const vendorPatterns = {
-    fullNameRegx: /^[A-Za-z]{2,16}\s[A-Za-z]{2,16}\s[A-Za-z]{2,16}$/,
-    phoneRegx: /^05+[0-9]{8,8}$/,
-    emailRegx: /^[A-Za-z0-9\._%+\-]+@[A-Za-z0-9\.\-]+\.[A-Za-z]{2,4}$/,
-    maxKiloRegx:/^[0-9]{0,10}$/,
-    minChargeRegx:/^[0-9]{0,10}$/,
-    vendorTypeRegx:/^[A-Za-z0-9]{2,20}$/,
-    fileNameRegx: /^[A-Za-z0-9\.\-]+\.(png|jpe?g|pdf)$/
-}
+export const supportedVendorType=[
+  {id: 1, name: "Restaurant / مطعم", value: "RESTAURANT"},
+  {id: 2, name: "Grocery / بقالة", value: "GROCERY"},
+  {id: 3, name: "Fashion / أزياء", value: "FASHION"}]
 
 export const validationSchema =(vendorData, isEditing, requiredMessage)=> {return Yup.object({
     fullName: Yup.string().required(requiredMessage),
@@ -34,7 +29,9 @@ export const validationSchema =(vendorData, isEditing, requiredMessage)=> {retur
     minChargeLongDistance: Yup.number().typeError(vendorData.minChargeLongDistance?.numbersOnly)
     .min(1, vendorData.minChargeLongDistance?.startFromOne)
     .required(requiredMessage),
-    vendorType: Yup.string().required(requiredMessage),
+    vendorType: Yup.string()
+    .oneOf(supportedVendorType.map(type=>type.value), vendorData.vendorType?.notSupported)
+    .required(requiredMessage),
     coverImage: Yup.mixed().notRequired(),
     profileImage: Yup.mixed().notRequired(),
     identityImage : Yup.mixed().when([], {
@@ -73,6 +70,8 @@ export function fillVendorFormData(fd, vendor, userId, vendorId){
   fd.append("VendorPayload", JSON.stringify({
             vendorId: vendorId,
             fullName: vendor.fullName,
+            email: vendor.email,
+            phone: vendor.phone,
             vendorType: vendor.vendorType.toUpperCase(),
             maxKilometerDelivery: vendor.maxKilometerDelivery===""?null:vendor.maxKilometerDelivery,
             minChargeLongDistance: vendor.minChargeLongDistance===""?null:vendor.minChargeLongDistance,
@@ -84,7 +83,4 @@ export function fillVendorFormData(fd, vendor, userId, vendorId){
         fd.append("licenseImage", vendor.licenseImage)
         fd.append("identityImage", vendor.identityImage)
         fd.append("coverImage", vendor.coverImage)
-}
-function regexToString(regex) {
-    return regex.toString().replace(/\//g, ""); //.replace(/\\\\/g, "\\");
 }

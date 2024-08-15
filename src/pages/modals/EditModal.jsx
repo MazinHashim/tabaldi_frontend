@@ -17,7 +17,7 @@ const EditModal = ({showModal, setShowModal, target, children}) => {
             <TEModalHeader>
               {/* <!--Modal title--> */}
               <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
-                Edit {target}
+                {target}
               </h5>
               {/* <!--Close button--> */}
               <button

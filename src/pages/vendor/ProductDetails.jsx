@@ -123,6 +123,7 @@ const ProductDetails = () => {
             toast.error(error.response?.data.message);
         }
     }
+    const selectedProductPrice = Math.round(selectedProduct.price + (selectedProduct.price / 100) * selectedProduct.companyProfit).toFixed(2);
   return (
     <>
     <ToastContainer />
@@ -141,11 +142,11 @@ const ProductDetails = () => {
             <div className='flex justify-between items-start w-full'>
                 <div className='flex flex-col w-3/4 space-y-10'>
                     <p className='text-gray-400'>{selectedProduct?.description}.</p>
-                    <p className='text-6xl'>{selectedProduct?.price.toFixed(2)}<span className='text-2xl'>{tCard["aedUnit"]}</span></p>
+                    <p className='text-6xl'>{selectedProductPrice}<span className='text-2xl'>{tCard["aedUnit"]}</span></p>
                     <div>  
                         <h4>{tOptionInfo["productChar"]}</h4>
                         {groups.map(group=>{
-                        return <div className='options my-7 border-2 border-slate-200 border-dashed rounded-3xl p-4'>
+                        return <div key={group} className='options my-7 border-2 border-slate-200 border-dashed rounded-3xl p-4'>
                             <div className='flex flex-wrap items-center'>
                                 <p className='text-gray-500 capitalize w-full'>{group}</p>
                                 {selectedProduct?.options
@@ -183,9 +184,9 @@ const ProductDetails = () => {
                         <div className='flex flex-wrap items-start options border-2 border-slate-200 border-dashed rounded-3xl p-4'>
                             
                             {selectedProduct?.options
-                            .filter(op=>op.groupFlag==null)
+                            .filter(option=>option.groupFlag==null)
                             .map((option) =>{
-                                return <div className='flex items-center capitalize bg-secondary-color text-white rounded-lg m-2'>
+                                return <div key={option.optionId} className='flex items-center capitalize bg-secondary-color text-white rounded-lg m-2'>
                                         <span className='p-1'>{option.name}</span>
                                         <span className='bg-white text-black p-1 border border-green-400 rounded-lg text-sm'>
                                             {option.fee} {tCard["aedUnit"]}
@@ -211,13 +212,11 @@ const ProductDetails = () => {
                 <div className='product-details flex flex-wrap justify-end'>
                     {!selectedProduct?.images ? "Loading..." :
                     selectedProduct.images.map((image)=>{
-                    return <>
-                        <img className="rounded-xl h-[10rem] w-5/12 m-1" 
+                    return <img key={image} className="rounded-xl h-[10rem] w-5/12 m-1" 
                     src={image
                         ?`${baseURL}/files/get/file/${image}`
                         :productProfile}
-                    alt={`${selectedProduct?.name}`} />
-                    </>})}
+                    alt={`${selectedProduct?.name}`} />})}
                 </div>
             </div>
         </div>

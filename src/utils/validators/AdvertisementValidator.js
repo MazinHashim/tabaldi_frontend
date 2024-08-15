@@ -9,7 +9,37 @@ export const validationSchema =(advertisementData, isEditing, formData, required
       then: ()=> Yup.string().matches(/^https?:\/\/[^\s/$.?#].[^\s]*$/,advertisementData.url?.urlFormat),
       otherwise: ()=> Yup.string().notRequired()
     }),
-    adsImage : Yup.mixed().when([], {
+    adsImage1 : Yup.mixed().when([], {
+    is: () => !isEditing,
+    then: ()=> Yup.mixed()
+      .test(
+        'fileSize',
+        'حجم الصورة غير مدعوم',
+        value => value && value.size <= 1024 * 1024 * 25 // 25 MB
+      )
+      .test(
+        'fileType',
+        `الملفات المدعومة png, jpg, jpeg, فقط`,
+        value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
+      ),
+      otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
+    }),
+    adsImage2 : Yup.mixed().when([], {
+    is: () => !isEditing,
+    then: ()=> Yup.mixed()
+      .test(
+        'fileSize',
+        'حجم الصورة غير مدعوم',
+        value => value && value.size <= 1024 * 1024 * 25 // 25 MB
+      )
+      .test(
+        'fileType',
+        `الملفات المدعومة png, jpg, jpeg, فقط`,
+        value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
+      ),
+      otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
+    }),
+    adsImage3 : Yup.mixed().when([], {
     is: () => !isEditing,
     then: ()=> Yup.mixed()
       .test(
@@ -31,7 +61,9 @@ export function fillAdvertisementFormData(fd, advertisement, advertisementId){
             advertisementId: advertisementId,
             title: advertisement.title,
             subtitle: advertisement.subtitle,
-            url: advertisement.url, vendorId: advertisement.vendorId==-1 ? null : advertisement.vendorId
+            url: advertisement.url, vendorId: advertisement.vendorId==="-1" ? null : advertisement.vendorId
           }))
-  fd.append("adsImage", advertisement.adsImage)
+  fd.append("adsImage1", advertisement.adsImage1)
+  fd.append("adsImage2", advertisement.adsImage2)
+  fd.append("adsImage3", advertisement.adsImage3)
 }

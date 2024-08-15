@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import * as validator from '../../utils/validators/AdvertisementValidator';
 import SendOTPModal from '../modals/SendOTPModal';
-import axios, { baseURL } from '../../apis/axios';
+import { baseURL } from '../../apis/axios';
 import { useTranslation } from 'react-i18next';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { ValidationError } from 'yup';
@@ -82,47 +82,67 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             </div>
             <div className="md:w-1/4 my-6">
               <label htmlFor="subtitle" className="text-lg">{tAdvertisementInfo.subtitle?.label}</label>
-              <input type="text" name="subtitle" id="subtitle" defaultValue={currentAdvertisement?.subtitle??''} disabled={isEdit} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.subtitle?.placeholder}/>
+              <input type="text" name="subtitle" id="subtitle" defaultValue={currentAdvertisement?.subtitle??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.subtitle?.placeholder}/>
               {errors?.subtitle&&<div className='text-red-600'>{errors?.subtitle}</div>}
-            </div>
-            <div className="md:w-1/4 my-6">
-              <label htmlFor="adsImage" className="text-lg">{tAdvertisementInfo.adsImage?.label}</label>
-              <input type="file" name="adsImage" id="adsImage" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage?.placeholder} />
-              {errors?.adsImage&&<div className='text-red-600'>{errors?.adsImage}</div>}
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row flex-wrap justify-between">
-            <div className="md:w-1/4 my-6">
-              <label htmlFor="url" className="text-lg">{tAdvertisementInfo.url?.label}</label>
-              <input type="url" name="url" id="url" defaultValue={currentAdvertisement?.url??''} disabled={isEdit} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.url?.placeholder} />
-              {errors?.url&&<div className='text-red-600'>{errors?.url}</div>}
-            </div>
+            </div>{!currentAdvertisement?.vendor?.vendorId && isEdit?"":
             <div className="md:w-1/4 my-6">
               <label htmlFor="vendorId" className="text-lg">{tAdvertisementInfo.vendorId?.label}</label>
               <select
                 name={"vendorId"}
-                defaultValue={currentAdvertisement?.vendor.vendorId}
+                defaultValue={currentAdvertisement?.vendor?.vendorId}
                 className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
                 >
                   <option key={0} value={-1}>{tAdvertisementInfo.vendorId?.label}</option>
                   {vendorList?vendorList.map(data=>{
                     const vendor=data;
                   return <option
+                  selected={vendor.vendorId===currentAdvertisement?.vendor?.vendorId}
                   key={vendor.vendorId} value={vendor.vendorId}>{vendor.fullName}</option>
                   }):"No Vendor Found"}
                 </select>
               {errors?.vendorId&&<div className='text-red-600'>{errors?.vendorId}</div>}
+            </div>}
+          </div>
+          <div className="flex flex-col md:flex-row flex-wrap justify-between">
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="adsImage1" className="text-lg">{tAdvertisementInfo.adsImage1?.label}</label>
+              <input type="file" name="adsImage1" id="adsImage1" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage1?.placeholder} />
+              {errors?.adsImage1&&<div className='text-red-600'>{errors?.adsImage1}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="adsImage2" className="text-lg">{tAdvertisementInfo.adsImage2?.label}</label>
+              <input type="file" name="adsImage2" id="adsImage2" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage2?.placeholder} />
+              {errors?.adsImage2&&<div className='text-red-600'>{errors?.adsImage2}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="adsImage3" className="text-lg">{tAdvertisementInfo.adsImage3?.label}</label>
+              <input type="file" name="adsImage3" id="adsImage3" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage3?.placeholder} />
+              {errors?.adsImage3&&<div className='text-red-600'>{errors?.adsImage3}</div>}
+            </div>
+          </div>
+          <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
+            {!currentAdvertisement?.url && isEdit?"":
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="url" className="text-lg">{tAdvertisementInfo.url?.label}</label>
+              <input type="url" name="url" id="url" defaultValue={currentAdvertisement?.url??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.url?.placeholder} />
+              {errors?.url&&<div className='text-red-600'>{errors?.url}</div>}
+            </div>}
+            <div className='md:w-1/4 my-6'>
+              <button type="submit" className="bg-primary-color text-white w-full py-2.5 mt-5">{tAdvertisementInfo[isEdit?"editBtn":"addBtn"]}</button>
             </div>
           </div>
           {isEdit && 
           <div className="flex flex-col md:flex-row flex-wrap justify-between my-6">
-              {previewUrls.adsImage?<img className="rounded-xl" width={100} src={previewUrls.adsImage} alt="ads" />
-              :currentAdvertisement.adsImage?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage}`} alt="ads" />
+              {previewUrls.adsImage1?<img className="rounded-xl" width={100} src={previewUrls.adsImage1} alt="ads1" />
+              :currentAdvertisement.adsImage1?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage1}`} alt="ads1" />
+                :"Loading..."}
+              {previewUrls.adsImage2?<img className="rounded-xl" width={100} src={previewUrls.adsImage2} alt="ads2" />
+              :currentAdvertisement.adsImage2?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage2}`} alt="ads1" />
+                :"Loading..."}
+              {previewUrls.adsImage3?<img className="rounded-xl" width={100} src={previewUrls.adsImage3} alt="ads3" />
+              :currentAdvertisement.adsImage3?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage3}`} alt="ads1" />
                 :"Loading..."}
           </div>}
-          <div className='flex flex-col md:flex-row flex-wrap justify-end my-6'>
-            <button type="submit" className="w-3/12 bg-primary-color text-white px-5 py-2.5 my-6">{tAdvertisementInfo[isEdit?"editBtn":"addBtn"]}</button>
-          </div>
         </form>
       </div>
     </>
