@@ -1,6 +1,6 @@
 import useAxiosFetchApi from '../../hooks/useFetch';
 import { useAuth, useOrdersData } from '../../hooks/appHooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { statusBGColor, statusTextColor } from '../../utils/OrderStatusUtils';
 import AppLoading from '../../utils/AppLoading';
@@ -18,6 +18,7 @@ const OrdersList = ({routeRole}) => {
     const [state] = useAxiosFetchApi(ordersUrl, {}, sessionToken);
     const orderList = state.data?.list;
     const { setOrders } = useOrdersData();
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate()
 
     useEffect(()=>{
@@ -27,21 +28,32 @@ const OrdersList = ({routeRole}) => {
     function goToOrderDetails(orderId) {
         navigate((routeRole!=="SUPERADMIN"?"":"/orders")+'/order-details', {state: {orderId}});
     }
+    const queryOrders = orderList?.filter((data) =>
+        Object.values(data).some((value) =>
+        value.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.customer.user.phone.includes(searchQuery.toLowerCase())
+        )
+    )
 
   return (
     <>
         <div className='flex flex-col w-full'>
             <div className="flex flex-col shadow-4 p-2 rounded-2xl">
                 <div className="flex justify-between">
-                    <input type="text" placeholder='Search' className='p-2 m-2 rounded-lg border'/>
-                    <select className='p-2 m-2 rounded-lg border' name="status" id="status">
-                        <option>Status</option>
+                    <input type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder='Search' className='p-2 m-2 rounded-lg border'/>
+                    {routeRole!=="SUPERADMIN"&&
+                    <select className='p-2 m-2 rounded-lg border' name="status" id="status"
+                    onChange={(e) => setSearchQuery(e.target.value)}>
+                        <option value={""}>Status</option>
                         <option value="PROGRESSING">PROGRESSING</option>
                         <option value="WAITING">WAITING</option>
                         <option value="CONFIRMED">CONFIRMED</option>
                         <option value="DELIVERED">DELIVERED</option>
                         <option value="CANCELED">CANCELED</option>
-                    </select>
+                    </select>}
                 </div>
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 px-6">
@@ -65,7 +77,9 @@ const OrdersList = ({routeRole}) => {
                                 </td></tr>
                             : !state.data.list
                             ? <tr><td colSpan={7} className='p-10'>{state.data.message??state.error.message}</td></tr>
-                            : orderList.map((order)=>{
+                            : queryOrders?.length===0
+                            ? <tr><td colSpan={7} className='p-10'>{"orderInfo.noOrders"}</td></tr>
+                            : queryOrders.map((order)=>{
                             return <tr key={order.orderId}>
                                 <td className="whitespace-nowrap p-4 font-medium">{order.orderNumber}</td>
                                 <td className="whitespace-nowrap p-4">{`${order.customer.firstName} ${order.customer.lastName}`}</td>

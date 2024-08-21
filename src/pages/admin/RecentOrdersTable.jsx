@@ -34,7 +34,7 @@ const RecentOrdersTable = ({state, orders, title}) => {
                 : orders.map((order)=>{
                   return <tr key={order.orderId}>
                       <td className="whitespace-nowrap p-4 font-medium">#{order.orderNumber}</td>
-                      <td className="whitespace-nowrap p-4 text-start">{order.cartItems[0].product.name}</td>
+                      <td className="whitespace-nowrap p-4 text-start">{order.cartItems[0]?.product.name}</td>
                       <td className="whitespace-nowrap p-4">{order.vendor.fullName}</td>
                       <td className="whitespace-nowrap p-4">{order.orderDate}</td>
                       <td className="whitespace-nowrap p-4">{order.total} AED</td>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useAuth } from '../../hooks/appHooks';
 import { useTranslation } from 'react-i18next';
 import useAxiosFetchApi from '../../hooks/useFetch';
@@ -10,11 +10,18 @@ const INVOICE_LIST_URL = "/vendors/{id}/invoices";
 const InvoicesList = () => {
   const {auth} = useAuth()
     const{t, i18n} = useTranslation();
+    const [searchQuery, setSearchQuery] = useState('');
     const tCard = t("productCard")
     const vendorInvoicesUrl = INVOICE_LIST_URL.replace("{id}", `${auth.vendorId}`);
     const sessionToken = auth.token;
     const [state] = useAxiosFetchApi(vendorInvoicesUrl, {}, sessionToken);
     const invoiceList = state.data?.list;
+    const queryInvoices = invoiceList?.filter((data) =>
+        Object.values(data).some((value) =>
+        value.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+        data.order.customer.user.phone===searchQuery.toLowerCase()
+        )
+    )
   return (
     <div>
       <>
@@ -25,9 +32,13 @@ const InvoicesList = () => {
           </div>
           <div className="flex flex-col shadow-4 p-2 rounded-2xl">
               <div className="flex justify-between">
-                  <input type="text" placeholder='Search' className='p-2 m-2 rounded-lg border'/>
-                  <select className='p-2 m-2 rounded-lg border' name="status" id="status">
-                      <option>Status</option>
+                  <input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  type="text" placeholder='Search' className='p-2 m-2 rounded-lg border'/>
+                  <select className='p-2 m-2 rounded-lg border' name="status" id="status"
+                  onChange={(e) => setSearchQuery(e.target.value)}>
+                      <option value={""}>Status</option>
                       <option value={"DRAFT"}>Draft</option>
                       <option value={"PAID"}>Paid</option>
                       <option value={"UNPAID"}>Unpaid</option>
@@ -54,7 +65,9 @@ const InvoicesList = () => {
                           </td></tr>
                       : !state.data.list
                       ? <tr><td colSpan={7} className='p-10'>{state.data.message??state.error.message}</td></tr>
-                      : invoiceList.map((invoice)=>{
+                      : queryInvoices?.length===0
+                      ? <tr><td colSpan={7} className='p-10'>{"invoiceInfo.noInvoices"}</td></tr>
+                      : queryInvoices.map((invoice)=>{
                           const bgColor=invoice.status==="PAID"?"bg-green-200":"bg-red-200";
                           const txtColor=invoice.status==="PAID"?"text-green-600":"text-red-600";
                       return <tr key={invoice.invoiceId}>

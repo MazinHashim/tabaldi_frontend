@@ -22,6 +22,7 @@ const CategoriesList = () => {
     const [editModal, setShowEditModal] = useState({category: null, status: false});
     const [deleteModal, setShowDeleteModal] = useState({categoryId: null, status: false});
     const [isLoading, setLoading] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
     const vendorCategoriesUrl = CATEGORY_LIST_URL.replace("{id}", `${auth.vendorId}`);
     const sessionToken = auth.token;
     const [state,_, setChangeData] = useAxiosFetchApi(vendorCategoriesUrl, {}, sessionToken);
@@ -79,7 +80,11 @@ const CategoriesList = () => {
             setChangeData([...otherCategories, {numberOfProducts:0, category}])
         }
     }
-
+    const queryCategories = categoryList?.filter((data) =>
+        Object.values(data.category).some((value) =>
+        value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+        )
+    )
   return (
     <>
         <ToastContainer />
@@ -92,9 +97,13 @@ const CategoriesList = () => {
             </div>
             <div className="flex flex-col shadow-4 p-2 rounded-2xl">
                 <div className="flex justify-between">
-                    <input type="text" placeholder='Search' className='p-2 m-2 rounded-lg border'/>
-                    <select className='p-2 m-2 rounded-lg border' name="status" id="status">
-                        <option>Status</option>
+                    <input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    type="text" placeholder='Search' className='p-2 m-2 rounded-lg border'/>
+                    <select className='p-2 m-2 rounded-lg border' name="status" id="status"
+                    onChange={(e) => setSearchQuery(e.target.value)}>
+                        <option value={""}>Status</option>
                         <option value={true}>Published</option>
                         <option value={false}>Unpublished</option>
                     </select>
@@ -118,8 +127,9 @@ const CategoriesList = () => {
                                 </td></tr>
                             : !state.data.list
                             ? <tr><td colSpan={7} className='p-10'>{state.data.message??state.error.message}</td></tr>
-                            : categoryList
-                            .sort((a, b) => {
+                            : queryCategories?.length===0
+                            ? <tr><td colSpan={7} className='p-10'>{"categoryInfo.noCategory"}</td></tr>
+                            : queryCategories.sort((a, b) => {
                                 if (a.category.name < b.category.name) return -1;
                                 if (a.category.name > b.category.name) return 1;
                                 return 0

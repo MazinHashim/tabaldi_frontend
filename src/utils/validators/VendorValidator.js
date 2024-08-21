@@ -3,7 +3,7 @@ import *as Yup from 'yup'
 export const supportedVendorType=[
   {id: 1, name: "Restaurant / مطعم", value: "RESTAURANT"},
   {id: 2, name: "Grocery / بقالة", value: "GROCERY"},
-  {id: 3, name: "Fashion / أزياء", value: "FASHION"}]
+  {id: 3, name: "Store / متجر", value: "STORE"}]
 
 export const validationSchema =(vendorData, isEditing, requiredMessage)=> {return Yup.object({
     fullName: Yup.string().required(requiredMessage),

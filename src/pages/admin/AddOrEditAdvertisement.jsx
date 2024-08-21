@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import * as validator from '../../utils/validators/AdvertisementValidator';
-import SendOTPModal from '../modals/SendOTPModal';
 import { baseURL } from '../../apis/axios';
 import { useTranslation } from 'react-i18next';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
@@ -12,7 +11,6 @@ const ADVERTISMENT_ADD_INFO_URL = "/advertisements/save";
 const FETCH_VENDORS_URL = "/vendors";
 
 const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) => {
-  const [showModal, setShowModal] = useState(false);
   const{t, i18n} = useTranslation();
   const axiosPrivate = useAxiosPrivate()
   const [state] = useAxiosFetchApi(FETCH_VENDORS_URL, {}, null);
@@ -41,7 +39,6 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
       } else {
         onEdit(infoResponse?.data.advertisement);
       }
-      setShowModal(false)
       toast.success(infoResponse?.data.message);
       } catch (error) {
         if(error instanceof ValidationError){
@@ -70,7 +67,6 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
   return (
     <>
       {!isEdit && <ToastContainer/>}
-      <SendOTPModal showModal={showModal} setShowModal={setShowModal} onAction={handleAddOrEditAdvertisement}/>
       <div>
         <h1 className='font-normal'>{tAdvertisementInfo[isEdit?"editAdvertisementTitle":"addAdvertisementTitle"]}</h1>
         <form className='w-full' onSubmit={handleAddOrEditAdvertisement} method='post'>
