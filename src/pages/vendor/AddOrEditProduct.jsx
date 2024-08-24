@@ -139,7 +139,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               {errors?.categoryId&&<div className='text-red-600'>{errors?.categoryId}</div>}
             </div>
             <div className="md:w-1/4 my-6">
-              {!auth.role||!isEdit && <><label htmlFor="companyProfit" className="text-lg">{tProductInfo.companyProfit?.label}</label>
+              {!auth.role||isEdit && <><label htmlFor="companyProfit" className="text-lg">{tProductInfo.companyProfit?.label}</label>
               <input type="number" name="companyProfit" id="companyProfit" defaultValue={currentProduct?.companyProfit??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.companyProfit?.placeholder}
               onChange={handleProfitAndPriceChange} />
               {errors?.companyProfit&&<div className='text-red-600'>{errors?.companyProfit}</div>}
