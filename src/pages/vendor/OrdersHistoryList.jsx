@@ -27,7 +27,7 @@ const OrdersHistoryList = () => {
     }
     const queryOrders = orderList?.filter((data) =>
         Object.values(data).some((value) =>
-        value.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+        value?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
         data.customer.user.phone.includes(searchQuery.toLowerCase())
         )
     )
