@@ -23,8 +23,8 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
   const [errors, setErrors] = useState();
   const [finalPrice, setFinalPrice] = useState(!currentProduct?
     0 : currentProduct.price + (currentProduct.price / 100) * currentProduct.companyProfit);
-  const [price, setPrice] = useState(currentProduct.price);
-  const [profit, setProfit] = useState(currentProduct.companyProfit);
+  const [price, setPrice] = useState(currentProduct?.price);
+  const [profit, setProfit] = useState(currentProduct?.companyProfit);
   const categoryList = state.data?.list;
   
   const handleAddOrEditProduct = async (e)=>{
