@@ -6,6 +6,8 @@ import { baseURL } from '../../apis/axios';
 import { GrDeploy } from 'react-icons/gr';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { toast } from 'react-toastify';
+import { BsCheck2Circle } from 'react-icons/bs';
+import { IoCloseCircleOutline, IoWarningOutline } from 'react-icons/io5';
 
 const TOGGLE_PUBLISH_URL = "/products/toggle/publish"
 const ProductCard = ({product, routeRole, onTogglePublishing}) => {
@@ -47,13 +49,19 @@ const ProductCard = ({product, routeRole, onTogglePublishing}) => {
             <h4 className='uppercase primary-color'>{product.category.name}</h4>
             <h3 className='uppercase'>{`${selectedProductPrice} ${tCard["aedUnit"]}`}</h3>
         </div>
-        <div className="flex justify-between px-2">
+        <div className="flex justify-between px-2 items-start">
             <h4>{product.name}</h4>
-            <button 
+            {routeRole==="SUPERADMIN"?<button 
             onClick={()=>isLoading?null:toggleProductPublishing(product.productId)}
             className={`${product.published?"bg-green-200":"bg-red-200"} text-sm`} title={"Published Prodcut"}>
                 <GrDeploy/>
-            </button>
+            </button>:
+                product.published
+                ? <BsCheck2Circle className={`${"text-green-700"} text-xl`} title={"Published Prodcut"}/>
+                : <p className={`text-sm ${"text-yellow-700"}`}>
+                    <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
+                    Reviewing</p>
+            }
         </div>
         <div className="flex px-2"><p className='text-gray-500'>{product.description}.</p></div>
         <hr/>

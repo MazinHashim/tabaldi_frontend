@@ -43,7 +43,13 @@ const VendorsList = () => {
             <AppLoading/></div>
             :!state.data.list
             ?<div className='flex justify-center items-center h-[70vh] capitalize'>{state.data.message??state.error.message}</div>
-            :vendorList.map((vendor, index)=>{
+            :vendorList
+            .sort((a, b) => {
+                if (a.fullName < b.fullName) return -1;
+                if (a.fullName > b.fullName) return 1;
+                return 0
+            })
+            .map((vendor)=>{
             return <VendorCard key={vendor.vendorId} vendor={vendor}
             onDelete={handleDeleteVendor}
             onEdit={handleChangeOnEditVendor}

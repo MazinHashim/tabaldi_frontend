@@ -95,11 +95,15 @@ export function validateProductBeforeSubmit(productData, productImages, isEdit) 
     (isEdit || productImages[0].name!==null);
 }
 
-export const validationSchema =(productData, isEditing, requiredMessage)=> {return Yup.object({
+export const validationSchema =(productData, isEditing, companyProfit, requiredMessage)=> {return Yup.object({
     name: Yup.string().required(requiredMessage),
-    companyProfit: Yup.number().typeError(productData.companyProfit.numbersOnly)
-    .min(1, productData.companyProfit.startFromOne)
-    .required(requiredMessage),
+    companyProfit: Yup.number().when([], {
+    is: () => companyProfit,
+    then: ()=> Yup.number().typeError(productData.companyProfit.numbersOnly)
+                  .min(1, productData.companyProfit.startFromOne)
+                  .required(requiredMessage),
+    otherwise: ()=> Yup.number().notRequired(), // No validation when editing
+    }),
     description: Yup.string().nullable(),
     quantity: Yup.number().typeError(productData.quantity.numbersOnly)
     .min(1, productData.quantity.startFromOne)
@@ -125,14 +129,15 @@ export const validationSchema =(productData, isEditing, requiredMessage)=> {retu
     }),
 })}
 
-export function fillProductFormData(fd, formData, productImages, productId, vendorId){
+export function fillProductFormData(fd, formData, productImages, companyProfit, productId, vendorId){
+
   fd.append("productPayload", JSON.stringify({
             productId: productId,
             vendorId: vendorId,
             name: formData.name,
             price: formData.price,
             quantity: formData.quantity,
-            companyProfit: formData.companyProfit,
+            companyProfit: formData.companyProfit??companyProfit,
             description: formData.description===""?null:formData.description,
             categoryId: formData.categoryId
           }))

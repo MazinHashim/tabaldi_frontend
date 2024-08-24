@@ -13,6 +13,8 @@ import * as validator from '../../utils/validators/OptionValidator';
 import FormInput from '../../utils/FormInput';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { baseURL } from '../../apis/axios';
+import { BsCheck2Circle } from 'react-icons/bs';
+import { IoWarningOutline } from 'react-icons/io5';
 const PRODUCTS_ROUTE_URL = "/products";
 const PRODUCT_DELETE_URL = "/products/delete";
 const ADD_OPTION_INFO_URL = "/options/save"
@@ -123,11 +125,16 @@ const ProductDetails = () => {
             toast.error(error.response?.data.message);
         }
     }
-    const selectedProductPrice = Math.round(selectedProduct.price + (selectedProduct.price / 100) * selectedProduct.companyProfit).toFixed(2);
+    const totalPrice = selectedProduct.price + (selectedProduct.price * selectedProduct.companyProfit / 100);
+    const selectedProductPrice = (Math.round(totalPrice * 2) / 2).toFixed(2);
   return (
     <>
     <ToastContainer />
         <div className='flex flex-col justify-center items-start space-y-8'>
+            {!selectedProduct.published &&
+                <p className={`${"text-yellow-700"}`}>
+                    <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
+                    Reviewing by super admin, This product will not be visible to the customers</p>}
             <div className='flex justify-between items-center'>
                 <h2>{selectedProduct?.name}</h2>
                 <h4 className='uppercase primary-color border border-green-300 rounded-lg px-1 mx-3'>

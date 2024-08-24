@@ -5,31 +5,25 @@ import { useNavigate } from 'react-router-dom';
 import { statusBGColor, statusTextColor } from '../../utils/OrderStatusUtils';
 import AppLoading from '../../utils/AppLoading';
 import { useTranslation } from 'react-i18next';
-const ORDER_LIST_URL = "/vendors/{id}/orders";
-const PENDING_ORDER_LIST_URL = "/orders/pending";
+const ORDER_HISTORY_LIST_URL = "/orders/history";
 
-const OrdersList = ({routeRole}) => {
-
-    var ordersUrl = PENDING_ORDER_LIST_URL;
+const OrdersHistoryList = () => {
     const { auth } = useAuth();
-    if(routeRole!=="SUPERADMIN"){
-        ordersUrl = ORDER_LIST_URL.replace("{id}", `${auth.vendorId}`);
-    }
     const sessionToken = auth.token;
-    const [state] = useAxiosFetchApi(ordersUrl, {}, sessionToken);
+    const [state] = useAxiosFetchApi(ORDER_HISTORY_LIST_URL, {}, sessionToken);
     const orderList = state.data?.list;
+    const{t} = useTranslation();
+    const tOrderInfo = t("orderInfo")
     const { setOrders } = useOrdersData();
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate()
-    const{t} = useTranslation();
-    const tOrderInfo = t("orderInfo")
 
     useEffect(()=>{
         setOrders(state.data?.list)
     }, [state.data, setOrders])
 
     function goToOrderDetails(orderId) {
-        navigate((routeRole!=="SUPERADMIN"?"":"/orders")+'/order-details', {state: {orderId}});
+        navigate('/order-details', {state: {orderId}});
     }
     const queryOrders = orderList?.filter((data) =>
         Object.values(data).some((value) =>
@@ -47,16 +41,12 @@ const OrdersList = ({routeRole}) => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={`${tOrderInfo.search}`} className='p-2 m-2 rounded-lg border'/>
-                    {routeRole!=="SUPERADMIN"&&
                     <select className='p-2 m-2 rounded-lg border' name="status" id="status"
                     onChange={(e) => setSearchQuery(e.target.value)}>
                         <option value={""}>{`${tOrderInfo.status.label}`}</option>
-                        <option value="PROGRESSING">PROGRESSING</option>
-                        <option value="WAITING">WAITING</option>
-                        <option value="CONFIRMED">CONFIRMED</option>
                         <option value="DELIVERED">DELIVERED</option>
                         <option value="CANCELED">CANCELED</option>
-                    </select>}
+                    </select>
                 </div>
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 px-6">
@@ -67,8 +57,8 @@ const OrdersList = ({routeRole}) => {
                             <tr>
                             <th scope="col" className="p-4">{`${tOrderInfo.orderNumber.label}`}</th>
                             <th scope="col" className="p-4">{`${tOrderInfo.customerName.label}`}</th>
+                            <th scope="col" className="p-4">{`${tOrderInfo.customerPhone.label}`}</th>
                             <th scope="col" className="p-4">{`${tOrderInfo.orderDate.label}`}</th>
-                            <th scope="col" className="p-4">{`${tOrderInfo.paymentMethod.label}`}</th>
                             <th scope="col" className="p-4">{`${tOrderInfo.status.label}`}</th>
                             <th scope="col" className="p-4">{`${tOrderInfo.amount.label}`}</th>
                             <th scope="col" className="p-4">{t("action")}</th>
@@ -86,8 +76,18 @@ const OrdersList = ({routeRole}) => {
                             return <tr key={order.orderId}>
                                 <td className="whitespace-nowrap p-4 font-medium">{order.orderNumber}</td>
                                 <td className="whitespace-nowrap p-4">{`${order.customer.firstName} ${order.customer.lastName}`}</td>
-                                <td className="whitespace-nowrap p-4">{order.forderDate}</td>
-                                <td className="whitespace-nowrap p-4">Cash on Delivery</td>
+                                <td className="whitespace-nowrap p-4">{order.customer.user.phone}</td>
+                                <td className="whitespace-nowrap p-4 w-64 text-sm">
+                                    <div className='flex justify-between text-warning-700 mb-1'>
+                                        <span>{`${tOrderInfo.ordered}`}</span> <span>{order.forderDate}</span>
+                                    </div>
+                                    <div className='flex justify-between text-info-700 mb-1'>
+                                        <span>{`${tOrderInfo.processed}`}</span> <span>{order.fprocessedDate??`${tOrderInfo.notYet}`}</span>
+                                    </div>
+                                    <div className='flex justify-between text-success-700 mb-1'>
+                                        <span>{`${tOrderInfo.delivered}`}</span> <span>{order.fdeliveredDate??`${tOrderInfo.notYet}`}</span>
+                                    </div>
+                                </td>
                                 <td className="whitespace-nowrap p-4">
                                     <span className={"font-bold py-1 px-2 "
                                     + statusTextColor(order.status) + " "
@@ -112,4 +112,4 @@ const OrdersList = ({routeRole}) => {
   )
 }
 
-export default OrdersList
+export default OrdersHistoryList

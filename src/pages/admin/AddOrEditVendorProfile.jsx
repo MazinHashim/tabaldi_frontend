@@ -75,12 +75,12 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
             </div>
             <div className="md:w-1/4 my-6">
               <label htmlFor="phone" className="text-lg">{tVendorInfo.phone?.label}</label>
-              <input type="text" name="phone" id="phone" defaultValue={currentVendor?.user.phone??''} disabled={isEdit} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.phone?.placeholder}/>
+              <input type="text" name="phone" id="phone" defaultValue={currentVendor?.user.phone??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.phone?.placeholder}/>
               {errors?.phone&&<div className='text-red-600'>{errors?.phone}</div>}
             </div>
             <div className="md:w-1/4 my-6">
               <label htmlFor="email" className="text-lg">{tVendorInfo.email?.label}</label>
-              <input type="email" name="email" id="email" defaultValue={currentVendor?.user.email??''} disabled={isEdit} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.email?.placeholder} />
+              <input type="email" name="email" id="email" defaultValue={currentVendor?.user.email??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.email?.placeholder} />
               {errors?.email&&<div className='text-red-600'>{errors?.email}</div>}
             </div>
           </div>

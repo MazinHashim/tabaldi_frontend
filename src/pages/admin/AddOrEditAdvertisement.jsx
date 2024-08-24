@@ -63,10 +63,13 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
     const urls = files.map(file => URL.createObjectURL(file));
       setPreviewUrls({...previewUrls, [event.target.name]: urls[0]});
   };
+  // const diffInMs = new Date(currentAdvertisement?.expireIn) - new Date(currentAdvertisement?.createdAt);
+  // const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+  // // const diffInDays = !diffInMs?undefined:Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
   return (
     <>
-      {!isEdit && <ToastContainer/>}
+      <ToastContainer/>
       <div>
         <h1 className='font-normal'>{tAdvertisementInfo[isEdit?"editAdvertisementTitle":"addAdvertisementTitle"]}</h1>
         <form className='w-full' onSubmit={handleAddOrEditAdvertisement} method='post'>
@@ -123,6 +126,28 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
               <input type="url" name="url" id="url" defaultValue={currentAdvertisement?.url??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.url?.placeholder} />
               {errors?.url&&<div className='text-red-600'>{errors?.url}</div>}
             </div>}
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="createDate" className="text-lg">{tAdvertisementInfo.createDate?.label}</label>
+              <input type="date" name="createDate" id="createDate" defaultValue={currentAdvertisement?.fcreatedDate??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.createDate?.placeholder} />
+              {errors?.createDate&&<div className='text-red-600'>{errors?.createDate}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="expireDate" className="text-lg">{tAdvertisementInfo.expireDate?.label}</label>
+              <input type="date" name="expireDate" id="expireDate" defaultValue={currentAdvertisement?.fexpireDate??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.expireDate?.placeholder} />
+              {errors?.expireDate&&<div className='text-red-600'>{errors?.expireDate}</div>}
+            </div>
+          </div>
+          <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="startTime" className="text-lg">{tAdvertisementInfo.startTime?.label}</label>
+              <input type="time" name="startTime" id="startTime" defaultValue={currentAdvertisement?.startTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.startTime?.placeholder} />
+              {errors?.startTime&&<div className='text-red-600'>{errors?.startTime}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="endTime" className="text-lg">{tAdvertisementInfo.endTime?.label}</label>
+              <input type="time" name="endTime" id="endTime" defaultValue={currentAdvertisement?.endTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.endTime?.placeholder} />
+              {errors?.endTime&&<div className='text-red-600'>{errors?.endTime}</div>}
+            </div>
             <div className='md:w-1/4 my-6'>
               <button type="submit" className="bg-primary-color text-white w-full py-2.5 mt-5">{tAdvertisementInfo[isEdit?"editBtn":"addBtn"]}</button>
             </div>

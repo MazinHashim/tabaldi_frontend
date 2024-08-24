@@ -9,6 +9,7 @@ import AdminHome from './pages/admin/AdminHome';
 import AddOrEditVendorProfile from './pages/admin/AddOrEditVendorProfile';
 import VendorsList from './pages/admin/VendorsList';
 import OrdersList from './pages/vendor/CustomerOrdersList';
+import OrdersHistoryList from './pages/vendor/OrdersHistoryList';
 import ProductsList from './pages/vendor/ProductsList';
 import VendorHome from './pages/vendor/VendorHome';
 import ProductDetails from './pages/vendor/ProductDetails';
@@ -35,6 +36,7 @@ const router = createBrowserRouter(
         <Route path='vendors/products/product-details' element={<ProductDetails/>} />
         <Route path='vendor-info' element={<AddOrEditVendorProfile />} />
         <Route path='orders/pending' element={<OrdersList routeRole={"SUPERADMIN"}/>}/>
+        <Route path='orders/history' element={<OrdersHistoryList />}/>
         <Route path='orders/order-details' element={<OrderDetails/>}/>
       </Route>
 

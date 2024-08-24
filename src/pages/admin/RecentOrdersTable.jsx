@@ -1,8 +1,12 @@
 import React from 'react'
 import { statusBGColor, statusTextColor } from '../../utils/OrderStatusUtils';
 import AppLoading from '../../utils/AppLoading';
+import { useTranslation } from 'react-i18next';
 
 const RecentOrdersTable = ({state, orders, title}) => {
+  const{t} = useTranslation();
+  const tOrderInfo = t("orderInfo")
+
   return (
     <div className="flex flex-col shadow-4 p-2 rounded-2xl mt-14">
         <div className="flex justify-between my-3">
@@ -15,12 +19,12 @@ const RecentOrdersTable = ({state, orders, title}) => {
                 <thead
                   className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                   <tr>
-                  <th scope="col" className="p-4">Order Number</th>
-                  <th scope="col" className="p-4">Product Name</th>
-                  <th scope="col" className="p-4">Vendor Name</th>
-                  <th scope="col" className="p-4">Date & Time</th>
-                  <th scope="col" className="p-4">Price</th>
-                  <th scope="col" className="p-4">Status</th>
+                  <th scope="col" className="p-4">{`${tOrderInfo.orderNumber.label}`}</th>
+                  <th scope="col" className="p-4">{`${tOrderInfo.productName.label}`}</th>
+                  <th scope="col" className="p-4">{`${tOrderInfo.vendorName.label}`}</th>
+                  <th scope="col" className="p-4">{`${tOrderInfo.orderDate.label}`}</th>
+                  <th scope="col" className="p-4">{`${tOrderInfo.amount.label}`}</th>
+                  <th scope="col" className="p-4">{t("action")}</th>
                   </tr>
               </thead>
               <tbody>
@@ -36,8 +40,8 @@ const RecentOrdersTable = ({state, orders, title}) => {
                       <td className="whitespace-nowrap p-4 font-medium">#{order.orderNumber}</td>
                       <td className="whitespace-nowrap p-4 text-start">{order.cartItems[0]?.product.name}</td>
                       <td className="whitespace-nowrap p-4">{order.vendor.fullName}</td>
-                      <td className="whitespace-nowrap p-4">{order.orderDate}</td>
-                      <td className="whitespace-nowrap p-4">{order.total} AED</td>
+                      <td className="whitespace-nowrap p-4">{order.forderDate}</td>
+                      <td className="whitespace-nowrap p-4">{order.total} {t("aedUnit")}</td>
                       <td className="whitespace-nowrap p-4">
                           <span className={"font-bold py-1 px-2 "
                           + statusTextColor(order.status) + " "

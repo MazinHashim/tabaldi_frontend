@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { PiArrowFatLinesRightFill } from "react-icons/pi";
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../hooks/appHooks';
@@ -10,40 +10,21 @@ import { HiCurrencyDollar, HiMiniShoppingCart } from 'react-icons/hi2';
 import { FaBoxOpen } from "react-icons/fa";
 import RecentOrdersTable from '../admin/RecentOrdersTable';
 import FrequentProductsTable from './FrequentProductsTable';
-import { GrDeploy } from 'react-icons/gr';
-import useAxiosPrivate from '../../apis/useAxiosPrivate';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 const HOME_DETAILS_URL = "/details/vendor/home/{id}";
-const TOGGLE_PUBLISH_URL = "/vendors/toggle/working"
+
 const VendorHome = () => {
-  const { auth, setAuth } = useAuth();
-  const axiosPrivate = useAxiosPrivate()
-  const [isLoading, setLoading] = useState(false);
+  const { auth } = useAuth();
   const homeDetailsUrl = HOME_DETAILS_URL.replace("{id}", `${auth?.vendorId}`);
   const [state, setUrl] = useAxiosFetchApi(null, {}, auth?.token);
   const details = state.data?.details;
-  const {t, i18n} = useTranslation();
+  const {t} = useTranslation();
   const tCard = t("vendorCard")
   useEffect(()=>{
     setUrl(homeDetailsUrl)
   }, [auth?.vendorId, homeDetailsUrl, setUrl])
 
-  async function toggleVendorWorkingStatus(productId){
-    try{
-        setLoading(true)
-        const params = `/${productId}`;
-        const statusChangedResponse = await axiosPrivate.get(TOGGLE_PUBLISH_URL+params,
-            {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
-        );
-        setLoading(false)
-        setAuth({...auth, working: statusChangedResponse?.data.published});
-        toast.success(statusChangedResponse?.data.message);
-    } catch (error) {
-        setLoading(false)
-        toast.error(error.response?.data.message);
-    }
-  }
   return (
     <div className='flex flex-col mb-6'>
       <ToastContainer />
@@ -58,12 +39,9 @@ const VendorHome = () => {
           </div>
           <span className='px-3 ms-2 rounded-lg bg-gray-600 text-white text-sm'>{auth?.vendorType}</span>
         </div>
-        <button 
-        onClick={()=>isLoading?null:toggleVendorWorkingStatus(auth?.vendorId)}
-        className={`${auth?.working?"bg-green-200":"bg-red-200"} text-sm`} title={"Working Vendor"}>
-            {auth?.working?tCard["working"]:tCard["outOfService"]}
-            <GrDeploy className='inline-block mx-2'/>
-        </button>
+        <p className={`px-2 ${auth?.working?"bg-green-700":"bg-red-700"} text-white rounded-lg text-sm inline-block`}>
+          {auth?.working?tCard["working"]:tCard["outOfService"]}
+        </p>
       </div>
       <hr />
       <div className='flex justify-between items-center text-center my-6'>

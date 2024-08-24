@@ -104,7 +104,10 @@ const AdvertisementsList = () => {
                             <tr key={"head-1"}>
                             <th scope="col" className="whitespace-nowrap  p-4">Title</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Subtitle</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Expire In</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Created Date</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Expire Date</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">Start Time</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">End Time</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Link</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Vendor</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Type</th>
@@ -130,8 +133,11 @@ const AdvertisementsList = () => {
                                 const txtColor=advertisement.shown?"text-green-600":"text-red-600";
                             return <tr key={advertisement.advertisementId}>
                                 <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.title}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.subtitle??"_"}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.fexpireIn}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.subtitle===""?"_":advertisement.subtitle??"_"}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.fcreatedDate}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.fexpireDate}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.fstartTime}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.fendTime}</td>
                                 <td className="whitespace-nowrap p-4">
                                     {advertisement.url
                                     ? <a className='bg-gray-200 text-xs' target='_blank' href={advertisement.url} rel="noreferrer">Visit</a>

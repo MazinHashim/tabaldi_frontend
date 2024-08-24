@@ -10,20 +10,46 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { baseURL } from '../../apis/axios';
 import { GrDeploy } from 'react-icons/gr';
+import { toast } from 'react-toastify';
+import useAxiosPrivate from '../../apis/useAxiosPrivate';
+import { BsCheck2Circle } from 'react-icons/bs';
+const TOGGLE_PUBLISH_URL = "/vendors/toggle/working"
 
 const VendorCard = ({vendor, onDelete, onEdit}) => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showIdentityModal, setShowIdentityModal] = useState(false);
-    const{t,} = useTranslation();
+    const [isLoading, setLoading] = useState(false);
+    const{t, i18n} = useTranslation();
     const tCard = t("vendorCard")
+    const axiosPrivate = useAxiosPrivate()
+    
+    async function toggleVendorWorkingStatus(vendorId){
+    try{
+        setLoading(true)
+        const params = `/${vendorId}`;
+        const statusChangedResponse = await axiosPrivate.get(TOGGLE_PUBLISH_URL+params,
+            {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
+        );
+        setLoading(false)
+        onEdit({...vendor, working: statusChangedResponse?.data.published});
+        toast.success(statusChangedResponse?.data.message);
+    } catch (error) {
+        setLoading(false)
+        toast.error(error.response?.data.message);
+    }
+  }
   return (
     <>
     <div key={vendor.vendorId} className='flex-col space-y-2 mb-16 w-full lg:w-5/12 shadow-3 p-2 m-2 rounded-xl'>
-        <div className='flex justify-end'>
-            <p className={`px-2 ${vendor.working?"bg-green-700":"bg-red-700"} text-white rounded-lg text-sm inline-block`}>
+        <div className='flex justify-between items-center'>
+            <p className={`${vendor.working?"bg-green-700":"bg-red-700"} text-white text-sm rounded-lg px-2`}>
                 {vendor.working?tCard["working"]:tCard["outOfService"]}
             </p>
+            <button onClick={()=>isLoading?null:toggleVendorWorkingStatus(vendor.vendorId)}
+                className={`${vendor.working?"bg-green-200":"bg-red-200"} text-sm`} title={"Working Vendor"}>
+                    <GrDeploy className='inline-block mx-2'/>
+            </button>
         </div>
         <div className='flex justify-between'>
             {vendor.profileImage?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${vendor.profileImage}`} alt="Profile" />
@@ -35,8 +61,12 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
                         setShowEditModal(true)}}><FaPen /></button>
                     <button className='boder border-gray-400 shadow-none mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
                 </div>
-                <Link className='boder border-gray-400 shadow-none text-sm text-center mx-1' to={"products"} state={{vendor}}>
-                View Products</Link>
+                <Link className='flex justify-between items-center boder border-gray-400 shadow-none text-sm text-center mx-1' to={"products"} state={{vendor}}>
+                <p>View Products</p>
+                {vendor.inactiveProductsCount===0
+                ? <BsCheck2Circle className={`${"text-green-700"} text-xl`} title={"All prodcuts active"}/>
+                : <span className='rounded-md bg-red-700 text-white px-1 text-sm'>{vendor.inactiveProductsCount}</span>
+                }</Link>
             </div>
         </div>
         <div className="flex-col space-y-2 justify-self-end">

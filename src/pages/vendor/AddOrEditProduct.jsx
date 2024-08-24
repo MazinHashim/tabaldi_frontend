@@ -23,8 +23,8 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
   const [errors, setErrors] = useState();
   const [finalPrice, setFinalPrice] = useState(!currentProduct?
     0 : currentProduct.price + (currentProduct.price / 100) * currentProduct.companyProfit);
-  const [price, setPrice] = useState(0);
-  const [profit, setProfit] = useState(0);
+  const [price, setPrice] = useState(currentProduct.price);
+  const [profit, setProfit] = useState(currentProduct.companyProfit);
   const categoryList = state.data?.list;
   
   const handleAddOrEditProduct = async (e)=>{
@@ -32,12 +32,15 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
     const data = new FormData(e.target);
     const formData = Object.fromEntries(data.entries());
     try {
-      await validator.validationSchema(tProductInfo, isEdit, t("requiredMessage"))
+      await validator.validationSchema(tProductInfo, isEdit, formData.companyProfit, t("requiredMessage"))
       .validate(formData, {abortEarly: false});
+      var companyProfit = !auth.role
+      ? formData.companyProfit
+      :currentProduct?.companyProfit;
       var vendorId = auth.vendorId;
       var productId = (isEdit?currentProduct.productId:null);
       const fd = new FormData();
-      validator.fillProductFormData(fd, formData, images, productId, vendorId)
+      validator.fillProductFormData(fd, formData, images, companyProfit, productId, vendorId)
         const infoResponse = await axiosPrivate.post(ADD_PRODUCT_INFO_URL, fd,
           {headers: {'Accept-Language': i18n.language}}
       );
@@ -72,7 +75,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
     const urls = files.map(file => URL.createObjectURL(file));
     setPreviewUrls(urls);
   };
-  const handleProfiAndPriceChange = (event) => {
+  const handleProfitAndPriceChange = (event) => {
     const { name, value } = event.target;
     let newPrice = parseFloat(name==="price"? value : price);
     let newProfit = parseFloat(name==="companyProfit"? value : profit);
@@ -83,8 +86,8 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
     }
 
     const totalPrice = newPrice + (newPrice * newProfit / 100);
-    console.log('Price:', newPrice, 'Profit:', newProfit, 'Final Price:', totalPrice);
-    setFinalPrice(totalPrice);
+    setFinalPrice(Math.round(totalPrice * 2) / 2);
+    // setFinalPrice(totalPrice);
   };
 
   return (
@@ -100,22 +103,23 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               {errors?.name&&<div className='text-red-600'>{errors?.name}</div>}
             </div>
             <div className="md:w-1/4 my-6">
-              <label htmlFor="companyProfit" className="text-lg">{tProductInfo.companyProfit?.label}</label>
-              <input type="number" name="companyProfit" id="companyProfit" defaultValue={currentProduct?.companyProfit??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.companyProfit?.placeholder}
-              onChange={handleProfiAndPriceChange} />
-              {errors?.companyProfit&&<div className='text-red-600'>{errors?.companyProfit}</div>}
-            </div>
-            <div className="md:w-1/4 my-6">
               <label htmlFor="quantity" className="text-lg">{tProductInfo.quantity?.label}</label>
               <input type="number" name="quantity" id="quantity" defaultValue={currentProduct?.quantity??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.quantity?.placeholder} />
               {errors?.quantity&&<div className='text-red-600'>{errors?.quantity}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="images" className="text-lg">{tProductInfo.images?.label}</label>
+              <input type="file" name="images" id="images" className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" multiple placeholder={tProductInfo.images?.placeholder}
+              onChange={handleImagesChange}
+              />
+              {errors?.images&&<div className='text-red-600'>{errors?.images}</div>}
             </div>
           </div>
           <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">
             <div className="md:w-1/4 my-6">
               <label htmlFor="price" className="text-lg">{tProductInfo.price?.label}</label>
               <input type="number" name="price" id="price" defaultValue={Math.round(currentProduct?.price)??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.price?.placeholder}
-              onChange={handleProfiAndPriceChange} />
+              onChange={handleProfitAndPriceChange} />
               {<div className='text-red-600'>{finalPrice}</div>}
               {errors?.price&&<div className='text-red-600'>{errors?.price}</div>}
             </div>
@@ -135,12 +139,11 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               {errors?.categoryId&&<div className='text-red-600'>{errors?.categoryId}</div>}
             </div>
             <div className="md:w-1/4 my-6">
-              <label htmlFor="images" className="text-lg">{tProductInfo.images?.label}</label>
-              <input type="file" name="images" id="images" className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" multiple placeholder={tProductInfo.images?.placeholder}
-              onChange={handleImagesChange}
-              />
-              {errors?.images&&<div className='text-red-600'>{errors?.images}</div>}
-            </div>
+              {!auth.role&&<><label htmlFor="companyProfit" className="text-lg">{tProductInfo.companyProfit?.label}</label>
+              <input type="number" name="companyProfit" id="companyProfit" defaultValue={currentProduct?.companyProfit??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.companyProfit?.placeholder}
+              onChange={handleProfitAndPriceChange} />
+              {errors?.companyProfit&&<div className='text-red-600'>{errors?.companyProfit}</div>}
+            </>}</div>
           </div>
           <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">
             <div className="md:w-1/2">

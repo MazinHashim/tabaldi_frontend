@@ -4,6 +4,10 @@ export const validationSchema =(advertisementData, isEditing, formData, required
     title: Yup.string().required(requiredMessage),
     subtitle: Yup.string().notRequired(),
     vendorId: Yup.number().nullable().notRequired(),
+    createDate: Yup.string().required(requiredMessage),
+    expireDate: Yup.string().required(requiredMessage),
+    startTime: Yup.string().required(requiredMessage),
+    endTime: Yup.string().required(requiredMessage),
     url: Yup.string().when([], {
       is: () => formData.url,
       then: ()=> Yup.string().matches(/^https?:\/\/[^\s/$.?#].[^\s]*$/,advertisementData.url?.urlFormat),
@@ -61,6 +65,10 @@ export function fillAdvertisementFormData(fd, advertisement, advertisementId){
             advertisementId: advertisementId,
             title: advertisement.title,
             subtitle: advertisement.subtitle,
+            createDate: advertisement.createDate,
+            expireDate: advertisement.expireDate,
+            startTime: advertisement.startTime,
+            endTime: advertisement.endTime,
             url: advertisement.url, vendorId: advertisement.vendorId==="-1" ? null : advertisement.vendorId
           }))
   fd.append("adsImage1", advertisement.adsImage1)

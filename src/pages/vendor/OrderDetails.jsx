@@ -6,7 +6,7 @@ import orderProfile from '../../img/vendor_profile.png'
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import useFetchFileData from '../../apis/useFetchFileData';
-import { useOrdersData } from '../../hooks/appHooks';
+import { useAuth, useOrdersData } from '../../hooks/appHooks';
 import { allStatuses, statusBGColor, statusTextColor } from '../../utils/OrderStatusUtils';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import useAxiosFetchApi from '../../hooks/useFetch';
@@ -16,6 +16,7 @@ const INVOICE_URL = "/invoices/order"
 const OrderDetails = () => {
     const{t, i18n} = useTranslation();
     // const tRecord = t("orderRecord")
+    const { auth } = useAuth();
     const statusRef = useRef(null)
     const axiosPrivate = useAxiosPrivate();
     const [isLoading, setLoading] = useState(false);
@@ -90,6 +91,8 @@ const OrderDetails = () => {
                         <select ref={statusRef} className='p-1 rounded-lg border' name="status" id="status">
                             <option value={""}>Status</option>
                             {allStatuses.map(status=>{
+                                if(status==="DELIVERED" && auth.role==="VENDOR")
+                                    return "";
                                 return <option key={status}>{status}</option>
                             })}
                         </select>
