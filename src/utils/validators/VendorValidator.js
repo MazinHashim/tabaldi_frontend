@@ -3,7 +3,12 @@ import *as Yup from 'yup'
 export const supportedVendorType=[
   {id: 1, name: "Restaurant / مطعم", value: "RESTAURANT"},
   {id: 2, name: "Grocery / بقالة", value: "GROCERY"},
-  {id: 3, name: "Store / متجر", value: "STORE"}]
+  {id: 3, name: "Store / متجر", value: "STORE"}];
+
+  export const supportedRegions=[
+  {id: 1, name: "Dubai / دبي", value: "DUBAI"},
+  {id: 2, name: "Sharjah / الشارقة", value: "SHARJAH"},
+  {id: 3, name: "Ajman / عجمان", value: "AJMAN"}]
 
 export const validationSchema =(vendorData, isEditing, requiredMessage)=> {return Yup.object({
     fullName: Yup.string().required(requiredMessage),
@@ -31,6 +36,9 @@ export const validationSchema =(vendorData, isEditing, requiredMessage)=> {retur
     .required(requiredMessage),
     vendorType: Yup.string()
     .oneOf(supportedVendorType.map(type=>type.value), vendorData.vendorType?.notSupported)
+    .required(requiredMessage),
+    region: Yup.string()
+    .oneOf(supportedRegions.map(region=>region.value), vendorData.region?.notSupported)
     .required(requiredMessage),
     coverImage: Yup.mixed().notRequired(),
     profileImage: Yup.mixed().notRequired(),
@@ -72,6 +80,7 @@ export function fillVendorFormData(fd, vendor, userId, vendorId){
             fullName: vendor.fullName,
             email: vendor.email,
             phone: vendor.phone,
+            region: vendor.region.toUpperCase(),
             vendorType: vendor.vendorType.toUpperCase(),
             maxKilometerDelivery: vendor.maxKilometerDelivery===""?null:vendor.maxKilometerDelivery,
             minChargeLongDistance: vendor.minChargeLongDistance===""?null:vendor.minChargeLongDistance,

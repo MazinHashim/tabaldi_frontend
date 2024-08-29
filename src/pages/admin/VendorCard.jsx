@@ -71,7 +71,11 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
         </div>
         <div className="flex-col space-y-2 justify-self-end">
             <div className="flex justify-between">
-                <h3>{vendor.fullName}</h3>
+                <h3>{vendor.fullName}
+                    <sub className="lowercase mx-2 bg-slate-800 text-white text-xs rounded-lg px-2">
+                        {vendor.region}
+                    </sub>
+                </h3>
                 <h3 className='capitalize'>{vendor.vendorType}</h3>
             </div>
             <div className="text-sm flex justify-between">

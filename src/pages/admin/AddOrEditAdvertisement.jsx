@@ -108,7 +108,7 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
               <input type="file" name="adsImage1" id="adsImage1" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage1?.placeholder} />
               {errors?.adsImage1&&<div className='text-red-600'>{errors?.adsImage1}</div>}
             </div>
-            <div className="md:w-1/4 my-6">
+            {/* <div className="md:w-1/4 my-6">
               <label htmlFor="adsImage2" className="text-lg">{tAdvertisementInfo.adsImage2?.label}</label>
               <input type="file" name="adsImage2" id="adsImage2" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage2?.placeholder} />
               {errors?.adsImage2&&<div className='text-red-600'>{errors?.adsImage2}</div>}
@@ -117,7 +117,7 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
               <label htmlFor="adsImage3" className="text-lg">{tAdvertisementInfo.adsImage3?.label}</label>
               <input type="file" name="adsImage3" id="adsImage3" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage3?.placeholder} />
               {errors?.adsImage3&&<div className='text-red-600'>{errors?.adsImage3}</div>}
-            </div>
+            </div> */}
           </div>
           <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
             {!currentAdvertisement?.url && isEdit?"":
@@ -153,16 +153,16 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             </div>
           </div>
           {isEdit && 
-          <div className="flex flex-col md:flex-row flex-wrap justify-between my-6">
+          <div className="flex flex-col md:flex-row flex-wrap justify-center my-6">
               {previewUrls.adsImage1?<img className="rounded-xl" width={100} src={previewUrls.adsImage1} alt="ads1" />
               :currentAdvertisement.adsImage1?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage1}`} alt="ads1" />
                 :"Loading..."}
-              {previewUrls.adsImage2?<img className="rounded-xl" width={100} src={previewUrls.adsImage2} alt="ads2" />
+              {/* {previewUrls.adsImage2?<img className="rounded-xl" width={100} src={previewUrls.adsImage2} alt="ads2" />
               :currentAdvertisement.adsImage2?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage2}`} alt="ads1" />
                 :"Loading..."}
               {previewUrls.adsImage3?<img className="rounded-xl" width={100} src={previewUrls.adsImage3} alt="ads3" />
               :currentAdvertisement.adsImage3?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage3}`} alt="ads1" />
-                :"Loading..."}
+                :"Loading..."} */}
           </div>}
         </form>
       </div>

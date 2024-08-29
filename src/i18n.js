@@ -61,6 +61,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         notSupported: "Vendor type not supported",
                         placeholder: "Eg: GROCERY",
                     },
+                    region: {
+                        label: "Region*",
+                        notSupported: "Region out of scope",
+                    },
                     profileImage: { label: "Profile Image" },
                     coverImage: { label: "Cover Image" },
                     licenseImage: {
@@ -272,7 +276,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     vendorType: {
                         label: "نوع محل البيع*",
                         notSupported: "نوع المحل فير مدعوم",
-                        placeholder: "مثال: GROCERY",
+                    },
+                    region: {
+                        label: "موقع المحل*",
+                        notSupported: "موقع المحل خارج النطاق",
                     },
                     profileImage: { label: "صورة البروفايل" },
                     coverImage: { label: "صورة الخلفية" },

@@ -28,36 +28,36 @@ export const validationSchema =(advertisementData, isEditing, formData, required
       ),
       otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
     }),
-    adsImage2 : Yup.mixed().when([], {
-    is: () => !isEditing,
-    then: ()=> Yup.mixed()
-      .test(
-        'fileSize',
-        'حجم الصورة غير مدعوم',
-        value => value && value.size <= 1024 * 1024 * 25 // 25 MB
-      )
-      .test(
-        'fileType',
-        `الملفات المدعومة png, jpg, jpeg, فقط`,
-        value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
-      ),
-      otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
-    }),
-    adsImage3 : Yup.mixed().when([], {
-    is: () => !isEditing,
-    then: ()=> Yup.mixed()
-      .test(
-        'fileSize',
-        'حجم الصورة غير مدعوم',
-        value => value && value.size <= 1024 * 1024 * 25 // 25 MB
-      )
-      .test(
-        'fileType',
-        `الملفات المدعومة png, jpg, jpeg, فقط`,
-        value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
-      ),
-      otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
-    }),
+    // adsImage2 : Yup.mixed().when([], {
+    // is: () => !isEditing,
+    // then: ()=> Yup.mixed()
+    //   .test(
+    //     'fileSize',
+    //     'حجم الصورة غير مدعوم',
+    //     value => value && value.size <= 1024 * 1024 * 25 // 25 MB
+    //   )
+    //   .test(
+    //     'fileType',
+    //     `الملفات المدعومة png, jpg, jpeg, فقط`,
+    //     value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
+    //   ),
+    //   otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
+    // }),
+    // adsImage3 : Yup.mixed().when([], {
+    // is: () => !isEditing,
+    // then: ()=> Yup.mixed()
+    //   .test(
+    //     'fileSize',
+    //     'حجم الصورة غير مدعوم',
+    //     value => value && value.size <= 1024 * 1024 * 25 // 25 MB
+    //   )
+    //   .test(
+    //     'fileType',
+    //     `الملفات المدعومة png, jpg, jpeg, فقط`,
+    //     value => value && ["image/png", "image/jpg", "image/jpeg"].includes(value.type)
+    //   ),
+    //   otherwise: ()=> Yup.mixed().notRequired(), // No validation when editing
+    // }),
 })}
 
 export function fillAdvertisementFormData(fd, advertisement, advertisementId){
@@ -72,6 +72,6 @@ export function fillAdvertisementFormData(fd, advertisement, advertisementId){
             url: advertisement.url, vendorId: advertisement.vendorId==="-1" ? null : advertisement.vendorId
           }))
   fd.append("adsImage1", advertisement.adsImage1)
-  fd.append("adsImage2", advertisement.adsImage2)
-  fd.append("adsImage3", advertisement.adsImage3)
+  // fd.append("adsImage2", advertisement.adsImage2)
+  // fd.append("adsImage3", advertisement.adsImage3)
 }

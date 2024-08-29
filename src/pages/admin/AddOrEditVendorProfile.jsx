@@ -128,9 +128,17 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
           </div>
           <div className='flex flex-col md:flex-row flex-wrap justify-between'>
             <div className="md:w-1/4 my-6">
-              <label htmlFor="coverImage" className="text-lg">{tVendorInfo.coverImage?.label}</label>
-              <input type="file" name="coverImage" id="coverImage" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.coverImage?.placeholder} />
-              {errors?.coverImage&&<div className='text-red-600'>{errors?.coverImage}</div>}
+              <label htmlFor="region" className="text-lg">{tVendorInfo.region?.label}</label>
+              <select
+                name={"region"}
+                defaultValue={currentVendor?.region??''}
+                className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
+                >
+                  {validator.supportedRegions.map(region=>{
+                  return <option key={region.id} value={region.value}>{region.name}</option>
+                  })}
+              </select>
+              {errors?.region&&<div className='text-red-600'>{errors?.region}</div>}
             </div>
             <div className="md:w-1/4 my-6">
               <label htmlFor="openingTime" className="text-lg">{tVendorInfo.openingTime?.label}</label>
@@ -142,6 +150,14 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
               <input type="time" name="closingTime" id="closingTime" defaultValue={currentVendor?.closingTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.closingTime?.placeholder} />
               {errors?.closingTime&&<div className='text-red-600'>{errors?.closingTime}</div>}
             </div>
+          </div>
+          <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
+            <div className="md:w-1/4">
+              <label htmlFor="coverImage" className="text-lg">{tVendorInfo.coverImage?.label}</label>
+              <input type="file" name="coverImage" id="coverImage" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.coverImage?.placeholder} />
+              {errors?.coverImage&&<div className='text-red-600'>{errors?.coverImage}</div>}
+            </div>
+            <button type="submit" className="w-1/4 bg-primary-color text-white px-5 py-2.5 my-6">{tVendorInfo[isEdit?"editBtn":"addBtn"]}</button>
           </div>
           {isEdit && 
           <div className="flex flex-col md:flex-row flex-wrap justify-between my-6">
@@ -155,9 +171,6 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
               :currentVendor.licenseImage?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentVendor?.licenseImage}`} alt="License" />
                 :"Loading..."}
           </div>}
-          <div className='flex flex-col md:flex-row flex-wrap justify-end my-6'>
-            <button type="submit" className="w-3/12 bg-primary-color text-white px-5 py-2.5 my-6">{tVendorInfo[isEdit?"editBtn":"addBtn"]}</button>
-          </div>
         </form>
       </div>
     </>
