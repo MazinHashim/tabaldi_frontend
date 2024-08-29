@@ -108,6 +108,16 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
               <input type="file" name="adsImage1" id="adsImage1" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage1?.placeholder} />
               {errors?.adsImage1&&<div className='text-red-600'>{errors?.adsImage1}</div>}
             </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="startTime" className="text-lg">{tAdvertisementInfo.startTime?.label}</label>
+              <input type="time" name="startTime" id="startTime" defaultValue={currentAdvertisement?.startTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.startTime?.placeholder} />
+              {errors?.startTime&&<div className='text-red-600'>{errors?.startTime}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="endTime" className="text-lg">{tAdvertisementInfo.endTime?.label}</label>
+              <input type="time" name="endTime" id="endTime" defaultValue={currentAdvertisement?.endTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.endTime?.placeholder} />
+              {errors?.endTime&&<div className='text-red-600'>{errors?.endTime}</div>}
+            </div>
             {/* <div className="md:w-1/4 my-6">
               <label htmlFor="adsImage2" className="text-lg">{tAdvertisementInfo.adsImage2?.label}</label>
               <input type="file" name="adsImage2" id="adsImage2" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage2?.placeholder} />
@@ -138,32 +148,25 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             </div>
           </div>
           <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
-            <div className="md:w-1/4 my-6">
-              <label htmlFor="startTime" className="text-lg">{tAdvertisementInfo.startTime?.label}</label>
-              <input type="time" name="startTime" id="startTime" defaultValue={currentAdvertisement?.startTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.startTime?.placeholder} />
-              {errors?.startTime&&<div className='text-red-600'>{errors?.startTime}</div>}
-            </div>
-            <div className="md:w-1/4 my-6">
-              <label htmlFor="endTime" className="text-lg">{tAdvertisementInfo.endTime?.label}</label>
-              <input type="time" name="endTime" id="endTime" defaultValue={currentAdvertisement?.endTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.endTime?.placeholder} />
-              {errors?.endTime&&<div className='text-red-600'>{errors?.endTime}</div>}
-            </div>
-            <div className='md:w-1/4 my-6'>
-              <button type="submit" className="bg-primary-color text-white w-full py-2.5 mt-5">{tAdvertisementInfo[isEdit?"editBtn":"addBtn"]}</button>
+            {isEdit && (previewUrls.adsImage1?<img className="rounded-lg md:w-3/4 h-60" src={previewUrls.adsImage1} alt="ads1" />
+              :currentAdvertisement.adsImage1?<img className="rounded-lg md:w-3/4 h-60" src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage1}`} alt="ads1" />
+                :"Loading...")}
+            <div className='md:w-1/4'>
+              <button type="submit" className="bg-primary-color text-white w-full py-2.5">{tAdvertisementInfo[isEdit?"editBtn":"addBtn"]}</button>
             </div>
           </div>
-          {isEdit && 
+          {/* {isEdit && 
           <div className="flex flex-col md:flex-row flex-wrap justify-center my-6">
               {previewUrls.adsImage1?<img className="rounded-xl" width={100} src={previewUrls.adsImage1} alt="ads1" />
               :currentAdvertisement.adsImage1?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage1}`} alt="ads1" />
                 :"Loading..."}
-              {/* {previewUrls.adsImage2?<img className="rounded-xl" width={100} src={previewUrls.adsImage2} alt="ads2" />
+              {previewUrls.adsImage2?<img className="rounded-xl" width={100} src={previewUrls.adsImage2} alt="ads2" />
               :currentAdvertisement.adsImage2?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage2}`} alt="ads1" />
                 :"Loading..."}
               {previewUrls.adsImage3?<img className="rounded-xl" width={100} src={previewUrls.adsImage3} alt="ads3" />
               :currentAdvertisement.adsImage3?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage3}`} alt="ads1" />
-                :"Loading..."} */}
-          </div>}
+                :"Loading..."}
+          </div>} */}
         </form>
       </div>
     </>
