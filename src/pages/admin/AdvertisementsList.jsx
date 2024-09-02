@@ -102,6 +102,7 @@ const AdvertisementsList = () => {
                         <thead
                             className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                             <tr key={"head-1"}>
+                            <th scope="col" className="whitespace-nowrap  p-4">Priority</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Title</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Subtitle</th>
                             <th scope="col" className="whitespace-nowrap  p-4">Created Date</th>
@@ -124,14 +125,15 @@ const AdvertisementsList = () => {
                             ? <tr><td colSpan={9} className='p-10'>{state.data.message??state.error.message}</td></tr>
                             : advertisementList
                             .sort((a, b) => {
-                                if (a.title < b.title) return -1;
-                                if (a.title > b.title) return 1;
+                                if (a.priority < b.priority) return -1;
+                                if (a.priority > b.priority) return 1;
                                 return 0
                             }).map((data)=>{
                                 const advertisement=data;
                                 const bgColor=advertisement.shown?"bg-green-200":"bg-red-200";
                                 const txtColor=advertisement.shown?"text-green-600":"text-red-600";
                             return <tr key={advertisement.advertisementId}>
+                                <td className="whitespace-nowrap p-4">{advertisement.priority}</td>
                                 <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.title}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.subtitle===""?"_":advertisement.subtitle??"_"}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.fcreatedDate}</td>

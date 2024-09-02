@@ -7,13 +7,12 @@ import productProfile from '../../img/vendor_profile.png'
 import { useTranslation } from 'react-i18next';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import EditProductModal from '../modals/EditModal';
-import { ToastContainer, toast } from 'react-toastify';
 import AddOrEditProduct from './AddOrEditProduct';
+import { ToastContainer, toast } from 'react-toastify';
 import * as validator from '../../utils/validators/OptionValidator';
 import FormInput from '../../utils/FormInput';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { baseURL } from '../../apis/axios';
-import { BsCheck2Circle } from 'react-icons/bs';
 import { IoWarningOutline } from 'react-icons/io5';
 const PRODUCTS_ROUTE_URL = "/products";
 const PRODUCT_DELETE_URL = "/products/delete";

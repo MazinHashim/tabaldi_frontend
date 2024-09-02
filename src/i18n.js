@@ -65,13 +65,13 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "Region*",
                         notSupported: "Region out of scope",
                     },
-                    profileImage: { label: "Profile Image" },
+                    profileImage: { label: "Logo Image" },
                     coverImage: { label: "Cover Image" },
                     licenseImage: {
                         label: "License Image*",
                     },
                     identityImage: {
-                        label: "Identity Image*",
+                        label: "UAE ID Image*",
                     },
                     openingTime: {
                         label: "Opening Time*",
@@ -114,7 +114,11 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     },
                     vendorId: {
                         label: "Choose Vendor",
-                        placeholder: "مثال: إختر البائع",
+                        notSupported: "Not exist in the list",
+                    },
+                    priority: {
+                        label: "Choose Priority",
+                        notSupported: "Not exist in the list",
                     },
                     createDate: { label: "Start Date*" },
                     expireDate: { label: "End Date*" },
@@ -330,7 +334,11 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     },
                     vendorId: {
                         label: "إختر البائع",
-                        placeholder: "مثال: إختر البائع",
+                        notSupported: "غير موجود في القائمة",
+                    },
+                    priority: {
+                        label: "إختر الترتيب",
+                        notSupported: "غير موجود في القائمة",
                     },
                     createDate: { label: "تاريخ البدء*" },
                     expireDate: { label: "تاريخ الإنتهاء*" },

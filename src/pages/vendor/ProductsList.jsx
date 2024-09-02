@@ -1,8 +1,10 @@
 
 import useAxiosFetchApi from '../../hooks/useFetch';
 import { useAuth, useProductsData } from '../../hooks/appHooks';
+import EditProductModal from '../modals/EditModal';
+import AddOrEditProduct from './AddOrEditProduct';
 import ProductCard from './ProductCard';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import AppLoading from '../../utils/AppLoading';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -11,6 +13,7 @@ const PRODUCT_LIST_URL = "/vendors/{id}/products";
 const ProductsList = ({routeRole}) => {
 
     const { auth, setAuth } = useAuth();
+    const [showEditModal, setShowEditModal] = useState(false);
     const token = auth.token;
     const refreshToken = auth.refreshToken;
     const location = useLocation();
@@ -29,7 +32,7 @@ const ProductsList = ({routeRole}) => {
         if(vendor){
             setAuth({...vendor, token, refreshToken})
         }
-    }, [vendor])
+    }, [vendor, token, refreshToken, setAuth])
 
     function onTogglePublishing(published, productId) {
         const otherProducts=productList.filter(prod=>prod.productId!==productId);
@@ -39,6 +42,12 @@ const ProductsList = ({routeRole}) => {
   return (
     <>
         <ToastContainer />
+        <div className="flex justify-between mb-10">
+            <h2>Products</h2>
+            <button className="bg-secondary-color text-white"
+            onClick={()=>setShowEditModal({advertisement: null, status: true})}
+            >Add New Product</button>
+        </div>
         <div className='flex flex-wrap w-full justify-between'>
             {state.isLoading?<div className="w-full h-[70vh] flex justify-center items-center">
                 <AppLoading/>
@@ -57,6 +66,9 @@ const ProductsList = ({routeRole}) => {
             onTogglePublishing={onTogglePublishing}/>})
             }
         </div>
+        <EditProductModal showModal={showEditModal} setShowModal={setShowEditModal} target="Product">
+            <AddOrEditProduct />
+        </EditProductModal>
     </>
   )
 }

@@ -49,9 +49,9 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
           })
           setErrors(allErrors)
         } else {
-          if(!isEdit){
-            e.target.querySelectorAll('input').forEach(input => { input.value = ""; });
-          }
+          // if(!isEdit){
+          //   e.target.querySelectorAll('input').forEach(input => { input.value = ""; });
+          // }
           toast.error(error.response?.data.message);
         }
       }
@@ -103,11 +103,22 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             </div>}
           </div>
           <div className="flex flex-col md:flex-row flex-wrap justify-between">
-            <div className="md:w-1/4 my-6">
-              <label htmlFor="adsImage1" className="text-lg">{tAdvertisementInfo.adsImage1?.label}</label>
-              <input type="file" name="adsImage1" id="adsImage1" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage1?.placeholder} />
-              {errors?.adsImage1&&<div className='text-red-600'>{errors?.adsImage1}</div>}
-            </div>
+            {<div className="md:w-1/4 my-6">
+              <label htmlFor="priority" className="text-lg">{tAdvertisementInfo.priority?.label}</label>
+              <select
+                name={"priority"}
+                defaultValue={currentAdvertisement?.priority}
+                className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
+                >
+                  {validator.adsPriorites.map(data=>{
+                    const ads=data;
+                  return <option
+                  selected={ads.priority===currentAdvertisement?.priority}
+                  key={ads.priority} value={ads.priority}>{ads.arName}</option>
+                  })}
+                </select>
+              {errors?.priority&&<div className='text-red-600'>{errors?.priority}</div>}
+            </div>}
             <div className="md:w-1/4 my-6">
               <label htmlFor="startTime" className="text-lg">{tAdvertisementInfo.startTime?.label}</label>
               <input type="time" name="startTime" id="startTime" defaultValue={currentAdvertisement?.startTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.startTime?.placeholder} />
@@ -148,6 +159,11 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             </div>
           </div>
           <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
+            <div className="md:w-1/4">
+              <label htmlFor="adsImage1" className="text-lg">{tAdvertisementInfo.adsImage1?.label}</label>
+              <input type="file" name="adsImage1" id="adsImage1" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage1?.placeholder} />
+              {errors?.adsImage1&&<div className='text-red-600'>{errors?.adsImage1}</div>}
+            </div>
             {isEdit && (previewUrls.adsImage1?<img className="rounded-lg md:w-3/4 h-60" src={previewUrls.adsImage1} alt="ads1" />
               :currentAdvertisement.adsImage1?<img className="rounded-lg md:w-3/4 h-60" src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage1}`} alt="ads1" />
                 :"Loading...")}

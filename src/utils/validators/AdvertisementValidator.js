@@ -1,9 +1,18 @@
 import *as Yup from 'yup'
+export const adsPriorites = [
+  {priority: 1, arName:"إعلان 1" ,enName:"Ad 1"},
+  {priority: 2, arName:"إعلان 2" ,enName:"Ad 2"},
+  {priority: 3, arName:"إعلان 3" ,enName:"Ad 3"},
+  {priority: 4, arName:"إعلان 4" ,enName:"Ad 4"},
+  {priority: 5, arName:"إعلان 5" ,enName:"Ad 5"}];
 
 export const validationSchema =(advertisementData, isEditing, formData, requiredMessage)=> {return Yup.object({
     title: Yup.string().required(requiredMessage),
     subtitle: Yup.string().notRequired(),
     vendorId: Yup.number().nullable().notRequired(),
+    priority: Yup.number()
+    .oneOf(adsPriorites.map(pr=>pr.priority), advertisementData.priority?.notSupported)
+    .max(5).min(1).required(requiredMessage),
     createDate: Yup.string().required(requiredMessage),
     expireDate: Yup.string().required(requiredMessage),
     startTime: Yup.string().required(requiredMessage),
@@ -69,7 +78,8 @@ export function fillAdvertisementFormData(fd, advertisement, advertisementId){
             expireDate: advertisement.expireDate,
             startTime: advertisement.startTime,
             endTime: advertisement.endTime,
-            url: advertisement.url, vendorId: advertisement.vendorId==="-1" ? null : advertisement.vendorId
+            priority: parseInt(advertisement.priority),
+            url: advertisement.url, vendorId: advertisement.vendorId==="-1" ? null : parseInt(advertisement.vendorId)
           }))
   fd.append("adsImage1", advertisement.adsImage1)
   // fd.append("adsImage2", advertisement.adsImage2)
