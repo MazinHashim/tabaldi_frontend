@@ -44,7 +44,7 @@ const ProductCard = ({product, routeRole}) => {
     const selectedProductPrice = Math.round(product.price + (product.price / 100) * product.companyProfit).toFixed(2);
   return (
     <>
-    <div key={product.productId} className='flex flex-col justify-between h-[27rem] bg-gray-50 mb-16 w-full lg:w-3/12 m-1 shadow-xl rounded-xl'>
+    <div key={product.productId} className='flex flex-col text-sm justify-between h-[27rem] bg-gray-50 mb-16 w-full lg:w-1/5 m-1 shadow-xl rounded-xl'>
         <img className="rounded-xl justify-stretch w-full h-[13rem]"
         src={product.images && product.images[0]
             ?`${baseURL}/files/get/file/${product.images[0]}`
@@ -52,10 +52,13 @@ const ProductCard = ({product, routeRole}) => {
         alt={`Product 0`} />
         <div className="flex justify-between px-2">
             <h4 className='uppercase primary-color'>{product.category.name}</h4>
+            {/* <h4 className='uppercase primary-color'>{i18n.language==="en"
+            ? product.category.name
+            : product.category.arName}</h4> */}
             <h3 className='uppercase'>{`${selectedProductPrice} ${tCard["aedUnit"]}`}</h3>
         </div>
         <div className="flex justify-between px-2 items-start">
-            <h4>{product.name}</h4>
+            <h4>{i18n.language==="en" ? product.name : product.arName}</h4>
             {routeRole==="SUPERADMIN"?
             <div className='flex flex-col items-center'>
                 <button 
@@ -63,20 +66,22 @@ const ProductCard = ({product, routeRole}) => {
                 className={`${product.published?"bg-green-200":"bg-red-200"} text-sm`} title={"Published Prodcut"}>
                     <GrDeploy/>
                 </button>
-                {!product.published && <span className='text-yellow-700 text-sm mx-1'>Reviewing</span>}
+                {!product.published && <span className='text-yellow-700 text-sm mx-1'>{tCard.reviewing}</span>}
             </div>:
                 product.published
                 ? <BsCheck2Circle className={`${"text-green-700"} text-xl`} title={"Published Prodcut"}/>
                 : <p className={`text-sm ${"text-yellow-700"}`}>
                     <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
-                    Reviewing</p>
+                    {tCard.reviewing}</p>
             }
         </div>
-        <div className="flex px-2"><p className='text-gray-500'>{product.description}.</p></div>
+        <div className="flex px-2"><p className='text-gray-500'>{i18n.language==="en" 
+        ? product.description
+        : product.arDescription}.</p></div>
         <hr/>
-        <div className="text-sm flex justify-between items-center p-2">
-            <h4>{`${product.quantity} ` + (tCard["itemText"])}</h4>
-            <button key={product.productId} onClick={()=>goToProductDetails(product.productId)} className='text-white py-1 px-2 bg-primary-color rounded-md'>
+        <div className="text-sm flex justify-between items-center p-2 font-thin">
+            <h5 className={`${product.quantity<=5?'text-red-500':'text-gray-500'}`}>{`${product.quantity} ` + (tCard["itemText"])}</h5>
+            <button key={product.productId} onClick={()=>goToProductDetails(product.productId)} className='text-white px-1 bg-primary-color rounded-md font-light'>
                 {tCard["showDetails"]}</button>
         </div>
     </div>

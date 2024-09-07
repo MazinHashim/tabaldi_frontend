@@ -166,7 +166,7 @@ const ProductDetails = () => {
                 </p>}
             </div>
             <div className='flex justify-between items-center'>
-                <h2>{selectedProduct?.name}</h2>
+                <h2>{selectedProduct?.name} / {selectedProduct?.arName}</h2>
                 <h4 className='uppercase primary-color border border-green-300 rounded-lg px-1 mx-3'>
                     {selectedProduct?.category.name}
                 </h4>
@@ -179,6 +179,7 @@ const ProductDetails = () => {
             <div className='flex justify-between items-start w-full'>
                 <div className='flex flex-col w-3/4 space-y-10'>
                     <p className='text-gray-400'>{selectedProduct?.description}.</p>
+                    <p className='text-gray-400'>{selectedProduct?.arDescription}.</p>
                     <p className='text-6xl'>{selectedProductPrice}<span className='text-2xl'>{tCard["aedUnit"]}</span></p>
                     <div>  
                         <h4>{tOptionInfo["productChar"]}</h4>

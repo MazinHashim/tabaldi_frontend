@@ -134,6 +134,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 productFormInfo: {
                     addProductTitle: "Add New Product",
                     editProductTitle: "Edit Product",
+                    products: "Products",
                     name: {
                         label: "English Name*",
                         charMost: "Name should consist of at most 3 words",
@@ -154,6 +155,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "Quantity*",
                         numbersOnly: "Should be only digits",
                         placeholder: "Eg: 5",
+                    },
+                    duration: {
+                        label: "Ready within*",
+                        placeholder: "Eg: From 1 To 5 days or mins",
                     },
                     price: {
                         label: "Price",
@@ -181,6 +186,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 productCard: {
                     itemText: 'Items',
                     showDetails: 'Show Details',
+                    reviewing: "Reviewing",
                     notVisible:"This product will not be visible to the customers",
                     quantityAboutAlert: "This product is about to finish, do you want to update the quantity?",
                     update: "Update Qnt.",
@@ -379,6 +385,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 productFormInfo: {
                     addProductTitle: "إضافة منتج جديد",
                     editProductTitle: "تعديل المنتج",
+                    products: "المنتجات",
                     name: {
                         label: "الإسم بالإنجليزي*",
                         charMost: "يجب أن لا يتجاوز 3 كلمات",
@@ -430,6 +437,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 productCard: {
                     itemText: 'قطعة',
                     showDetails: 'عرض التفاصيل',
+                    reviewing: "مراجعة",
                     notVisible:"هذا المنتج لن يكون مرئياً للعملاء",
                     quantityAboutAlert: "هذا المنتج على وشك الانتهاء، هل تريد تحديث الكمية؟",
                     aedUnit: "درهم",

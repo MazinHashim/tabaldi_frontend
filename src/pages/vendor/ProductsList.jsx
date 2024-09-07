@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import AppLoading from '../../utils/AppLoading';
 import { useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 const PRODUCT_LIST_URL = "/vendors/{id}/products";
 
 const ProductsList = ({routeRole}) => {
@@ -17,6 +18,8 @@ const ProductsList = ({routeRole}) => {
     const token = auth.token;
     const refreshToken = auth.refreshToken;
     const location = useLocation();
+    const{t, i18n} = useTranslation();
+    const pInfo = t("productFormInfo")
     const vendor = location?.state?.vendor;
     const vendorProductsUrl = PRODUCT_LIST_URL.replace("{id}", `${vendor?.vendorId??auth.vendorId}`);
     const sessionToken = auth.token;
@@ -43,16 +46,16 @@ const ProductsList = ({routeRole}) => {
     <>
         <ToastContainer />
         <div className="flex justify-between mb-10">
-            <h2>Products</h2>
+            <h2>{pInfo.products}</h2>
             <button className="bg-secondary-color text-white"
             onClick={()=>setShowEditModal({advertisement: null, status: true})}
-            >Add New Product</button>
+            >{pInfo.addProductTitle}</button>
         </div>
         <div className='flex flex-wrap w-full justify-between'>
-            {state.isLoading || !products?<div className="w-full h-[70vh] flex justify-center items-center">
+            {state.isLoading?<div className="w-full h-[70vh] flex justify-center items-center">
                 <AppLoading/>
                 </div>
-            :!state.data?.list
+            :!products
             ?<div className='flex justify-center items-center h-[70vh] capitalize w-full'>{state.data?.message??state.error?.message}</div>
             :products
             .sort((a, b) => {
