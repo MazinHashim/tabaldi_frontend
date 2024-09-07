@@ -11,6 +11,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
             translation: {
                 requiredMessage: "Should not be empty",
                 action: "Action",
+                search: "Search",
                 aedUnit: " AED",
                 login: {
                     title: "Login",
@@ -134,9 +135,14 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     addProductTitle: "Add New Product",
                     editProductTitle: "Edit Product",
                     name: {
-                        label: "Name*",
+                        label: "English Name*",
                         charMost: "Name should consist of at most 3 words",
                         placeholder: "Eg: Labtop",
+                    },
+                    arName: {
+                        label: "Arabic Name*",
+                        charMost: "Name should consist of at most 3 words",
+                        placeholder: "Eg: لابتوب",
                     },
                     companyProfit: {
                         label: "Company Profit*",
@@ -162,8 +168,12 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "Product Images*"
                     },
                     description: { 
-                        label: "Description" ,
-                        placeholder: "Description"
+                        label: "English Description" ,
+                        placeholder: "English Description"
+                    },
+                    arDescription: { 
+                        label: "Arabic Description" ,
+                        placeholder: "Arabic Description"
                     },
                     addBtn: "ADD",
                     editBtn: "EDIT",
@@ -171,6 +181,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 productCard: {
                     itemText: 'Items',
                     showDetails: 'Show Details',
+                    notVisible:"This product will not be visible to the customers",
+                    quantityAboutAlert: "This product is about to finish, do you want to update the quantity?",
+                    update: "Update Qnt.",
+                    unpublish: "Unpublish",
                     aedUnit: " AED"
                 },
                 optionFormInfo: {
@@ -193,10 +207,21 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     newGroupBtn: "New Group"
                 },
                 categoryFormInfo: {
+                    addCategoryTitle: "Add Category",
+                    editCategoryTitle: "Edit Category",
                     name: {
                         label: "Name*",
                         errorMessage: "Name should not be empty"
                     },
+                    published: {
+                        label: "Select Category Status",
+                    },
+                    products: "Products",
+                    status: "Status",
+                    publishedTxt: "Published",
+                    unpublishedTxt: "Unpublished",
+                    category: "Categories",
+                    addNewBtn: "Add New Category",
                     addBtn: "ADD",
                     editBtn: "EDIT",
                 },
@@ -230,7 +255,8 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
             translation: {
                 requiredMessage: "يجب أن لا يكون فارغاً",
                 action: "تعديل",
-                aedUnit: " درهم",
+                search: "البحث",
+                aedUnit: "درهم",
                 login: {
                     title: "تسجيل الدخول",
                     subtitle: "قم بتسجيل الدخول على حسابك",
@@ -354,7 +380,12 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     addProductTitle: "إضافة منتج جديد",
                     editProductTitle: "تعديل المنتج",
                     name: {
-                        label: "إسم المنتج*",
+                        label: "الإسم بالإنجليزي*",
+                        charMost: "يجب أن لا يتجاوز 3 كلمات",
+                        placeholder: "مثال: Laptop",
+                    },
+                    arName: {
+                        label: "إسم بالعربي*",
                         charMost: "يجب أن لا يتجاوز 3 كلمات",
                         placeholder: "مثال: اللابتوب",
                     },
@@ -363,6 +394,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         numbersOnly: "يجب أن يكون أرقامًا فقط",
                         startFromOne: "يبدأ من 1",
                         placeholder: "مثال: 10",
+                    },
+                    duration: {
+                        label: "مدة التجهيز*",
+                        placeholder: "مثال: من - إلى -",
                     },
                     quantity: {
                         label: "الكمية المتوفرة*",
@@ -384,14 +419,22 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "صور المنتج*",
                         errorMessage: "يجب إرفاق صورة واحدة على الأقل"
                     },
-                    description: { label: "وصف المنتج", placeholder: "وصف المنتج" },
+                    description: { label: "الوصف بالإنجليزي", placeholder: "الوصف بالإنجليزي" },
+                    arDescription: { 
+                        label: "الوصف بالعربي" ,
+                        placeholder: "الوصف بالعربي"
+                    },
                     addBtn: "إضافة",
                     editBtn: "تعديل",
                 },
                 productCard: {
                     itemText: 'قطعة',
                     showDetails: 'عرض التفاصيل',
-                    aedUnit: " درهم"
+                    notVisible:"هذا المنتج لن يكون مرئياً للعملاء",
+                    quantityAboutAlert: "هذا المنتج على وشك الانتهاء، هل تريد تحديث الكمية؟",
+                    aedUnit: "درهم",
+                    update: "تعديل الكمية",
+                    unpublish: "إخفاء"
                 },
                 optionFormInfo: {
                     productChar: "خصائص المنتج",
@@ -413,10 +456,21 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     newGroupBtn: "فئة جديدة"
                 },
                 categoryFormInfo: {
+                    addCategoryTitle: "إضافة صنف",
+                    editCategoryTitle: "تعديل صنف",
                     name: {
                         label: "الإسم*",
                         errorMessage: "يجب أن لا يكون فارغاً"
                     },
+                    published: {
+                        label: "إختيار حالة الصنف",
+                    },
+                    publishedTxt: "نشر",
+                    unpublishedTxt: "إيقاف",
+                    products: "المنتجات",
+                    status: "الحالة",
+                    category: "الأصناف",
+                    addNewBtn: "إضافة صنف جديد",
                     addBtn: "إضافة",
                     editBtn: "تعديل",
                 },

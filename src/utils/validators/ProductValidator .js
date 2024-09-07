@@ -1,4 +1,4 @@
- import *as Yup from 'yup'
+import *as Yup from 'yup'
 
  export const productPatterns = {
     nameRegx: /^[A-Za-z]{2,16}\s[A-Za-z]{2,16}\s[A-Za-z]{2,16}$/,
@@ -97,6 +97,8 @@ export function validateProductBeforeSubmit(productData, productImages, isEdit) 
 
 export const validationSchema =(productData, isEditing, companyProfit, requiredMessage)=> {return Yup.object({
     name: Yup.string().required(requiredMessage),
+    arName: Yup.string().required(requiredMessage),
+    duration: Yup.string().required(requiredMessage),
     companyProfit: Yup.number().when([], {
     is: () => companyProfit,
     then: ()=> Yup.number().typeError(productData.companyProfit.numbersOnly)
@@ -105,6 +107,7 @@ export const validationSchema =(productData, isEditing, companyProfit, requiredM
     otherwise: ()=> Yup.number().notRequired(), // No validation when editing
     }),
     description: Yup.string().nullable(),
+    arDescription: Yup.string().nullable(),
     quantity: Yup.number().typeError(productData.quantity.numbersOnly)
     .min(1, productData.quantity.startFromOne)
     .required(requiredMessage),
@@ -135,10 +138,13 @@ export function fillProductFormData(fd, formData, productImages, companyProfit, 
             productId: productId,
             vendorId: vendorId,
             name: formData.name,
+            arName: formData.arName,
+            duration: formData.duration,
             price: formData.price,
             quantity: formData.quantity,
             companyProfit: formData.companyProfit??companyProfit,
             description: formData.description===""?null:formData.description,
+            arDescription: formData.arDescription===""?null:formData.arDescription,
             categoryId: formData.categoryId
           }))
   if(productImages.length===0)fd.append('productImages', formData.images);

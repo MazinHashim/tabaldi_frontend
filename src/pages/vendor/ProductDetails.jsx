@@ -18,6 +18,7 @@ const PRODUCTS_ROUTE_URL = "/products";
 const PRODUCT_DELETE_URL = "/products/delete";
 const ADD_OPTION_INFO_URL = "/options/save"
 const OPTION_DELETE_URL = "/options/delete"
+const TOGGLE_PUBLISH_URL = "/products/toggle/publish"
 
 const ProductDetails = () => {
     const location = useLocation();
@@ -29,6 +30,7 @@ const ProductDetails = () => {
     const{t, i18n} = useTranslation();
     const axiosPrivate = useAxiosPrivate()
     const tCard = t("vendorCard")
+    const pCard = t("productCard")
     const tOptionInfo = t("optionFormInfo")
     const optionInputs = validator.translateInputText(tOptionInfo)
     const productId=location.state.productId;
@@ -52,6 +54,24 @@ const ProductDetails = () => {
     function handleToggleNewGroup() {
         setOpenedOptionGroup(null)
         setIsNewGroup(!newGroup)
+    }
+    async function toggleProductPublishing(productId){
+        try{
+            setLoading(true)
+            const params = `/${productId}`;
+            const statusChangedResponse = await axiosPrivate.get(TOGGLE_PUBLISH_URL+params,
+                {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
+            );
+            setLoading(false)
+            // onTogglePublishing(statusChangedResponse?.data.published, productId);
+            const otherProducts=products.filter(prod=>prod.productId!==productId);
+            const selectedProduct=products.find(prod=>prod.productId===productId);
+            setProducts([...otherProducts, {...selectedProduct, published: statusChangedResponse?.data.published}])
+            toast.success(statusChangedResponse?.data.message);
+        } catch (error) {
+            setLoading(false)
+            toast.error(error.response?.data.message);
+        }
     }
     async function handleOnProductDelete(productId) {
          try{
@@ -130,10 +150,21 @@ const ProductDetails = () => {
     <>
     <ToastContainer />
         <div className='flex flex-col justify-center items-start space-y-8'>
-            {!selectedProduct.published &&
-                <p className={`${"text-yellow-700"}`}>
+            <div className='flex gap-3 items-center'>
+                {selectedProduct.quantity <= 5 &&
+                <p className="text-red-700 border-red-700 border rounded-lg p-1">
                     <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
-                    Reviewing by super admin, This product will not be visible to the customers</p>}
+                    {pCard["quantityAboutAlert"]}
+                    <button onClick={()=>setShowEditModal(true)} className='font-bold mx-2'>{pCard["update"]}</button>
+                    {selectedProduct.published&&<button className='font-bold mx-2' 
+                    onClick={()=>isLoading?null:toggleProductPublishing(selectedProduct.productId)}>{pCard["unpublish"]}</button>}
+                </p>}
+                {!selectedProduct.published &&
+                <p className="text-yellow-700 border-yellow-700 border rounded-lg p-1">
+                    <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
+                    {pCard["notVisible"]}
+                </p>}
+            </div>
             <div className='flex justify-between items-center'>
                 <h2>{selectedProduct?.name}</h2>
                 <h4 className='uppercase primary-color border border-green-300 rounded-lg px-1 mx-3'>

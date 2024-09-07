@@ -141,7 +141,7 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             </div> */}
           </div>
           <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
-            {!currentAdvertisement?.url && isEdit?"":
+            {currentAdvertisement?.vendor?.vendorId && isEdit?"":
             <div className="md:w-1/4 my-6">
               <label htmlFor="url" className="text-lg">{tAdvertisementInfo.url?.label}</label>
               <input type="url" name="url" id="url" defaultValue={currentAdvertisement?.url??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.url?.placeholder} />

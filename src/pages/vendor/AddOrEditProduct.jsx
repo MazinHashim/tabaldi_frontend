@@ -108,10 +108,17 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               {errors?.name&&<div className='text-red-600'>{errors?.name}</div>}
             </div>
             <div className="md:w-1/4 my-6">
+              <label htmlFor="arName" className="text-lg">{tProductInfo.arName?.label}</label>
+              <input type="text" name="arName" id="arName" defaultValue={currentProduct?.arName??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.arName?.placeholder} />
+              {errors?.arName&&<div className='text-red-600'>{errors?.arName}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
               <label htmlFor="quantity" className="text-lg">{tProductInfo.quantity?.label}</label>
               <input type="number" name="quantity" id="quantity" defaultValue={currentProduct?.quantity??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.quantity?.placeholder} />
               {errors?.quantity&&<div className='text-red-600'>{errors?.quantity}</div>}
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">
             <div className="md:w-1/4 my-6">
               <label htmlFor="images" className="text-lg">{tProductInfo.images?.label}</label>
               <input type="file" name="images" id="images" className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" multiple placeholder={tProductInfo.images?.placeholder}
@@ -119,8 +126,6 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               />
               {errors?.images&&<div className='text-red-600'>{errors?.images}</div>}
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">
             <div className="md:w-1/4 my-6">
               <label htmlFor="price" className="text-lg">{tProductInfo.price?.label}</label>
               <input type="number" name="price" id="price" defaultValue={Math.round(currentProduct?.price)??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.price?.placeholder}
@@ -143,18 +148,30 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
                 </select>
               {errors?.categoryId&&<div className='text-red-600'>{errors?.categoryId}</div>}
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">
             <div className="md:w-1/4 my-6">
               {!auth.role||!isEdit ?<><label htmlFor="companyProfit" className="text-lg">{tProductInfo.companyProfit?.label}</label>
               <input type="number" name="companyProfit" id="companyProfit" defaultValue={currentProduct?.companyProfit??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.companyProfit?.placeholder}
               onChange={handleProfitAndPriceChange} />
               {errors?.companyProfit&&<div className='text-red-600'>{errors?.companyProfit}</div>}
             </>:""}</div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="duration" className="text-lg">{tProductInfo.duration?.label}</label>
+              <input type="text" name="duration" id="duration" defaultValue={currentProduct?.duration??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.duration?.placeholder} />
+              {errors?.duration&&<div className='text-red-600'>{errors?.duration}</div>}
+            </div>
           </div>
           <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">
-            <div className="md:w-1/2">
+            <div className="md:w-1/3">
               <label htmlFor="description" className="text-lg">{tProductInfo.description?.label}</label>
               <textarea name="description" id="description" defaultValue={currentProduct?.description??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.description?.placeholder}></textarea>
               {errors?.description&&<div className='text-red-600'>{errors?.description}</div>}
+            </div>
+            <div className="md:w-1/3">
+              <label htmlFor="arDescription" className="text-lg">{tProductInfo.arDescription?.label}</label>
+              <textarea name="arDescription" id="arDescription" defaultValue={currentProduct?.arDescription??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.arDescription?.placeholder}></textarea>
+              {errors?.arDescription&&<div className='text-red-600'>{errors?.arDescription}</div>}
             </div>
             <button type="submit" className="w-[30%] bg-primary-color text-white px-5 py-2.5 my-10">{tProductInfo[isEdit?"editBtn":"addBtn"]}</button>
           </div>

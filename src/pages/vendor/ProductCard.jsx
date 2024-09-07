@@ -7,14 +7,16 @@ import { GrDeploy } from 'react-icons/gr';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { toast } from 'react-toastify';
 import { BsCheck2Circle } from 'react-icons/bs';
-import { IoCloseCircleOutline, IoWarningOutline } from 'react-icons/io5';
+import { IoWarningOutline } from 'react-icons/io5';
+import { useProductsData } from '../../hooks/appHooks';
 
 const TOGGLE_PUBLISH_URL = "/products/toggle/publish"
-const ProductCard = ({product, routeRole, onTogglePublishing}) => {
+const ProductCard = ({product, routeRole}) => {
     const{t, i18n} = useTranslation();
     const navigate = useNavigate()
     const axiosPrivate = useAxiosPrivate()
     const [isLoading, setLoading] = useState(false);
+    const { products, setProducts } = useProductsData();
     const tCard = t("productCard")
 
     function goToProductDetails(productId) {
@@ -29,7 +31,10 @@ const ProductCard = ({product, routeRole, onTogglePublishing}) => {
                 {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
             );
             setLoading(false)
-            onTogglePublishing(statusChangedResponse?.data.published, productId);
+            // onTogglePublishing(statusChangedResponse?.data.published, productId);
+            const otherProducts=products.filter(prod=>prod.productId!==productId);
+            const selectedProduct=products.find(prod=>prod.productId===productId);
+            setProducts([...otherProducts, {...selectedProduct, published: statusChangedResponse?.data.published}])
             toast.success(statusChangedResponse?.data.message);
         } catch (error) {
             setLoading(false)
@@ -51,11 +56,15 @@ const ProductCard = ({product, routeRole, onTogglePublishing}) => {
         </div>
         <div className="flex justify-between px-2 items-start">
             <h4>{product.name}</h4>
-            {routeRole==="SUPERADMIN"?<button 
-            onClick={()=>isLoading?null:toggleProductPublishing(product.productId)}
-            className={`${product.published?"bg-green-200":"bg-red-200"} text-sm`} title={"Published Prodcut"}>
-                <GrDeploy/>
-            </button>:
+            {routeRole==="SUPERADMIN"?
+            <div className='flex flex-col items-center'>
+                <button 
+                onClick={()=>isLoading?null:toggleProductPublishing(product.productId)}
+                className={`${product.published?"bg-green-200":"bg-red-200"} text-sm`} title={"Published Prodcut"}>
+                    <GrDeploy/>
+                </button>
+                {!product.published && <span className='text-yellow-700 text-sm mx-1'>Reviewing</span>}
+            </div>:
                 product.published
                 ? <BsCheck2Circle className={`${"text-green-700"} text-xl`} title={"Published Prodcut"}/>
                 : <p className={`text-sm ${"text-yellow-700"}`}>

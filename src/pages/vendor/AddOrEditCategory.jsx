@@ -1,20 +1,19 @@
-import React, { useRef } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import FormInput from '../../utils/FormInput';
 import * as validator from '../../utils/validators/CategoryValidator';
 import { useAuth } from '../../hooks/appHooks';
 import { useTranslation } from 'react-i18next';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
+import { ValidationError } from 'yup';
 const ADD_CATEGORY_INFO_URL = "/categories/save";
 
 const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
   const { auth } = useAuth();
   const{t, i18n} = useTranslation();
   const axiosPrivate = useAxiosPrivate()
-  const publishRef = useRef(null);
+  const [errors, setErrors] = useState();
   const tCategoryInfo = t("categoryFormInfo")
-  const categoryInputs = validator.translateInputText(tCategoryInfo)
   
   const handleAddOrEditCategory = async (e)=>{
     e.preventDefault();
@@ -23,57 +22,61 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
     var vendorId = auth.vendorId;
     var categoryId = (isEdit?currentCategory?.categoryId:null);
     const formData = {...data,
-      // name:"",
-      published: isEdit? null : publishRef.current.value.toLowerCase()==="PUBLISHED".toLowerCase(),
+      published: isEdit ? null : data.published==="true" ? true : false,
       vendorId, categoryId}
-    var isValidForm = validator.validateCategoryBeforeSubmit(formData, isEdit);
-    if(isValidForm){
       try {
-          const infoResponse = await axiosPrivate.post(ADD_CATEGORY_INFO_URL, formData,
-              {headers: {'Accept-Language': i18n.language}}
-          );
-          setChangeData(infoResponse?.data.category, isEdit)
-          if(!isEdit){ 
-            e.target.querySelectorAll('input').forEach(input => {
-                input.value = '';
-            });
-          }
-          toast.success(infoResponse?.data.message);
-        } catch (error) {
-        if(!isEdit){
+        console.log(formData)
+        await validator.validationSchema(tCategoryInfo, isEdit, t("requiredMessage"))
+        .validate(formData, {abortEarly: false});
+        setErrors(null)
+        const infoResponse = await axiosPrivate.post(ADD_CATEGORY_INFO_URL, formData,
+            {headers: {'Accept-Language': i18n.language}}
+        );
+        setChangeData(infoResponse?.data.category, isEdit)
+        if(!isEdit){ 
           e.target.querySelectorAll('input').forEach(input => {
-            input.value = "";
+              input.value = '';
           });
         }
-        toast.error(error.response?.data.message);
+        toast.success(infoResponse?.data.message);
+      } catch (error) {
+        if(error instanceof ValidationError){
+          console.log(error instanceof ValidationError?"validation error...":error)
+          let allErrors = {};
+          error?.inner?.forEach((err)=>{
+            allErrors[err.path]=err.message;
+          })
+          setErrors(allErrors)
+        } else {
+          if(!isEdit){
+            e.target.querySelectorAll('input').forEach(input => { input.value = ""; });
+          }
+          toast.error(error.response?.data.message);
+          console.log(error)
         }
-    } else {
-      toast.error("Invalid Fields");
     }
   }
 
   return (
     <>
       <div>
-        <h1 className='font-normal'>{tCategoryInfo[isEdit?"editCategoryTitle":"addCategoryTitle"]}</h1>
         <form className='w-full' onSubmit={handleAddOrEditCategory} method='post'>
           <div className="flex justify-between">
-            {categoryInputs.slice(0, 1).map((input) => {
-                return <FormInput 
-                key={input.id}
-                {...{...input, 
-                  containerstyle: `${isEdit?"md:w-[60%]":"md:w-[30%]"} my-4`, defaultValue: isEdit?currentCategory[input.name]:""}}
-                />
-              })}
+            <div className={`${isEdit?"md:w-[60%]":"md:w-[30%]"} my-4`}>
+              <label htmlFor="name" className="text-lg">{tCategoryInfo.name?.label}</label>
+              <input type="text" name="name" id="name" defaultValue={currentCategory?.name??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tCategoryInfo.name?.placeholder} />
+              {errors?.name&&<div className='text-red-600'>{errors?.name}</div>}
+            </div>
             {!isEdit&& <div className='md:w-[30%] my-4'>
-                <label htmlFor={"published"} className="text-sm">Select Category Status</label>
+                <label htmlFor={"published"} className="text-sm">{tCategoryInfo.published?.label}</label>
                 <select
-                ref={publishRef}
+                name='published'
                 className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
                 >
-                  <option>Published</option>
-                  <option>Unpublished</option>
+                  <option value={true}>{tCategoryInfo.publishedTxt}</option>
+                  <option value={false}>{tCategoryInfo.unpublishedTxt}</option>
                 </select>
+                {errors?.published&&<div className='text-red-600'>{errors?.published}</div>}
               </div>}
               <button type="submit" className="w-[30%] bg-primary-color text-white px-5 py-2 my-10">{tCategoryInfo[isEdit?"editBtn":"addBtn"]}</button>
             </div>

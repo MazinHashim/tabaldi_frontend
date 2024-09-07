@@ -22,7 +22,7 @@ const ProductsList = ({routeRole}) => {
     const sessionToken = auth.token;
     const [state, _, setChangeData] = useAxiosFetchApi(vendorProductsUrl, {}, sessionToken);
     const productList = state.data?.list;
-    const { setProducts } = useProductsData();
+    const { products, setProducts } = useProductsData();
 
     useEffect(()=>{
         setProducts(state.data?.list)
@@ -49,12 +49,12 @@ const ProductsList = ({routeRole}) => {
             >Add New Product</button>
         </div>
         <div className='flex flex-wrap w-full justify-between'>
-            {state.isLoading?<div className="w-full h-[70vh] flex justify-center items-center">
+            {state.isLoading || !products?<div className="w-full h-[70vh] flex justify-center items-center">
                 <AppLoading/>
                 </div>
             :!state.data?.list
             ?<div className='flex justify-center items-center h-[70vh] capitalize w-full'>{state.data?.message??state.error?.message}</div>
-            :productList
+            :products
             .sort((a, b) => {
                 if (a.name < b.name) return -1;
                 if (a.name > b.name) return 1;

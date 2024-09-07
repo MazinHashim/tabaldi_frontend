@@ -1,4 +1,6 @@
- export const categoryPatterns = {
+import *as Yup from 'yup'
+
+export const categoryPatterns = {
     nameRegx: /^[A-Za-z0-9]{1,16}$/,
 }
 
@@ -23,16 +25,11 @@ export function validateCategoryBeforeSubmit(categoryData, isEdit) {
 function regexToString(regex) {
     return regex.toString().replace(/\//g, ""); //.replace(/\\\\/g, "\\");
 }
-export function translateInputText(tCategoryIfno){
-  return categoryInfoInputs.map(input => {
-    if(tCategoryIfno[input.name]){
-      return {...input,
-        label: tCategoryIfno[input.name]["label"],
-        errorMessage: input.errorMessage ? tCategoryIfno[input.name]["errorMessage"]:null,
-        title: input.title ? tCategoryIfno[input.name]["title"]:null
-      }
-    }
-    return input
-  })
-  
-}
+export const validationSchema =(productData, isEditing, requiredMessage)=> {return Yup.object({
+    name: Yup.string().required(requiredMessage),
+    published: Yup.number().when([], {
+    is: () => !isEditing,
+    then: ()=> Yup.boolean().required(requiredMessage),
+    otherwise: ()=> Yup.number().notRequired(), // No validation when editing
+    }),
+})}
