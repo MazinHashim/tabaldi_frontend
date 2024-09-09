@@ -21,7 +21,7 @@ const ProductsList = ({routeRole}) => {
     const{t, i18n} = useTranslation();
     const pInfo = t("productFormInfo")
     const vendor = location?.state?.vendor;
-    const vendorProductsUrl = PRODUCT_LIST_URL.replace("{id}", `${vendor?.vendorId??auth.vendorId}`);
+    const vendorProductsUrl = PRODUCT_LIST_URL.replace("{id}", `${vendor?.vendorId??auth.vendorId}`).concat("?roleName=VENDOR");
     const sessionToken = auth.token;
     const [state, _, setChangeData] = useAxiosFetchApi(vendorProductsUrl, {}, sessionToken);
     const productList = state.data?.list;

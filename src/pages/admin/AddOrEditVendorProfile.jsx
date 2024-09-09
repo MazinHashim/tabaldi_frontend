@@ -7,6 +7,7 @@ import { baseURL } from '../../apis/axios';
 import { useTranslation } from 'react-i18next';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { ValidationError } from 'yup';
+import AppMap from '../../layouts/AppMap';
 const VENDOR_ADD_INFO_URL = "/vendors/save";
 
 const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
@@ -15,19 +16,20 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
   const tVendorInfo = t("vendorFormIfno")
   const [errors, setErrors] = useState();
   const [previewUrls, setPreviewUrls] = useState({});
-  
+  const [marker, setMarker] = useState(isEdit?{lat: currentVendor.lat, lng: currentVendor.lng}:null);
   const handleAddOrEditVendor = async (e)=>{
     e.preventDefault();
     const data = new FormData(e.target);
     const formData = Object.fromEntries(data.entries());
+    const formDataWithCoord = {...formData, lat: marker?.lat, lng: marker?.lng}
     try {
       await validator.validationSchema(tVendorInfo, isEdit, t("requiredMessage"))
-      .validate(formData, {abortEarly: false});
+      .validate(formDataWithCoord, {abortEarly: false});
       // userId will initialize after add user response
       var userId = (isEdit?currentVendor.user.userId:null);
       var vendorId = (isEdit?currentVendor.vendorId:null);
       const fd = new FormData();
-      validator.fillVendorFormData(fd, formData, userId, vendorId)
+      validator.fillVendorFormData(fd, formDataWithCoord, userId, vendorId)
       const infoResponse = await axiosPrivate.post(VENDOR_ADD_INFO_URL, fd,
           {headers: {'Accept-Language': i18n.language}}
       );
@@ -151,7 +153,9 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
               {errors?.closingTime&&<div className='text-red-600'>{errors?.closingTime}</div>}
             </div>
           </div>
-          <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
+          <div className='flex flex-col md:flex-row flex-wrap justify-between items-start my-6'>
+            <AppMap marker={marker} setMarker={setMarker} />
+            {errors?.lat&&<div className='text-red-600'>{errors?.lat}</div>}
             <div className="md:w-1/4">
               <label htmlFor="coverImage" className="text-lg">{tVendorInfo.coverImage?.label}</label>
               <input type="file" name="coverImage" id="coverImage" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.coverImage?.placeholder} />

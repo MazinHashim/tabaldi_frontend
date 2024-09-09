@@ -15,7 +15,7 @@ const VendorsList = () => {
     const sessionToken = auth.token;
     const{ i18n} = useTranslation();
     const axiosPrivate = useAxiosPrivate()
-    const [state, _,setChangeData] = useAxiosFetchApi(VENDOR_LIST_URL, {}, sessionToken);
+    const [state, _,setChangeData] = useAxiosFetchApi(VENDOR_LIST_URL.concat("?roleName=VENDOR"), {}, sessionToken);
     const vendorList = state.data?.list;
 
     function handleChangeOnEditVendor(newData){

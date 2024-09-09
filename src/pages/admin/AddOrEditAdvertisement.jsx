@@ -13,7 +13,7 @@ const FETCH_VENDORS_URL = "/vendors";
 const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) => {
   const{t, i18n} = useTranslation();
   const axiosPrivate = useAxiosPrivate()
-  const [state] = useAxiosFetchApi(FETCH_VENDORS_URL, {}, null);
+  const [state] = useAxiosFetchApi(FETCH_VENDORS_URL.concat("?roleName=VENDOR"), {}, null);
   const tAdvertisementInfo = t("advertisementFormIfno")
   const [errors, setErrors] = useState();
   const [previewUrls, setPreviewUrls] = useState({});
