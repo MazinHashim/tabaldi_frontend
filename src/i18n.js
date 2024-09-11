@@ -413,7 +413,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 adminHomeInfo: {
                     welcomeTxt: "مرحباً بكم من جديد! إدارة راتينا",
                     subPargTxt: "يعد نظام إدارة Rateena تصميمًا بسيطًا ونظيفًا للبائعين والموردين.",
-                    viewVendor: "إعرض البائع",
+                    viewVendor: "إعرض البائعين",
                     newSales: "مبيعات جديدة",
                     pendingTxt: "طلبات معلقة",
                     noPendingTxt: "لا يوجد طلبات معلقة",
@@ -530,11 +530,11 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         placeholder: "مثال: عرض العيد",
                     },
                     subtitle: {
-                        label: "وصف الإعلان بالإنجليزي*",
+                        label: "الوصف بالإنجليزي*",
                         placeholder: "مثال:أفضل العروض للعيد",
                     },
                     arSubtitle: {
-                        label: "وصف الإعلان بالعربي*",
+                        label: "الوصف بالعربي*",
                         placeholder: "مثال:أفضل العروض للعيد",
                     },
                     url: {

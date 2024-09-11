@@ -81,7 +81,7 @@ export function fillVendorFormData(fd, vendor, userId, vendorId){
   fd.append("VendorPayload", JSON.stringify({
             vendorId: vendorId,
             fullName: vendor.fullName,
-            arFullName: vendor.fullName,
+            arFullName: vendor.arFullName,
             email: vendor.email,
             lat: vendor.lat,
             lng: vendor.lng,
