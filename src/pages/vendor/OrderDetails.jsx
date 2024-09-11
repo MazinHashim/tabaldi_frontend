@@ -15,7 +15,7 @@ const CHANGE_STATUS_URL="/orders/change/status"
 const INVOICE_URL = "/invoices/order"
 const OrderDetails = () => {
     const{t, i18n} = useTranslation();
-    // const tRecord = t("orderRecord")
+    const tOrder = t("orderDetailsInfo")
     const { auth } = useAuth();
     const statusRef = useRef(null)
     const axiosPrivate = useAxiosPrivate();
@@ -70,8 +70,8 @@ const OrderDetails = () => {
     <ToastContainer />
     <div className='flex flex-col w-full'>
         <div className="flex justify-between mb-10">
-            <h2>Order Details</h2>
-            <button className="bg-secondary-color text-white" onClick={()=>navigate(-1)}>Back to all Orders</button>
+            <h2>{tOrder["orderDetails"]}</h2>
+            <button className="bg-secondary-color text-white" onClick={()=>navigate(-1)}>{tOrder["backToOrders"]}</button>
         </div>
         {state.isLoading?<AppLoading/>
         : !invoice
@@ -80,7 +80,7 @@ const OrderDetails = () => {
             <div className="m-2 px-4">
                 <div className="flex justify-between">
                     <div className='flex items-center'>
-                        <h3>Order #{selectedOrder[0].orderNumber}</h3>
+                        <h3>{tOrder["orderNumber"]} {selectedOrder[0].orderNumber}</h3>
                         <span className={"font-bold px-1 m-2 text-sm capitalize "
                         + statusTextColor(selectedOrder[0].status) + " "
                         + statusBGColor(selectedOrder[0].status) + " rounded-lg"}>
@@ -89,37 +89,37 @@ const OrderDetails = () => {
                     </div>
                     <div className='flex space-x-3 text-sm'>
                         <select ref={statusRef} className='p-1 rounded-lg border' name="status" id="status">
-                            <option value={""}>Status</option>
+                            <option value={""}>{tOrder["status"]}</option>
                             {allStatuses.map(status=>{
                                 if(status==="DELIVERED" && auth.role==="VENDOR")
                                     return "";
                                 return <option key={status}>{status}</option>
                             })}
                         </select>
-                        <button className={`${isLoading?'invisible':''} bg-primary-color text-white`} onClick={handleChangeOrderStatus}>Save</button>
-                        <button className="border border-gray-300">Download Invoice</button>
+                        <button className={`${isLoading?'invisible':''} bg-primary-color text-white`} onClick={handleChangeOrderStatus}>{tOrder["save"]}</button>
+                        <button className="border border-gray-300">{tOrder["downloadInv"]}</button>
                     </div>
                 </div>
                 <div className="flex w-full justify-between my-10">
                     <div className="flex-col space-y-2">
-                        <h4>Customer Details</h4>
+                        <h4>{tOrder["custDetails"]}</h4>
                         <p>{customerName}</p>
                         <p>{selectedOrder[0].customer.user.email}</p>
                         <p>{selectedOrder[0].customer.user.phone}</p>
-                        <p className='font-bold text-sm primary-color cursor-pointer'>View Profile</p>
+                        <p className='font-bold text-sm primary-color cursor-pointer'>{tOrder["viewProfile"]}</p>
                     </div>
                     <div className="flex-col space-y-2">
-                        <h4>Shipping Address</h4>
+                        <h4>{tOrder["shippAddress"]}</h4>
                         <p>{selectedOrder[0].address.name}</p>
                         <p>{selectedOrder[0].address.street}</p>
-                        <p>Contact No. {selectedOrder[0].address.phone}</p>
+                        <p>{tOrder["contactNum"]} {selectedOrder[0].address.phone}</p>
                     </div>
                     <div className="flex-col space-y-2">
-                        <h4>Order Details</h4>
-                        <p>Order No: {selectedOrder[0].orderNumber}</p>
-                        <p>Order Date: {selectedOrder[0].orderDate}</p>
-                        <p>Number of items: {selectedOrder[0].cartItems.length} {"items"}</p>
-                        <p>Order Total: {selectedOrder[0].total} AED 
+                        <h4>{tOrder["orderDetails"]}</h4>
+                        <p>{tOrder["orderNum"]}: {selectedOrder[0].orderNumber}</p>
+                        <p>{tOrder["orderDate"]}: {selectedOrder[0].orderDate}</p>
+                        <p>{tOrder["numOfItems"]}: {selectedOrder[0].cartItems.length} {"items"}</p>
+                        <p>{tOrder["orderTotal"]}: {selectedOrder[0].total} {t("aedUnit")} 
                             <span className={`lowercase mx-2 text-sm px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
                                 {invoice.status}</span></p>
                     </div>
@@ -129,10 +129,10 @@ const OrderDetails = () => {
             <thead
                 className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                 <tr>
-                <th scope="col" className="p-4 text-start" colSpan={2}>Product</th>
-                <th scope="col" className="p-4">Quantity</th>
-                <th scope="col" className="p-4">Price</th>
-                <th scope="col" className="p-4 text-end">Total</th>
+                <th scope="col" className="p-4 text-start" colSpan={2}>{tOrder["product"]}</th>
+                <th scope="col" className="p-4">{tOrder["quantity"]}</th>
+                <th scope="col" className="p-4">{tOrder["price"]}</th>
+                <th scope="col" className="p-4 text-end">{tOrder["total"]}</th>
                 </tr>
             </thead>
             <tbody>
@@ -161,47 +161,47 @@ const OrderDetails = () => {
                             {option.name}</td>
                         <td className="whitespace-nowrap px-2">_</td>
                         <td className="whitespace-nowrap px-2">{option.fee??"_"}</td>
-                        <td className="whitespace-nowrap px-2 text-end">{option.fee??"_"} AED</td>
+                        <td className="whitespace-nowrap px-2 text-end">{option.fee??"_"} {t("aedUnit")}</td>
                     </tr>
                 })}
                 </>
                 })}
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
-                    <td className="border-b border-gray-300 capitalize text-start">subtotal </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.subtotal} AED</td>
+                    <td className="border-b border-gray-300 capitalize text-start">{tOrder["subtotal"]} </td>
+                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.subtotal} {t("aedUnit")}</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
-                    <td className="border-b border-gray-300 capitalize text-start">discount </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.discount} AED</td>
+                    <td className="border-b border-gray-300 capitalize text-start">{tOrder["discount"]} </td>
+                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.discount} {t("aedUnit")}</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
-                    <td className="border-b border-gray-300 capitalize text-start">shipping cost </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.shippingCost} AED</td>
+                    <td className="border-b border-gray-300 capitalize text-start">{tOrder["shippingCost"]} </td>
+                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.shippingCost} {t("aedUnit")}</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
-                    <td className="border-b border-gray-300 capitalize text-start">VAT </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.taxes} AED</td>
+                    <td className="border-b border-gray-300 capitalize text-start">{tOrder["vat"]} </td>
+                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.taxes} {t("aedUnit")}</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
-                    <td className="capitalize text-start">grand total: </td>
-                    <td className='p-2 text-end'>{invoice.summary.total} AED</td>
+                    <td className="capitalize text-start">{tOrder["grandTotal"]}: </td>
+                    <td className='p-2 text-end'>{invoice.summary.total} {t("aedUnit")}</td>
                 </tr>
             </tbody>
             </table>
             <div className="flex px-7 py-2">
                 <div className="w-1/2">
-                    <h4>Payment Info</h4>
+                    <h4>{tOrder["paymentInfo"]}</h4>
                     <p>{invoice.paymentMethod==="CASH"?"Cash on Delivery":invoice.paymentMethod}</p>
                 </div>
                 <div className="w-1/2">
-                    <h3 className='my-2'>Notes</h3>
+                    <h3 className='my-2'>{tOrder["notes"]}</h3>
                     <textarea placeholder='Write note for order' className='rounded-md border border-gray-200 w-full h-24 p-2' name="note" id="note"></textarea>
-                    <button className="bg-primary-color text-white">Save Notes</button>
+                    <button className="bg-primary-color text-white">{tOrder["saveNotes"]}</button>
                 </div>
             </div>
         </div>}

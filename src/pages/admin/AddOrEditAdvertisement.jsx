@@ -80,10 +80,23 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
               {errors?.title&&<div className='text-red-600'>{errors?.title}</div>}
             </div>
             <div className="md:w-1/4 my-6">
+              <label htmlFor="arTitle" className="text-lg">{tAdvertisementInfo.arTitle?.label}</label>
+              <input type="text" name="arTitle" id="arTitle" defaultValue={currentAdvertisement?.arTitle??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.arTitle?.placeholder} />
+              {errors?.arTitle&&<div className='text-red-600'>{errors?.arTitle}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
               <label htmlFor="subtitle" className="text-lg">{tAdvertisementInfo.subtitle?.label}</label>
               <input type="text" name="subtitle" id="subtitle" defaultValue={currentAdvertisement?.subtitle??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.subtitle?.placeholder}/>
               {errors?.subtitle&&<div className='text-red-600'>{errors?.subtitle}</div>}
-            </div>{!currentAdvertisement?.vendor?.vendorId && isEdit?"":
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row flex-wrap justify-between">
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="arSubtitle" className="text-lg">{tAdvertisementInfo.arSubtitle?.label}</label>
+              <input type="text" name="arSubtitle" id="arSubtitle" defaultValue={currentAdvertisement?.arSubtitle??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.arSubtitle?.placeholder}/>
+              {errors?.arSubtitle&&<div className='text-red-600'>{errors?.arSubtitle}</div>}
+            </div>
+            {!currentAdvertisement?.vendor?.vendorId && isEdit?"":
             <div className="md:w-1/4 my-6">
               <label htmlFor="vendorId" className="text-lg">{tAdvertisementInfo.vendorId?.label}</label>
               <select
@@ -101,8 +114,6 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
                 </select>
               {errors?.vendorId&&<div className='text-red-600'>{errors?.vendorId}</div>}
             </div>}
-          </div>
-          <div className="flex flex-col md:flex-row flex-wrap justify-between">
             {<div className="md:w-1/4 my-6">
               <label htmlFor="priority" className="text-lg">{tAdvertisementInfo.priority?.label}</label>
               <select
@@ -119,16 +130,6 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
                 </select>
               {errors?.priority&&<div className='text-red-600'>{errors?.priority}</div>}
             </div>}
-            <div className="md:w-1/4 my-6">
-              <label htmlFor="startTime" className="text-lg">{tAdvertisementInfo.startTime?.label}</label>
-              <input type="time" name="startTime" id="startTime" defaultValue={currentAdvertisement?.startTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.startTime?.placeholder} />
-              {errors?.startTime&&<div className='text-red-600'>{errors?.startTime}</div>}
-            </div>
-            <div className="md:w-1/4 my-6">
-              <label htmlFor="endTime" className="text-lg">{tAdvertisementInfo.endTime?.label}</label>
-              <input type="time" name="endTime" id="endTime" defaultValue={currentAdvertisement?.endTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.endTime?.placeholder} />
-              {errors?.endTime&&<div className='text-red-600'>{errors?.endTime}</div>}
-            </div>
             {/* <div className="md:w-1/4 my-6">
               <label htmlFor="adsImage2" className="text-lg">{tAdvertisementInfo.adsImage2?.label}</label>
               <input type="file" name="adsImage2" id="adsImage2" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage2?.placeholder} />
@@ -140,13 +141,30 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
               {errors?.adsImage3&&<div className='text-red-600'>{errors?.adsImage3}</div>}
             </div> */}
           </div>
-          <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
+          <div className="flex flex-col md:flex-row flex-wrap justify-between">
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="startTime" className="text-lg">{tAdvertisementInfo.startTime?.label}</label>
+              <input type="time" name="startTime" id="startTime" defaultValue={currentAdvertisement?.startTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.startTime?.placeholder} />
+              {errors?.startTime&&<div className='text-red-600'>{errors?.startTime}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="endTime" className="text-lg">{tAdvertisementInfo.endTime?.label}</label>
+              <input type="time" name="endTime" id="endTime" defaultValue={currentAdvertisement?.endTime??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.endTime?.placeholder} />
+              {errors?.endTime&&<div className='text-red-600'>{errors?.endTime}</div>}
+            </div>
             {currentAdvertisement?.vendor?.vendorId && isEdit?"":
             <div className="md:w-1/4 my-6">
               <label htmlFor="url" className="text-lg">{tAdvertisementInfo.url?.label}</label>
               <input type="url" name="url" id="url" defaultValue={currentAdvertisement?.url??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.url?.placeholder} />
               {errors?.url&&<div className='text-red-600'>{errors?.url}</div>}
             </div>}
+          </div>
+          <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
+            <div className="md:w-1/4">
+              <label htmlFor="adsImage1" className="text-lg">{tAdvertisementInfo.adsImage1?.label}</label>
+              <input type="file" name="adsImage1" id="adsImage1" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage1?.placeholder} />
+              {errors?.adsImage1&&<div className='text-red-600'>{errors?.adsImage1}</div>}
+            </div>
             <div className="md:w-1/4 my-6">
               <label htmlFor="createDate" className="text-lg">{tAdvertisementInfo.createDate?.label}</label>
               <input type="date" name="createDate" id="createDate" defaultValue={currentAdvertisement?.fcreatedDate??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.createDate?.placeholder} />
@@ -159,11 +177,6 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             </div>
           </div>
           <div className='flex flex-col md:flex-row flex-wrap justify-between my-6'>
-            <div className="md:w-1/4">
-              <label htmlFor="adsImage1" className="text-lg">{tAdvertisementInfo.adsImage1?.label}</label>
-              <input type="file" name="adsImage1" id="adsImage1" onChange={handleImagesChange} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tAdvertisementInfo.adsImage1?.placeholder} />
-              {errors?.adsImage1&&<div className='text-red-600'>{errors?.adsImage1}</div>}
-            </div>
             {isEdit && (previewUrls.adsImage1?<img className="rounded-lg md:w-3/4 h-60" src={previewUrls.adsImage1} alt="ads1" />
               :currentAdvertisement.adsImage1?<img className="rounded-lg md:w-3/4 h-60" src={`${baseURL}/files/get/file/${currentAdvertisement?.adsImage1}`} alt="ads1" />
                 :"Loading...")}

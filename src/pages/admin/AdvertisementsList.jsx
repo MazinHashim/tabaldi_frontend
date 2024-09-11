@@ -20,6 +20,7 @@ const AdvertisementsList = () => {
 
     const {auth} = useAuth()
     const{t, i18n} = useTranslation();
+    const tAdvertisementInfo = t("advertisementFormIfno")
     const axiosPrivate = useAxiosPrivate()
     const [editModal, setShowEditModal] = useState({advertisement: null, status: false});
     const [deleteModal, setShowDeleteModal] = useState({advertisementId: null, status: false});
@@ -81,18 +82,18 @@ const AdvertisementsList = () => {
         {!editModal && <ToastContainer />}
         <div className='flex flex-col w-full'>
             <div className="flex justify-between mb-10">
-                <h2>Advertisements</h2>
+                <h2>{tAdvertisementInfo["advertisements"]}</h2>
                 <button className="bg-secondary-color text-white"
                 onClick={()=>setShowEditModal({advertisement: null, status: true})}
-                >Add New Advertisement</button>
+                >{tAdvertisementInfo["addAdvertisementTitle"]}</button>
             </div>
             <div className="flex flex-col shadow-4 p-2 rounded-2xl">
                 <div className="flex justify-between">
-                    <input type="text" placeholder='Search' className='p-2 m-2 rounded-lg border'/>
+                    <input type="text" placeholder={tAdvertisementInfo.searchTxt} className='p-2 m-2 rounded-lg border'/>
                     <select className='p-2 m-2 rounded-lg border' name="status" id="status">
-                        <option>Status</option>
-                        <option value={true}>Visiable</option>
-                        <option value={false}>Hidden</option>
+                        <option>{tAdvertisementInfo.statusTxt}</option>
+                        <option value={true}>{tAdvertisementInfo["visiable"]}</option>
+                        <option value={false}>{tAdvertisementInfo["hidden"]}</option>
                     </select>
                 </div>
                 <div className="overflow-x-scroll sm:-mx-3 lg:-mx-2">
@@ -102,19 +103,21 @@ const AdvertisementsList = () => {
                         <thead
                             className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                             <tr key={"head-1"}>
-                            <th scope="col" className="whitespace-nowrap  p-4">Priority</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Title</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Subtitle</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Created Date</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Expire Date</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Start Time</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">End Time</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Link</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Vendor</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Type</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Advertisement Image</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">Visibility</th>
-                            <th scope="col" className="whitespace-nowrap  p-1">Action</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.priority.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.title.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.arTitle.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.subtitle.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.arSubtitle.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.createDate.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.expireDate.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.startTime.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.endTime.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.url.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.vendorId.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.type}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.adsImage1.label.replace("*","")}</th>
+                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.visibility}</th>
+                            <th scope="col" className="whitespace-nowrap  p-1">{t("action")}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -135,7 +138,9 @@ const AdvertisementsList = () => {
                             return <tr key={advertisement.advertisementId}>
                                 <td className="whitespace-nowrap p-4">{advertisement.priority}</td>
                                 <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.title}</td>
+                                <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.arTitle}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.subtitle===""?"_":advertisement.subtitle??"_"}</td>
+                                <td className="whitespace-nowrap p-4">{advertisement.arSubtitle===""?"_":advertisement.arSubtitle??"_"}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.fcreatedDate}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.fexpireDate}</td>
                                 <td className="whitespace-nowrap p-4">{advertisement.fstartTime}</td>

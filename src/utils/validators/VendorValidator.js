@@ -12,6 +12,7 @@ export const supportedVendorType=[
 
 export const validationSchema =(vendorData, isEditing, requiredMessage)=> {return Yup.object({
     fullName: Yup.string().required(requiredMessage),
+    arFullName: Yup.string().required(requiredMessage),
     lat: Yup.number().required(requiredMessage),
     lng: Yup.number().required(requiredMessage),
     phone: Yup.string().when([], {
@@ -80,6 +81,7 @@ export function fillVendorFormData(fd, vendor, userId, vendorId){
   fd.append("VendorPayload", JSON.stringify({
             vendorId: vendorId,
             fullName: vendor.fullName,
+            arFullName: vendor.fullName,
             email: vendor.email,
             lat: vendor.lat,
             lng: vendor.lng,

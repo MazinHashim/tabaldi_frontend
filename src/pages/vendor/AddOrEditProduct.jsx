@@ -143,7 +143,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
                   {categoryList?categoryList.map(data=>{
                     const category=data.category;
                   return <option
-                  key={category.categoryId} value={category.categoryId}>{category.name}</option>
+                  key={category.categoryId} value={category.categoryId}>{category.name} / {category.arName}</option>
                   }):"No Category Found"}
                 </select>
               {errors?.categoryId&&<div className='text-red-600'>{errors?.categoryId}</div>}

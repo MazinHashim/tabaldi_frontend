@@ -62,7 +62,7 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
                     <button className='boder border-gray-400 shadow-none mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
                 </div>
                 <Link className='flex justify-between items-center boder border-gray-400 shadow-none text-sm text-center mx-1' to={"products"} state={{vendor}}>
-                <p>View Products</p>
+                <p>{tCard["viewProducts"]}</p>
                 {vendor.inactiveProductsCount===0
                 ? <BsCheck2Circle className={`${"text-green-700"} text-xl`} title={"All prodcuts active"}/>
                 : <span className='rounded-md bg-red-700 text-white px-1 text-sm'>{vendor.inactiveProductsCount}</span>
@@ -71,7 +71,9 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
         </div>
         <div className="flex-col space-y-2 justify-self-end">
             <div className="flex justify-between">
-                <h3>{vendor.fullName}
+                <h3>
+                    {i18n.language==="en"?vendor.fullName:vendor.arFullName}
+                    {/* {vendor.fullName} */}
                     <sub className="lowercase mx-2 bg-slate-800 text-white text-xs rounded-lg px-2">
                         {vendor.region}
                     </sub>

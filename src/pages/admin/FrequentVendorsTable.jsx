@@ -1,7 +1,7 @@
 import React from 'react'
 import AppLoading from '../../utils/AppLoading';
 
-const FrequentVendorsTable = ({state, title}) => {
+const FrequentVendorsTable = ({state, title, labels}) => {
   return (
     <div className="flex flex-col shadow-4 p-2 rounded-2xl mt-14">
         <div className="flex justify-between my-3">
@@ -14,12 +14,12 @@ const FrequentVendorsTable = ({state, title}) => {
                 <thead
                   className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                   <tr>
-                  <th scope="col" className="p-4">Vendor Name</th>
-                  <th scope="col" className="p-4">Email</th>
-                  <th scope="col" className="p-4">Phone</th>
-                  <th scope="col" className="p-4">Created At</th>
-                  <th scope="col" className="p-4">Vendor Type</th>
-                  <th scope="col" className="p-4">Number Of Orders</th>
+                  <th scope="col" className="p-4">{labels["vendorName"]}</th>
+                  <th scope="col" className="p-4">{labels["email"]}</th>
+                  <th scope="col" className="p-4">{labels["phone"]}</th>
+                  <th scope="col" className="p-4">{labels["createdAt"]}</th>
+                  <th scope="col" className="p-4">{labels["vendorType"]}</th>
+                  <th scope="col" className="p-4">{labels["numOfOrd"]}</th>
                   </tr>
               </thead>
               <tbody>

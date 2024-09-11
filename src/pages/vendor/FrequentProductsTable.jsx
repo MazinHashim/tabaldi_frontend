@@ -1,7 +1,7 @@
 import React from 'react'
 import AppLoading from '../../utils/AppLoading';
 
-const FrequentProductsTable = ({state, title}) => {
+const FrequentProductsTable = ({state, title, labels}) => {
   return (
     <div className="flex flex-col shadow-4 p-2 rounded-2xl mt-14">
         <div className="flex justify-between my-3">
@@ -14,13 +14,13 @@ const FrequentProductsTable = ({state, title}) => {
                 <thead
                   className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                   <tr>
-                  <th scope="col" className="p-4">Product Name</th>
-                  <th scope="col" className="p-4">Category</th>
-                  <th scope="col" className="p-4">Available Quntity</th>
-                  <th scope="col" className="p-4">Company Profit</th>
-                  <th scope="col" className="p-4">Price</th>
-                  <th scope="col" className="p-4">Number of Options</th>
-                  <th scope="col" className="p-4">Number of Orders</th>
+                  <th scope="col" className="p-4">{labels["prodName"]}</th>
+                  <th scope="col" className="p-4">{labels["category"]}</th>
+                  <th scope="col" className="p-4">{labels["availQuant"]}</th>
+                  <th scope="col" className="p-4">{labels["compProfit"]}</th>
+                  <th scope="col" className="p-4">{labels["price"]}</th>
+                  <th scope="col" className="p-4">{labels["numOfOpt"]}</th>
+                  <th scope="col" className="p-4">{labels["numOfOrd"]}</th>
                   </tr>
               </thead>
               <tbody>

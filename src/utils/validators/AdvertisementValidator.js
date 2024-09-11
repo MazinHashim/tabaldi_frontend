@@ -9,6 +9,8 @@ export const adsPriorites = [
 export const validationSchema =(advertisementData, isEditing, formData, requiredMessage)=> {return Yup.object({
     title: Yup.string().required(requiredMessage),
     subtitle: Yup.string().notRequired(),
+    arTitle: Yup.string().required(requiredMessage),
+    arSubtitle: Yup.string().notRequired(),
     vendorId: Yup.number().nullable().notRequired(),
     priority: Yup.number()
     .oneOf(adsPriorites.map(pr=>pr.priority), advertisementData.priority?.notSupported)
@@ -74,6 +76,8 @@ export function fillAdvertisementFormData(fd, advertisement, advertisementId){
             advertisementId: advertisementId,
             title: advertisement.title,
             subtitle: advertisement.subtitle,
+            arTitle: advertisement.arTitle,
+            arSubtitle: advertisement.arSubtitle,
             createDate: advertisement.createDate,
             expireDate: advertisement.expireDate,
             startTime: advertisement.startTime,

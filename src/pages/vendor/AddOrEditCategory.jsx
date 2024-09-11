@@ -67,6 +67,11 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
               <input type="text" name="name" id="name" defaultValue={currentCategory?.name??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tCategoryInfo.name?.placeholder} />
               {errors?.name&&<div className='text-red-600'>{errors?.name}</div>}
             </div>
+            <div className={`${isEdit?"md:w-[60%]":"md:w-[30%]"} my-4`}>
+              <label htmlFor="arName" className="text-lg">{tCategoryInfo.arName?.label}</label>
+              <input type="text" name="arName" id="arName" defaultValue={currentCategory?.arName??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tCategoryInfo.arName?.placeholder} />
+              {errors?.arName&&<div className='text-red-600'>{errors?.arName}</div>}
+            </div>
             {!isEdit&& <div className='md:w-[30%] my-4'>
                 <label htmlFor={"published"} className="text-sm">{tCategoryInfo.published?.label}</label>
                 <select
@@ -78,6 +83,8 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
                 </select>
                 {errors?.published&&<div className='text-red-600'>{errors?.published}</div>}
               </div>}
+            </div>
+          <div className="flex justify-between">
               <button type="submit" className="w-[30%] bg-primary-color text-white px-5 py-2 my-10">{tCategoryInfo[isEdit?"editBtn":"addBtn"]}</button>
             </div>
         </form>

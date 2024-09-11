@@ -76,17 +76,22 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
               {errors?.fullName&&<div className='text-red-600'>{errors?.fullName}</div>}
             </div>
             <div className="md:w-1/4 my-6">
+              <label htmlFor="arFullName" className="text-lg">{tVendorInfo.arFullName?.label}</label>
+              <input type="text" name="arFullName" id="arFullName" defaultValue={currentVendor?.arFullName??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.arFullName?.placeholder} />
+              {errors?.arFullName&&<div className='text-red-600'>{errors?.arFullName}</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
               <label htmlFor="phone" className="text-lg">{tVendorInfo.phone?.label}</label>
               <input type="text" name="phone" id="phone" defaultValue={currentVendor?.user.phone??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.phone?.placeholder}/>
               {errors?.phone&&<div className='text-red-600'>{errors?.phone}</div>}
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row flex-wrap justify-between">
             <div className="md:w-1/4 my-6">
               <label htmlFor="email" className="text-lg">{tVendorInfo.email?.label}</label>
               <input type="email" name="email" id="email" defaultValue={currentVendor?.user.email??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.email?.placeholder} />
               {errors?.email&&<div className='text-red-600'>{errors?.email}</div>}
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row flex-wrap justify-between">
             <div className="md:w-1/4 my-6">
               <label htmlFor="maxKilometerDelivery" className="text-lg">{tVendorInfo.maxKilometerDelivery?.label}</label>
               <input type="number" name="maxKilometerDelivery" id="maxKilometerDelivery" defaultValue={currentVendor?.maxKilometerDelivery??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.maxKilometerDelivery?.placeholder} />
@@ -96,19 +101,6 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
               <label htmlFor="minChargeLongDistance" className="text-lg">{tVendorInfo.minChargeLongDistance?.label}</label>
               <input type="number" name="minChargeLongDistance" id="minChargeLongDistance" defaultValue={currentVendor?.minChargeLongDistance??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.minChargeLongDistance?.placeholder}/>
               {errors?.minChargeLongDistance&&<div className='text-red-600'>{errors?.minChargeLongDistance}</div>}
-            </div>
-            <div className="md:w-1/4 my-6">
-              <label htmlFor="vendorType" className="text-lg">{tVendorInfo.vendorType?.label}</label>
-              <select
-                name={"vendorType"}
-                defaultValue={currentVendor?.vendorType??''}
-                className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
-                >
-                  {validator.supportedVendorType.map(type=>{
-                  return <option key={type.id} value={type.value}>{type.name}</option>
-                  })}
-              </select>
-              {errors?.vendorType&&<div className='text-red-600'>{errors?.vendorType}</div>}
             </div>
           </div>
           <div className="flex flex-col md:flex-row flex-wrap justify-between">
@@ -154,6 +146,19 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
             </div>
           </div>
           <div className='flex flex-col md:flex-row flex-wrap justify-between items-start my-6'>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="vendorType" className="text-lg">{tVendorInfo.vendorType?.label}</label>
+              <select
+                name={"vendorType"}
+                defaultValue={currentVendor?.vendorType??''}
+                className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
+                >
+                  {validator.supportedVendorType.map(type=>{
+                  return <option key={type.id} value={type.value}>{type.name}</option>
+                  })}
+              </select>
+              {errors?.vendorType&&<div className='text-red-600'>{errors?.vendorType}</div>}
+            </div>
             <AppMap marker={marker} setMarker={setMarker} />
             {errors?.lat&&<div className='text-red-600'>{errors?.lat}</div>}
             <div className="md:w-1/4">

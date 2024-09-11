@@ -123,6 +123,7 @@ const CategoriesList = () => {
                             className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                             <tr key={"head-1"}>
                             <th scope="col" className="py-4">{tCategoryInfo.name?.label.replace("*","")}</th>
+                            <th scope="col" className="py-4">{tCategoryInfo.arName?.label.replace("*","")}</th>
                             <th scope="col" className="py-4">{tCategoryInfo.products}</th>
                             <th scope="col" className="py-4">{tCategoryInfo.status}</th>
                             <th scope="col" className="py-1">{t("action")}</th>
@@ -146,6 +147,7 @@ const CategoriesList = () => {
                                 const txtColor=category.published?"text-green-600":"text-red-600";
                             return <tr key={category.categoryId}>
                                 <td className="whitespace-nowrap py-4 font-medium capitalize">{category.name}</td>
+                                <td className="whitespace-nowrap py-4 font-medium capitalize">{category.arName}</td>
                                 <td className="whitespace-nowrap py-4">{data.numberOfProducts}</td>
                                 <td className="whitespace-nowrap py-4">
                                         <span className={`px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>

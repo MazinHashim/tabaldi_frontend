@@ -11,7 +11,7 @@ const InvoicesList = () => {
   const {auth} = useAuth()
     const{t, i18n} = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
-    const tCard = t("productCard")
+    const tInvoice = t("invoiceInfo")
     const vendorInvoicesUrl = INVOICE_LIST_URL.replace("{id}", `${auth.vendorId}`);
     const sessionToken = auth.token;
     const [state] = useAxiosFetchApi(vendorInvoicesUrl, {}, sessionToken);
@@ -28,20 +28,20 @@ const InvoicesList = () => {
         <ToastContainer />
         <div className='flex flex-col w-full'>
           <div className="flex justify-between mb-10">
-              <h2>Invoices</h2>
+              <h2>{tInvoice["invoices"]}</h2>
           </div>
           <div className="flex flex-col shadow-4 p-2 rounded-2xl">
               <div className="flex justify-between">
                   <input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  type="text" placeholder='Search' className='p-2 m-2 rounded-lg border'/>
+                  type="text" placeholder={tInvoice["search"]} className='p-2 m-2 rounded-lg border'/>
                   <select className='p-2 m-2 rounded-lg border' name="status" id="status"
                   onChange={(e) => setSearchQuery(e.target.value)}>
-                      <option value={""}>Status</option>
-                      <option value={"DRAFT"}>Draft</option>
-                      <option value={"PAID"}>Paid</option>
-                      <option value={"UNPAID"}>Unpaid</option>
+                      <option value={""}>{tInvoice["status"]}</option>
+                      <option value={"DRAFT"}>{tInvoice["draft"]}</option>
+                      <option value={"PAID"}>{tInvoice["paid"]}</option>
+                      <option value={"UNPAID"}>{tInvoice["unpaid"]}</option>
                   </select>
               </div>
               <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -51,12 +51,12 @@ const InvoicesList = () => {
                     <thead
                       className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                       <tr key={"head-1"}>
-                      <th scope="col" className="py-4">Invoice Number</th>
-                      <th scope="col" className="py-4">Payment Method</th>
-                      <th scope="col" className="py-1">Issue Date</th>
-                      <th scope="col" className="py-1">Total</th>
-                      <th scope="col" className="py-4">Status</th>
-                      <th scope="col" className="py-4">Action</th>
+                      <th scope="col" className="py-4">{tInvoice["invoiceNumber"]}</th>
+                      <th scope="col" className="py-4">{tInvoice["paymentMethod"]}</th>
+                      <th scope="col" className="py-1">{tInvoice["issueDate"]}</th>
+                      <th scope="col" className="py-1">{tInvoice["total"]}</th>
+                      <th scope="col" className="py-4">{tInvoice["status"]}</th>
+                      <th scope="col" className="py-4">{t("action")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -74,7 +74,7 @@ const InvoicesList = () => {
                         <td className="whitespace-nowrap p-5 font-medium capitalize">{invoice.invoiceNumber}</td>
                         <td className="whitespace-nowrap p-5">{invoice.paymentMethod}</td>
                         <td className="whitespace-nowrap p-5">{invoice.fissueDate}</td>
-                        <td className="whitespace-nowrap p-5">{invoice.summary.total} {tCard["aedUnit"]}</td>
+                        <td className="whitespace-nowrap p-5">{invoice.summary.total} {t("aedUnit")}</td>
                         <td className="whitespace-nowrap p-5">
                                 <span className={`px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
                                     {invoice.status.toLowerCase()}
@@ -83,7 +83,7 @@ const InvoicesList = () => {
                         <td className="whitespace-nowrap py-4">
                           <button 
                           onClick={()=>console.log("Mazin")}
-                          className='bg-success-200 mx-1'>View Order</button>
+                          className='bg-success-200 mx-1'>{tInvoice["viewOrder"]}</button>
                         </td>
                       </tr>
                       })}
