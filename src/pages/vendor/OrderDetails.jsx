@@ -11,6 +11,7 @@ import { allStatuses, statusBGColor, statusTextColor } from '../../utils/OrderSt
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import useAxiosFetchApi from '../../hooks/useFetch';
 import AppLoading from '../../utils/AppLoading';
+import { baseURL } from '../../apis/axios';
 const CHANGE_STATUS_URL="/orders/change/status"
 const INVOICE_URL = "/invoices/order"
 const OrderDetails = () => {
@@ -97,7 +98,7 @@ const OrderDetails = () => {
                             })}
                         </select>
                         <button className={`${isLoading?'invisible':''} bg-primary-color text-white`} onClick={handleChangeOrderStatus}>{tOrder["save"]}</button>
-                        <button className="border border-gray-300">{tOrder["downloadInv"]}</button>
+                        <a href={`${baseURL}/invoices/${invoice.invoiceId}/download`} target='_blank' className="border border-gray-300">{tOrder["downloadInv"]}</a>
                     </div>
                 </div>
                 <div className="flex w-full justify-between my-10">

@@ -10,10 +10,12 @@ import RecentOrdersTable from './RecentOrdersTable';
 import FrequentVendorsTable from './FrequentVendorsTable';
 import FrequentCustomersTable from './FequentCustomersTable';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 const HOME_DETAILS_URL = "/details/admin/home";
 const AdminHome = () => {
   const { auth } = useAuth();
   const{t, i18n} = useTranslation();
+  const navigate = useNavigate();
   const tAdmin= t("adminHomeInfo")
   const sessionToken = auth.token;
   const [state] = useAxiosFetchApi(HOME_DETAILS_URL, {}, sessionToken);
@@ -27,7 +29,7 @@ const AdminHome = () => {
         <div className="absolute z-10 p-10">
           <h1 className='font-normal'>{tAdmin["welcomeTxt"]}</h1>
           <p className='text-white'>{tAdmin["subPargTxt"]}</p>
-          <button className='bg-secondary-color border-0 my-2 py-2 px-4 rounded-xl text-white'>{tAdmin["viewVendor"]}</button>
+          <button onClick={()=>navigate("/vendors")} className='bg-secondary-color border-0 my-2 py-2 px-4 rounded-xl text-white'>{tAdmin["viewVendor"]}</button>
         </div>
       </div>
       <div className="flex justify-between">
