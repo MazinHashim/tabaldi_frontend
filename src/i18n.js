@@ -76,12 +76,13 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 vendorFormIfno: {
                     addVendorTitle: "Add New Vendor",
                     editVendorTitle: "Edit Vendor",
+                    vendors: "Vendors",
                     fullName: {
                         label: "English Name*",
                         most3Words: "Must be 3 names and only 2 to 16 characters per name",
                         placeholder: "Eg: Rateena",
                     },
-                    fullName: {
+                    arFullName: {
                         label: "Arabic Name*",
                         most3Words: "Must be 3 names and only 2 to 16 characters per name",
                         placeholder: "Eg: رتينة",
@@ -437,6 +438,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 vendorFormIfno: {
                     addVendorTitle: "إضافة بائع",
                     editVendorTitle: "تعديل البائع",
+                    vendors: "قائمة البائعيين",
                     fullName: {
                         label: "الإسم بالإنجليزي*",
                         most3Words: "يجب أن يكون ثلاثي ويتراوح عدد الأحرف من 2 إلى 16 حرفًا فقط لكل اسم",

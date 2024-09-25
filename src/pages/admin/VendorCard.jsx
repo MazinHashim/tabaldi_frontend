@@ -41,7 +41,7 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
   }
   return (
     <>
-    <div key={vendor.vendorId} className='flex-col space-y-2 mb-16 w-full lg:w-5/12 shadow-3 p-2 m-2 rounded-xl'>
+    <div key={vendor.vendorId} className='flex-col mb-16 shadow-3 p-2 w-full border space-y-2 rounded-xl'>
         <div className='flex justify-between items-center'>
             <p className={`${vendor.working?"bg-green-700":"bg-red-700"} text-white text-sm rounded-lg px-2`}>
                 {vendor.working?tCard["working"]:tCard["outOfService"]}

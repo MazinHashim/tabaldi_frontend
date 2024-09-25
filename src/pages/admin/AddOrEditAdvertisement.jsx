@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import * as validator from '../../utils/validators/AdvertisementValidator';
+import VendorSelect from '../../utils/VendorSelect';
 import { baseURL } from '../../apis/axios';
 import { useTranslation } from 'react-i18next';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
@@ -99,7 +100,9 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             {!currentAdvertisement?.vendor?.vendorId && isEdit?"":
             <div className="md:w-1/4 my-6">
               <label htmlFor="vendorId" className="text-lg">{tAdvertisementInfo.vendorId?.label}</label>
-              <select
+              <VendorSelect currentAdvertisement={currentAdvertisement}
+               vendorList={vendorList} tAdvertisementInfo={tAdvertisementInfo} />
+              {/* <select
                 name={"vendorId"}
                 defaultValue={currentAdvertisement?.vendor?.vendorId}
                 className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
@@ -111,7 +114,7 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
                   selected={vendor.vendorId===currentAdvertisement?.vendor?.vendorId}
                   key={vendor.vendorId} value={vendor.vendorId}>{vendor.fullName}</option>
                   }):"No Vendor Found"}
-                </select>
+                </select> */}
               {errors?.vendorId&&<div className='text-red-600'>{errors?.vendorId}</div>}
             </div>}
             {<div className="md:w-1/4 my-6">
