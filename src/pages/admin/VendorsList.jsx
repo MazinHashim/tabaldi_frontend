@@ -29,7 +29,7 @@ const VendorsList = () => {
 
     function handleChangeOnEditVendor(newData){
         const others=vendorList.filter(remain=>remain.vendorId!==newData.vendorId);
-        setChangeData([...others, newData])
+        setChangeData({list: [...others, newData]})
     }
 
     async function handleDeleteVendor(id) {
@@ -38,7 +38,7 @@ const VendorsList = () => {
                 {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
             );
             const afterDelete=vendorList.filter(remain=>remain.vendorId!==id);
-            setChangeData(afterDelete)
+            setChangeData({list: afterDelete})
             toast.success(userDeletedResponse?.data.message);
         } catch (error) {
             toast.error(error.response?.data.message);

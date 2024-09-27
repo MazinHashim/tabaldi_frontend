@@ -33,6 +33,7 @@ const router = createBrowserRouter(
         <Route path='vendors' element={<VendorsList />} />
         <Route path='advertisements' element={<AdvertisementsList />} />
         <Route path='vendors/products' element={<ProductsList routeRole={"SUPERADMIN"}/>} />
+        <Route path='vendors/categories' element={<CategoriesList routeRole={"SUPERADMIN"}/>}/>
         <Route path='vendors/products/product-details' element={<ProductDetails/>} />
         <Route path='vendor-info' element={<AddOrEditVendorProfile />} />
         <Route path='orders/pending' element={<OrdersList routeRole={"SUPERADMIN"}/>}/>

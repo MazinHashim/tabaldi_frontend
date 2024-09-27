@@ -26,7 +26,7 @@ function AppMap({marker, setMarker}) {
       lat: event.latLng.lat(),
       lng: event.latLng.lng(),
     });
-  }, []);
+  }, [setMarker]);
 
   if (loadError) return "Error loading maps";
   if (!isLoaded) return "Loading Maps";
@@ -46,6 +46,14 @@ function AppMap({marker, setMarker}) {
         <div>
           <p className="mt-3">Latitude: <span className="bg-green-200 px-1 rounded-md mx-2">{marker.lat}</span>
           Longitude: <span className="bg-green-200 px-1 rounded-md mx-2">{marker.lng}</span></p>
+          <a
+            href={`https://www.google.com/maps?q=${marker.lat},${marker.lng}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline mt-2 inline-block"
+          >
+            Share Location
+          </a>
         </div>
       )}
     </div>

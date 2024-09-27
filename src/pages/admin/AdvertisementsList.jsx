@@ -1,17 +1,19 @@
 import useAxiosFetchApi from '../../hooks/useFetch';
 import { useAuth } from '../../hooks/appHooks';
-import { useState } from 'react';
-import { GrDeploy } from "react-icons/gr";
-import { FaPen, FaTrash } from "react-icons/fa";
+import React, { useState, useMemo } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import AppLoading from '../../utils/AppLoading';
 import EditModal from '../modals/EditModal';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import AddOrEditAdvertisement from '../admin/AddOrEditAdvertisement';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { baseURL } from '../../apis/axios';
 import InformationModal from '../modals/InformationModal';
+import { groupBy } from 'lodash';
+import AvailableBanners from '../../utils/AvailableBanners';
+import AdvertisementTable from './AdvertisementTable';
+import AppLoading from '../../utils/AppLoading';
+
 const ADVERTISEMENT_LIST_URL = "/advertisements";
 const TOGGLE_PUBLISH_URL = "/advertisements/toggle/showing"
 const ADVERTISEMENT_DELETE_URL = "/advertisements/delete"
@@ -28,13 +30,14 @@ const AdvertisementsList = () => {
     const [isLoading, setLoading] = useState(false);
     const sessionToken = auth.token;
     const [state,_, setChangeData] = useAxiosFetchApi(ADVERTISEMENT_LIST_URL, {}, sessionToken);
-    const advertisementList = state.data?.list;
-    // const { setAdvertisements } = useAdvertisementsData();
+    const advertisementList = state.data?.advertisements;
+    const availableBanners = state.data?.availableBanners;
 
-    // useEffect(()=>{
-    //     setAdvertisements(state.data?.list)
-    //     console.log(JSON.stringify(state.data?.list))
-    // }, [state.data, setAdvertisements])
+    const groupedAdvertisements = useMemo(() => {
+        if (!state.data?.advertisements) return {};
+        const sorted = [...state.data.advertisements].sort((a, b) => a.priority - b.priority);
+        return groupBy(sorted, 'priority');
+    }, [state.data?.advertisements]);
 
     async function toggleAdvertisementShowing(advertisementId){
         try{
@@ -46,8 +49,8 @@ const AdvertisementsList = () => {
             setLoading(false)
             const otherAdvertisements=advertisementList.filter(ads=>ads.advertisementId!==advertisementId);
             const selectedAdvertisement=advertisementList.filter(ads=>ads.advertisementId===advertisementId);
-            setChangeData([...otherAdvertisements, {...selectedAdvertisement[0],
-                shown: statusChangedResponse?.data.published}])
+            setChangeData({availableBanners, advertisements: [...otherAdvertisements, {...selectedAdvertisement[0],
+                shown: statusChangedResponse?.data.published}]})
             toast.success(statusChangedResponse?.data.message);
         } catch (error) {
             setLoading(false)
@@ -63,8 +66,11 @@ const AdvertisementsList = () => {
                 {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
             );
             setLoading(false)
-            const otherAdvertisements=advertisementList.filter(ads=>ads.advertisementId!==advertisementId)
-            setChangeData(otherAdvertisements)
+            const updatedAdvertisements = advertisementList.filter(ads => ads.advertisementId !== advertisementId);
+            setChangeData({
+                availableBanners,
+                advertisements: updatedAdvertisements
+            });
             toast.success(advertisementDeletedResponse?.data.message);
         } catch (error) {
             setLoading(false)
@@ -73,11 +79,25 @@ const AdvertisementsList = () => {
     }
 
     function onSetChangedData(advertisement){
-        const otherAdvertisements = advertisementList.filter(ads=>ads.advertisementId!==advertisement.advertisementId)
-        setChangeData([...otherAdvertisements, advertisement])
+        const otherAdvertisements = advertisementList.filter(ads => ads.advertisementId !== advertisement.advertisementId);
+        const oldAdvertisement = advertisementList.find(ads => ads.advertisementId === advertisement.advertisementId);
+        
+        const updatedAvailableBanners = {
+            ...availableBanners,
+            [oldAdvertisement.vendor?.vendorType || "EXTERNAL_ADS"]
+            : availableBanners[oldAdvertisement.vendor?.vendorType || "EXTERNAL_ADS"]
+                .replace(oldAdvertisement.priority.toString(), advertisement.priority.toString())
+        };
+console.log(availableBanners[oldAdvertisement.vendor
+            ? oldAdvertisement.vendor.vendorType
+            : "EXTERNAL_ADS"], JSON.stringify(updatedAvailableBanners))
+        setChangeData({
+            availableBanners: updatedAvailableBanners,
+            advertisements: [...otherAdvertisements, advertisement]
+        });
     }
 
-  return (
+    return (
     <>
         {!editModal && <ToastContainer />}
         <div className='flex flex-col w-full'>
@@ -87,106 +107,20 @@ const AdvertisementsList = () => {
                 onClick={()=>setShowEditModal({advertisement: null, status: true})}
                 >{tAdvertisementInfo["addAdvertisementTitle"]}</button>
             </div>
-            <div className="flex flex-col shadow-4 p-2 rounded-2xl">
-                <div className="flex justify-between">
-                    <input type="text" placeholder={tAdvertisementInfo.searchTxt} className='p-2 m-2 rounded-lg border'/>
-                    <select className='p-2 m-2 rounded-lg border' name="status" id="status">
-                        <option>{tAdvertisementInfo.statusTxt}</option>
-                        <option value={true}>{tAdvertisementInfo["visiable"]}</option>
-                        <option value={false}>{tAdvertisementInfo["hidden"]}</option>
-                    </select>
-                </div>
-                <div className="overflow-x-scroll sm:-mx-3 lg:-mx-2">
-                    <div className="inline-block min-w-full py-2">
-                    <div className="overflow-hidden">
-                        <table className="min-w-full text-center text-sm font-light">
-                        <thead
-                            className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
-                            <tr key={"head-1"}>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.priority.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.title.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.arTitle.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.subtitle.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.arSubtitle.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.createDate.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.expireDate.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.startTime.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.endTime.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.url.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.vendorId.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.type}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.adsImage1.label.replace("*","")}</th>
-                            <th scope="col" className="whitespace-nowrap  p-4">{tAdvertisementInfo.visibility}</th>
-                            <th scope="col" className="whitespace-nowrap  p-1">{t("action")}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {state.isLoading?<tr><td colSpan={9} className='p-10'>
-                                <AppLoading/>
-                                </td></tr>
-                            : !state.data.list
-                            ? <tr><td colSpan={9} className='p-10'>{state.data.message??state.error.message}</td></tr>
-                            : advertisementList
-                            .sort((a, b) => {
-                                if (a.priority < b.priority) return -1;
-                                if (a.priority > b.priority) return 1;
-                                return 0
-                            }).map((data)=>{
-                                const advertisement=data;
-                                const bgColor=advertisement.shown?"bg-green-200":"bg-red-200";
-                                const txtColor=advertisement.shown?"text-green-600":"text-red-600";
-                            return <tr key={advertisement.advertisementId}>
-                                <td className="whitespace-nowrap p-4">{advertisement.priority}</td>
-                                <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.title}</td>
-                                <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.arTitle}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.subtitle===""?"_":advertisement.subtitle??"_"}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.arSubtitle===""?"_":advertisement.arSubtitle??"_"}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.fcreatedDate}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.fexpireDate}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.fstartTime}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.fendTime}</td>
-                                <td className="whitespace-nowrap p-4">
-                                    {advertisement.url
-                                    ? <a className='bg-gray-200 text-xs' target='_blank' href={advertisement.url} rel="noreferrer">Visit</a>
-                                    : "_"}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.vendor?.fullName??"_"}</td>
-                                <td className="whitespace-nowrap p-4">{advertisement.vendor==null?"External":"Internal"}</td>
-                                <td className="whitespace-nowrap p-4">
-                                    {/* <img className='w-[45%] rounded-lg' src={`${baseURL}/files/get/file/${advertisement.adsImage1}`} alt="ads1" /> */}
-                                    <button 
-                                    onClick={()=>setShowImagesModal({advertisement: advertisement, status: true})}
-                                    className='bg-gray-200 text-xs'>Show Image</button>
-                                </td>
-                                <td className="whitespace-nowrap p-4">
-                                    <span className={`px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
-                                        {advertisement.shown?"Visiable":"Hidden"}
-                                    </span>
-                                </td>
-                                <td className="whitespace-nowrap py-4 w-1/4">
-                                    <button 
-                                    onClick={()=>isLoading?null:toggleAdvertisementShowing(advertisement.advertisementId)}
-                                    className={`${advertisement.shown&&"bg-green-200"} mx-1`}>
-                                        <GrDeploy/>
-                                    </button>
-                                    <button 
-                                    onClick={()=>setShowEditModal({advertisement: advertisement, status: true})}
-                                    className='bg-success-200 mx-1'>
-                                        <FaPen/>
-                                    </button>
-                                    <button 
-                                    onClick={()=>setShowDeleteModal({advertisementId: advertisement.advertisementId, status: true})}
-                                    className='bg-danger-200 mx-1'>
-                                        <FaTrash/>
-                                    </button>
-                                </td>
-                            </tr>
-                            })}
-                        </tbody>
-                        </table>
-                    </div>
-                    </div>
-                </div>
-            </div>
+
+            {state.isLoading&&<div>
+                <AppLoading /></div>}
+            {!state.data.advertisements&&<div>
+            <p className='p-10'>{state.data?.message??state.error?.message}</p></div>}
+            {state.data.availableBanners&&<AvailableBanners availableBanners={availableBanners} />}
+            {state.data.advertisements&&<AdvertisementTable 
+                groupedAdvertisements={groupedAdvertisements}
+                isLoading={isLoading}
+                toggleAdvertisementShowing={toggleAdvertisementShowing}
+                setShowEditModal={setShowEditModal}
+                setShowDeleteModal={setShowDeleteModal}
+                setShowImagesModal={setShowImagesModal}
+            />}
         </div>
         <EditModal showModal={editModal.status} setShowModal={setShowEditModal} target="Advertisement">
             <AddOrEditAdvertisement key={editModal.advertisement?.advertisementId}

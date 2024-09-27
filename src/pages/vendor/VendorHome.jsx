@@ -79,7 +79,7 @@ const VendorHome = () => {
               <HiCurrencyDollar className='text-green-300' size={45}/>
             </div>
             <h2 className='font-semibold mt-3'>{details?.earnings} {t("aedUnit")}</h2>
-            <p>{tHome["revenueTxt"]} Sep</p>
+            <p>{tHome["revenueTxt"]}</p>
           </div>}
         </div>
 

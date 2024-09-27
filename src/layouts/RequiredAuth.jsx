@@ -28,12 +28,16 @@ const RequiredAuth = ({routeRole}) => {
     const newUser = state.data?.newUser;
     var userRole = {};
     const tMain = t("main")
-    useEffect(()=>{
-        if(state.data?.user && state.data?.user.role !=="SUPERADMIN"){
-            setVendorProfileUrl("/vendors/profile")
-            setAuth({...vendorState.data?.vendor, token, refreshToken, role: state.data?.user.role})
+    useEffect(() => {
+        if (state.data?.user) {
+            if (state.data.user.role === "SUPERADMIN") {
+                setAuth({ ...state.data.user, token, refreshToken });
+            } else {
+                setVendorProfileUrl("/vendors/profile");
+                setAuth({ ...vendorState.data?.vendor, token, refreshToken, role: state.data.user.role });
+            }
         }
-    }, [state.data, vendorState, token, refreshToken, setAuth, setVendorProfileUrl,])
+    }, [state.data, vendorState, token, refreshToken, setAuth, setVendorProfileUrl]);
     
     if(userProfile){
         userRole = userProfile.role;

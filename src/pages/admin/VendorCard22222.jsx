@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import {HiOutlinePaperClip} from 'react-icons/hi'
-import {FaTrash, FaPen, FaShare} from 'react-icons/fa'
+import {FaTrash, FaPen} from 'react-icons/fa'
 import vendorProfile from '../../img/vendor_profile.png'
-import vendorCover from '../../img/vendor_cover.jfif'
 import EditVendorModal from '../modals/EditModal';
 import AddOrEditVendorProfile from './AddOrEditVendorProfile';
 import ConfirmationModal from '../modals/ConfirmationModal';
@@ -16,7 +15,7 @@ import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { BsCheck2Circle } from 'react-icons/bs';
 const TOGGLE_PUBLISH_URL = "/vendors/toggle/working"
 
-const VendorCard = ({vendor, onDelete, onEdit}) => {
+const VendorCard22222 = ({vendor, onDelete, onEdit}) => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showIdentityModal, setShowIdentityModal] = useState(false);
@@ -40,20 +39,6 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
         toast.error(error.response?.data.message);
     }
   }
-
-  const handleShare = () => {
-    if (vendor.lat && vendor.lng) {
-        const url = `https://www.google.com/maps/search/?api=1&query=${vendor.lat},${vendor.lng}`;
-        navigator.clipboard.writeText(url).then(() => {
-            toast.success(tCard["locationCopied"]);
-        }).catch(() => {
-            toast.error(tCard["copyFailed"]);
-        });
-    } else {
-        toast.error(tCard["noLocationAvailable"]);
-    }
-};
-
   return (
     <>
     <div key={vendor.vendorId} className='flex-col mb-16 shadow-3 p-2 w-full border space-y-2 rounded-xl'>
@@ -66,45 +51,28 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
                     <GrDeploy className='inline-block mx-2'/>
             </button>
         </div>
-        {/* Cover image container with profile image overlay */}
-        <div className='w-full h-48 relative'>
-            {vendor.coverImage 
-                ? <img className="rounded-xl w-full h-full object-cover" src={`${baseURL}/files/get/file/${vendor.coverImage}`} alt="Cover" />
-                : <img className="rounded-xl w-full h-full object-cover" src={vendorCover} alt="Default Cover" />
-            }
-            {/* Profile image overlay */}
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
-                {vendor.profileImage 
-                    ? <img className="rounded-full w-24 h-24 object-cover border-4 border-white" src={`${baseURL}/files/get/file/${vendor.profileImage}`} alt="Profile" />
-                    : <img className="rounded-full w-24 h-24 object-cover border-4 border-white" src={vendorProfile} alt='Profile'/>
-                }
-            </div>
-        </div>
-        {/* Spacer to account for overlapping profile image */}
-        <div className="h-12"></div>
-        {/* Buttons below the images */}
-        <div className="flex flex-col gap-2 mt-4">
-            <div className="flex flex-wrap justify-start gap-4">
-                <Link className='flex justify-between items-center border border-gray-400 shadow-none text-sm text-center px-2 py-1 rounded w-[calc(50%-0.5rem)]' to={"products"} state={{vendor}}>
+        <div className='flex justify-between items-start'>
+            {vendor.profileImage?<img className="rounded-xl" width={100} src={`${baseURL}/files/get/file/${vendor.profileImage}`} alt="Profile" />
+                :<img className="rounded-xl" width={100} src={vendorProfile} alt='Profile'/>}
+            <div className="flex flex-col items-stretch">
+                <div className='mb-1'>
+                    <button className='boder border-gray-400 shadow-none mx-1' onClick={()=>setShowIdentityModal(true)}><HiOutlinePaperClip /></button>
+                    <button className='boder border-gray-400 shadow-none mx-1' onClick={()=>{
+                        setShowEditModal(true)}}><FaPen /></button>
+                    <button className='boder border-gray-400 shadow-none mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
+                    <Link className='flex justify-between items-center boder border-gray-400 shadow-none text-sm text-center m-1' to={"products"} state={{vendor}}>
                     <p>{tCard["viewProducts"]}</p>
-                    {vendor.inactiveProductsCount === 0
-                        ? <BsCheck2Circle className="text-green-700 text-xl ml-1" title="All active products"/>
-                        : <span className='rounded-md bg-red-700 text-white px-1 text-sm ml-1'>{vendor.inactiveProductsCount}</span>
-                    }
-                </Link>
-                <Link className='flex justify-between items-center border border-gray-400 shadow-none text-sm text-center px-2 py-1 rounded w-[calc(50%-0.5rem)]' to={"categories"} state={{vendor}}>
+                    {vendor.inactiveProductsCount===0
+                    ? <BsCheck2Circle className={`${"text-green-700"} text-xl`} title={"All active prodcuts"}/>
+                    : <span className='rounded-md bg-red-700 text-white px-1 text-sm'>{vendor.inactiveProductsCount}</span>
+                    }</Link>
+                    <Link className='flex justify-between items-center boder border-gray-400 shadow-none text-sm text-center m-1' to={"categories"} state={{vendor}}>
                     <p>{tCard["viewCategories"]}</p>
-                    {vendor.inactiveCategoriesCount === 0
-                        ? <BsCheck2Circle className="text-green-700 text-xl ml-1" title="All active categories"/>
-                        : <span className='rounded-md bg-red-700 text-white px-1 text-sm ml-1'>{vendor.inactiveCategoriesCount}</span>
-                    }
-                </Link>
-            </div>
-            <div className="flex justify-end items-center gap-2">
-                <button className='border border-gray-400 shadow-none p-2 rounded' onClick={handleShare} title={tCard["shareLocation"]}><FaShare /></button>
-                <button className='border border-gray-400 shadow-none p-2 rounded' onClick={()=>setShowIdentityModal(true)}><HiOutlinePaperClip /></button>
-                <button className='border border-gray-400 shadow-none p-2 rounded' onClick={()=>{setShowEditModal(true)}}><FaPen /></button>
-                <button className='border border-gray-400 shadow-none p-2 rounded' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
+                    {vendor.inactiveCategoriesCount===0
+                    ? <BsCheck2Circle className={`${"text-green-700"} text-xl`} title={"All active categories"}/>
+                    : <span className='rounded-md bg-red-700 text-white px-1 text-sm'>{vendor.inactiveCategoriesCount}</span>
+                    }</Link>
+                </div>
             </div>
         </div>
         <div className="flex-col space-y-2 justify-self-end">
@@ -164,4 +132,4 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
   )
 }
 
-export default VendorCard
+export default VendorCard22222

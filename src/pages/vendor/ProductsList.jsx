@@ -40,7 +40,7 @@ const ProductsList = ({routeRole}) => {
     function onTogglePublishing(published, productId) {
         const otherProducts=productList.filter(prod=>prod.productId!==productId);
         const selectedProduct=productList.find(prod=>prod.productId===productId);
-        setChangeData([...otherProducts, {...selectedProduct, published: published}])
+        setChangeData({list: [...otherProducts, {...selectedProduct, published: published}]})
     }
   return (
     <>

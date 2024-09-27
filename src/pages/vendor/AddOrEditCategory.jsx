@@ -8,7 +8,7 @@ import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { ValidationError } from 'yup';
 const ADD_CATEGORY_INFO_URL = "/categories/save";
 
-const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
+const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false, userRole}) => {
   const { auth } = useAuth();
   const{t, i18n} = useTranslation();
   const axiosPrivate = useAxiosPrivate()
@@ -26,7 +26,7 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
       vendorId, categoryId}
       try {
         console.log(formData)
-        await validator.validationSchema(tCategoryInfo, isEdit, t("requiredMessage"))
+        await validator.validationSchema(tCategoryInfo, isEdit, userRole, t("requiredMessage"))
         .validate(formData, {abortEarly: false});
         setErrors(null)
         const infoResponse = await axiosPrivate.post(ADD_CATEGORY_INFO_URL, formData,
@@ -61,18 +61,18 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
     <>
       <div>
         <form className='w-full' onSubmit={handleAddOrEditCategory} method='post'>
-          <div className="flex justify-between">
-            <div className={`${isEdit?"md:w-[60%]":"md:w-[30%]"} my-4`}>
+          <div className="flex justify-start">
+            <div className="md:w-[30%] my-4 mx-2">
               <label htmlFor="name" className="text-lg">{tCategoryInfo.name?.label}</label>
               <input type="text" name="name" id="name" defaultValue={currentCategory?.name??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tCategoryInfo.name?.placeholder} />
               {errors?.name&&<div className='text-red-600'>{errors?.name}</div>}
             </div>
-            <div className={`${isEdit?"md:w-[60%]":"md:w-[30%]"} my-4`}>
+            <div className="md:w-[30%] my-4 mx-2">
               <label htmlFor="arName" className="text-lg">{tCategoryInfo.arName?.label}</label>
               <input type="text" name="arName" id="arName" defaultValue={currentCategory?.arName??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tCategoryInfo.arName?.placeholder} />
               {errors?.arName&&<div className='text-red-600'>{errors?.arName}</div>}
             </div>
-            {!isEdit&& <div className='md:w-[30%] my-4'>
+            {!isEdit&&userRole==="SUPERADMIN"&&<div className='md:w-[30%] my-4 mx-2'>
                 <label htmlFor={"published"} className="text-sm">{tCategoryInfo.published?.label}</label>
                 <select
                 name='published'
@@ -83,8 +83,6 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false}) => {
                 </select>
                 {errors?.published&&<div className='text-red-600'>{errors?.published}</div>}
               </div>}
-            </div>
-          <div className="flex justify-between">
               <button type="submit" className="w-[30%] bg-primary-color text-white px-5 py-2 my-10">{tCategoryInfo[isEdit?"editBtn":"addBtn"]}</button>
             </div>
         </form>

@@ -78,7 +78,7 @@ const useAxiosFetchApi = (initialUrl, initialData, authToken) => {
 
     if(!didCancel && changeData){
       console.log("changeData", changeData)
-      dispatch({ type: 'FETCH_SUCCESS', payload: {...state, list: changeData} })
+      dispatch({ type: 'FETCH_SUCCESS', payload: {...state, ...changeData} })
       return;
     }
 

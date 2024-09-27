@@ -10,28 +10,37 @@ import EditModal from '../modals/EditModal';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import AddOrEditCategory from './AddOrEditCategory';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
+import { useLocation } from 'react-router-dom';
 const FETCH_CATEGORY_URL = "/vendors/{id}/categories";
 const TOGGLE_PUBLISH_URL = "/categories/toggle/publish"
 const CATEGORY_DELETE_URL = "/categories/delete"
 
-const CategoriesList = () => {
+const CategoriesList = ({routeRole}) => {
 
-    const {auth} = useAuth()
+    const {auth, setAuth} = useAuth()
     const{t, i18n} = useTranslation();
     const axiosPrivate = useAxiosPrivate()
+    const location = useLocation();
     const tCategoryInfo = t("categoryFormInfo")
+    const vendor = location?.state?.vendor;
     const [editModal, setShowEditModal] = useState({category: null, status: false});
     const [deleteModal, setShowDeleteModal] = useState({categoryId: null, status: false});
     const [isLoading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-  
     const sessionToken = auth.token;
+    const refreshToken = auth.refreshToken;
     const [state, setUrl, setChangeData] = useAxiosFetchApi(null, {}, sessionToken);
   
     useEffect(()=>{
-        const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${auth.vendorId}`);
+        const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${vendor?.vendorId??auth.vendorId}`);
         setUrl(vendorCategoriesUrl)
-    }, [auth.vendorId, setUrl])
+    }, [auth.vendorId, setUrl, vendor])
+    useEffect(()=>{
+        if(vendor){
+            console.log(sessionToken)
+            setAuth({...vendor, token: sessionToken, refreshToken})
+        }
+    }, [vendor, sessionToken, refreshToken, setAuth])
 
     const categoryList = state.data?.list;
     // const { setCategories } = useCategoriesData();
@@ -51,10 +60,10 @@ const CategoriesList = () => {
             setLoading(false)
             const otherCategories=categoryList.filter(cate=>cate.category.categoryId!==categoryId);
             const selectedCategory=categoryList.filter(cate=>cate.category.categoryId===categoryId);
-            setChangeData([...otherCategories, {...selectedCategory[0],
+            setChangeData({list: [...otherCategories, {...selectedCategory[0],
                 category: {...selectedCategory[0].category,
-                published: statusChangedResponse?.data.published}}])
-            // toast.success(statusChangedResponse?.data.message);
+                published: statusChangedResponse?.data.published}}]})
+            toast.success(statusChangedResponse?.data.message);
         } catch (error) {
             setLoading(false)
             toast.error(error.response?.data.message);
@@ -82,9 +91,9 @@ const CategoriesList = () => {
         const otherCategories = categoryList.filter(cate=>cate.category.categoryId!==category.categoryId)
         if(wasEdit){
             const selected = categoryList.filter(cate=>cate.category.categoryId===category.categoryId)
-            setChangeData([...otherCategories, {...selected[0], category}])
+            setChangeData({list: [...otherCategories, {...selected[0], category}]})
         } else {
-            setChangeData([...otherCategories, {numberOfProducts:0, category}])
+            setChangeData({list: [...otherCategories, {numberOfProducts:0, category}]})
         }
     }
     const queryCategories = categoryList?.filter((data) =>
@@ -155,11 +164,12 @@ const CategoriesList = () => {
                                         </span>
                                     </td>
                                 <td className="whitespace-nowrap py-4 w-1/4">
+                                {routeRole==="SUPERADMIN"&&
                                     <button 
                                     onClick={()=>isLoading?null:toggleCategoryPublishing(category.categoryId)}
                                     className={`${category.published&&"bg-green-200"} mx-1`}>
                                         <GrDeploy/>
-                                    </button>
+                                    </button>}
                                     <button 
                                     onClick={()=>setShowEditModal({category, status: true})}
                                     className='bg-success-200 mx-1'>
@@ -183,6 +193,7 @@ const CategoriesList = () => {
         <EditModal showModal={editModal.status} setShowModal={setShowEditModal} target={tCategoryInfo[editModal.category!=null?"editCategoryTitle":"addCategoryTitle"]}>
             <AddOrEditCategory key={editModal.category?.categoryId}
             isEdit={editModal.category!=null}
+            userRole={routeRole}
             setChangeData={onSetChangedData}
             currentCategory={editModal.category}/>
         </EditModal>
