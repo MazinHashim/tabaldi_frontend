@@ -82,6 +82,7 @@ export function fillAdvertisementFormData(fd, advertisement, advertisementId){
             expireDate: advertisement.expireDate,
             startTime: advertisement.startTime,
             endTime: advertisement.endTime,
+            replacePriority: advertisement.replacePriority? true :false,
             priority: parseInt(advertisement.priority),
             url: advertisement.url, vendorId: advertisement.vendorId==="-1" ? null : parseInt(advertisement.vendorId)
           }))

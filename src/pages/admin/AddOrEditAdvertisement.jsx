@@ -24,6 +24,7 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
     e.preventDefault();
     const data = new FormData(e.target);
     const formData = Object.fromEntries(data.entries());
+    console.log(JSON.stringify(formData));
     try {
       await validator.validationSchema(tAdvertisementInfo, isEdit, formData, t("requiredMessage"))
       .validate(formData, {abortEarly: false});
@@ -37,9 +38,8 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
         e.target.querySelectorAll('input').forEach(input => {
             input.value = '';
         });
-      } else {
-        onEdit(infoResponse?.data.advertisement);
       }
+      onEdit(infoResponse?.data.list);
       toast.success(infoResponse?.data.message);
       } catch (error) {
         if(error instanceof ValidationError){
@@ -119,6 +119,17 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             </div>}
             {<div className="md:w-1/4 my-6">
               <label htmlFor="priority" className="text-lg">{tAdvertisementInfo.priority?.label}</label>
+              <div className="flex items-center mb-2">
+                <input
+                  type="checkbox"
+                  id="replacePriority"
+                  name="replacePriority"
+                  className="mx-2"
+                />
+                <label htmlFor="replacePriority" className="text-sm">
+                  {tAdvertisementInfo.replacePriority?.label || "Replace existing priority?"}
+                </label>
+              </div>
               <select
                 name={"priority"}
                 defaultValue={currentAdvertisement?.priority}

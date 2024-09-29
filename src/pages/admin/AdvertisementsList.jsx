@@ -78,23 +78,18 @@ const AdvertisementsList = () => {
         }
     }
 
-    function onSetChangedData(advertisement){
-        const otherAdvertisements = advertisementList.filter(ads => ads.advertisementId !== advertisement.advertisementId);
-        const oldAdvertisement = advertisementList.find(ads => ads.advertisementId === advertisement.advertisementId);
+    function onSetChangedData(advertisements){
+        // const otherAdvertisements = advertisementList.filter(ads => ads.advertisementId !== advertisement.advertisementId);
+        // const oldAdvertisement = advertisementList.find(ads => ads.advertisementId === advertisement.advertisementId);
         
-        const updatedAvailableBanners = {
-            ...availableBanners,
-            [oldAdvertisement.vendor?.vendorType || "EXTERNAL_ADS"]
-            : availableBanners[oldAdvertisement.vendor?.vendorType || "EXTERNAL_ADS"]
-                .replace(oldAdvertisement.priority.toString(), advertisement.priority.toString())
-        };
-console.log(availableBanners[oldAdvertisement.vendor
-            ? oldAdvertisement.vendor.vendorType
-            : "EXTERNAL_ADS"], JSON.stringify(updatedAvailableBanners))
-        setChangeData({
-            availableBanners: updatedAvailableBanners,
-            advertisements: [...otherAdvertisements, advertisement]
-        });
+        // const updatedAvailableBanners = {
+        //     ...availableBanners,
+        //     [oldAdvertisement.vendor?.vendorType || "EXTERNAL_ADS"]
+        //     : availableBanners[oldAdvertisement.vendor?.vendorType || "EXTERNAL_ADS"]
+        //         .replace(oldAdvertisement.priority.toString(), advertisement.priority.toString())
+        // };
+        setChangeData({ availableBanners, advertisements });
+        // advertisements: [...otherAdvertisements, advertisement],
     }
 
     return (

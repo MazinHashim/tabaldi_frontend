@@ -14,7 +14,7 @@ const AvailableBanners = ({ availableBanners }) => {
                 {Object.entries(availableBanners).map(([vendorType, banners]) => (
                     <div key={vendorType} className="bg-gray-100 rounded-md p-4">
                         <h4 className="font-medium mb-2 break-words">{vendorType}</h4>
-                        <p className="text-sm text-gray-600 break-words">{banners}</p>
+                        <p className="text-sm text-gray-600 break-words">{banners?banners:"No Available Banners"}</p>
                     </div>
                 ))}
             </div>

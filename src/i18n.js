@@ -194,6 +194,9 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "Choose Priority",
                         notSupported: "Not exist in the list",
                     },
+                    replacePriority: {
+                        label: "Replace existing priority?",
+                    },
                     createDate: { label: "Start Date*" },
                     expireDate: { label: "End Date*" },
                     startTime: { label: "Start Time*" },
@@ -562,6 +565,9 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     priority: {
                         label: "الترتيب",
                         notSupported: "غير موجود في القائمة",
+                    },
+                    replacePriority: {
+                        label: "استبدال الإعلان الموجود؟",
                     },
                     createDate: { label: "تاريخ البدء*" },
                     expireDate: { label: "تاريخ الإنتهاء*" },
