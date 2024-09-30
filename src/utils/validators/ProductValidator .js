@@ -1,7 +1,8 @@
 import *as Yup from 'yup'
 
  export const productPatterns = {
-    nameRegx: /^[A-Za-z]{2,16}\s[A-Za-z]{2,16}\s[A-Za-z]{2,16}$/,
+  // Match a string that consists of 1 to 4 words, where each word is made up of one or more letters from any language, optionally followed by whitespace.
+    nameRegx: /^(?:\p{L}+\s*){1,4}$/u,
     descriptionRegx: /^[A-Za-z0-9\._%+\-]{0,100}$/,
     quantityRegx:/^[0-9]{1,10}$/,
     priceRegx:/^[0-9]{1,10}$/,
@@ -142,6 +143,7 @@ export function fillProductFormData(fd, formData, productImages, companyProfit, 
             duration: formData.duration,
             price: formData.price,
             quantity: formData.quantity,
+            options: formData.options,
             companyProfit: formData.companyProfit??companyProfit,
             description: formData.description===""?null:formData.description,
             arDescription: formData.arDescription===""?null:formData.arDescription,

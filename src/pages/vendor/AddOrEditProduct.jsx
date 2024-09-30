@@ -8,6 +8,7 @@ import useAxiosFetchApi from '../../hooks/useFetch';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { ValidationError } from 'yup';
 import { baseURL } from '../../apis/axios';
+import { IoMdCloseCircleOutline } from 'react-icons/io';
 const FETCH_CATEGORY_URL = "/vendors/{id}/categories";
 const ADD_PRODUCT_INFO_URL = "/products/save";
 
@@ -24,7 +25,13 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
     0 : currentProduct.price + (currentProduct.price / 100) * currentProduct.companyProfit);
   const [price, setPrice] = useState(currentProduct?.price);
   const [profit, setProfit] = useState(currentProduct?.companyProfit);
-  
+  const [options, setOptions] = useState([]);
+  const [newOption, setNewOption] = useState({
+    opName: '',
+    fee: null,
+    groupFlag: null
+  });
+
   useEffect(()=>{
     const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${auth.vendorId}`);
     setUrl(vendorCategoriesUrl)
@@ -36,6 +43,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
     e.preventDefault();
     const data = new FormData(e.target);
     const formData = Object.fromEntries(data.entries());
+    const formDataWithOptions = {...formData, options};
     try {
       await validator.validationSchema(tProductInfo, isEdit, formData.companyProfit, t("requiredMessage"))
       .validate(formData, {abortEarly: false});
@@ -45,7 +53,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
       var vendorId = auth.vendorId;
       var productId = (isEdit?currentProduct.productId:null);
       const fd = new FormData();
-      validator.fillProductFormData(fd, formData, images, companyProfit, productId, vendorId)
+      validator.fillProductFormData(fd, formDataWithOptions, images, companyProfit, productId, vendorId)
         const infoResponse = await axiosPrivate.post(ADD_PRODUCT_INFO_URL, fd,
           {headers: {'Accept-Language': i18n.language}}
       );
@@ -64,9 +72,9 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
         })
         setErrors(allErrors)
       } else {
-        if(!isEdit){
-          e.target.querySelectorAll('input').forEach(input => { input.value = ""; });
-        }
+        // if(!isEdit){
+        //   e.target.querySelectorAll('input').forEach(input => { input.value = ""; });
+        // }
         toast.error(error.response?.data.message);
         console.log(error)
       }
@@ -93,6 +101,26 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
     const totalPrice = newPrice + (newPrice * newProfit / 100);
     setFinalPrice(Math.round(totalPrice * 2) / 2);
     // setFinalPrice(totalPrice);
+  };
+
+  const handleOptionChange = (e) => {
+    const { name, value } = e.target;
+    setNewOption(prev => ({
+      ...prev,
+      [name]: value === '' ? null : value
+    }));
+  };
+  const handleDeleteOption = (index) => {
+    const afterDelete = options.filter((option, opIndex)=>opIndex!==index)
+    setOptions(afterDelete);
+  };
+
+  const addOption = () => {
+    if(newOption.opName && (newOption.fee || newOption.groupFlag)){
+    const { opName, ...restNewOption } = newOption;
+    setOptions(prev => [...prev, {...restNewOption, name: newOption.opName.trim()}]);
+    setNewOption({ opName: '', fee: null, groupFlag: null });
+    }
   };
 
   return (
@@ -162,6 +190,37 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               {errors?.duration&&<div className='text-red-600'>{errors?.duration}</div>}
             </div>
           </div>
+          {!isEdit&&<div className='flex flex-col md:flex-row flex-wrap justify-between items-start rounded-lg border border-green-400 p-4'>
+            <h3>Add Options</h3>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="opName" className="text-lg">{tProductInfo.opName?.label||'Option Name'}</label>
+              <input type="text" name="opName" id="opName" 
+              value={newOption.opName || ''}
+              onChange={handleOptionChange}
+              className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.opName?.placeholder||'Option Name'} />
+              {!newOption.opName&& <div className="text-red-600 text-sm mt-1">Please enter Option Name</div>}
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="fee" className="text-lg">{tProductInfo.fee?.label||'Fee (optional)'}</label>
+              <input type="number" name="fee" id="fee" 
+              value={newOption.fee || ''}
+              onChange={handleOptionChange}
+              disabled={!!newOption.groupFlag}
+              className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.fee?.placeholder||'Fee (optional)'} />
+            </div>
+            <div className="md:w-1/4 my-6">
+              <label htmlFor="groupFlag" className="text-lg">{tProductInfo.groupFlag?.label||'Group flag (optional)'}</label>
+              <input type="text" name="groupFlag" id="groupFlag" 
+              value={newOption.groupFlag || ''}
+              onChange={handleOptionChange}
+              disabled={!!newOption.fee}
+              className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.groupFlag?.placeholder||'Group flag (optional)'} />
+              {newOption.fee && newOption.groupFlag && (
+              <div className="text-red-600 text-sm mt-1">Please enter either Fee or Group Flag, not both.</div>
+            )}
+            </div>
+            <button type="button" onClick={addOption} className="w-[10%] bg-primary-color text-white px-5 py-2.5 my-10">{tProductInfo["addBtn"]}</button>
+          </div>}
           <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">
             <div className="md:w-1/3">
               <label htmlFor="description" className="text-lg">{tProductInfo.description?.label}</label>
@@ -186,6 +245,24 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               </>
             ))}
           </div>
+
+          {!isEdit&&<div>
+            <h4 className='my-2'>{tProductInfo["addedOptions"]||'Added Options'}</h4>
+            <ul>
+              {options
+              .map((option, index) => (
+                <span key={index} className='px-2 min-w-16 capitalize bg-secondary-color text-white text-center rounded-lg pl-1 m-5'>
+                    <span className='p-1'>{option.name}</span>
+                    <span className='bg-white text-black p-1 border border-green-400 rounded-lg text-sm'>
+                        {option.fee} {option.groupFlag?option.groupFlag:t("aedUnit")}
+                    </span>
+                    <span className="p-1 cursor-pointer"
+                    onClick={()=>handleDeleteOption(index)}
+                    ><IoMdCloseCircleOutline className='inline'/></span>
+                </span>
+              ))}
+            </ul>
+          </div>}
         </form>
       </div>
     </>

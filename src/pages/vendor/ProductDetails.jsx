@@ -14,11 +14,14 @@ import FormInput from '../../utils/FormInput';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { baseURL } from '../../apis/axios';
 import { IoWarningOutline } from 'react-icons/io5';
+import ProductImageList from '../../components/ProductImageList.jsx';
 const PRODUCTS_ROUTE_URL = "/products";
 const PRODUCT_DELETE_URL = "/products/delete";
 const ADD_OPTION_INFO_URL = "/options/save"
 const OPTION_DELETE_URL = "/options/delete"
 const TOGGLE_PUBLISH_URL = "/products/toggle/publish"
+const ADD_IIMAGE_URL = "/products/{id}/add-image"
+const REMOVE_IIMAGE_URL = "/products/{id}/remove-image"
 
 const ProductDetails = () => {
     const location = useLocation();
@@ -146,118 +149,185 @@ const ProductDetails = () => {
     }
     const totalPrice = selectedProduct.price + (selectedProduct.price * selectedProduct.companyProfit / 100);
     const selectedProductPrice = (Math.round(totalPrice * 2) / 2).toFixed(2);
+    const handleAddImage = async (file) => {
+        try {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const response = await axiosPrivate.post(
+                `${ADD_IIMAGE_URL.replace("{id}", productId)}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept-Language': i18n.language
+                }
+            });
+
+            // Update the product's images in the state
+            const updatedProduct = response.data.product;
+            setProducts(products.map(p => p.productId === productId ? updatedProduct : p));
+
+            toast.success('Image added successfully');
+        } catch (error) {
+            console.error('Error adding image:', error);
+            toast.error(error.response?.data.message || 'Failed to add image');
+        }
+    };
+
+    const handleRemoveImage = async (imagePath) => {
+        try {
+            const response = await axiosPrivate.delete(
+                `${REMOVE_IIMAGE_URL.replace("{id}", productId)}?imagePath=${imagePath}`, {
+                headers: {
+                    'Accept-Language': i18n.language
+                }
+            });
+
+            // Update the product's images in the state
+            const updatedProduct =  response.data.product;
+            setProducts(products.map(p => p.productId === productId ? updatedProduct : p));
+
+            toast.success('Image removed successfully');
+        } catch (error) {
+            console.error('Error removing image:', error);
+            toast.error(error.response?.data.message || 'Failed to remove image');
+        }
+    };
   return (
     <>
     <ToastContainer />
-        <div className='flex flex-col justify-center items-start space-y-8'>
-            <div className='flex gap-3 items-center'>
-                {selectedProduct.quantity <= 5 &&
-                <p className="text-red-700 border-red-700 border rounded-lg p-1">
-                    <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
-                    {pCard["quantityAboutAlert"]}
-                    <button onClick={()=>setShowEditModal(true)} className='font-bold mx-2'>{pCard["update"]}</button>
-                    {selectedProduct.published&&<button className='font-bold mx-2' 
-                    onClick={()=>isLoading?null:toggleProductPublishing(selectedProduct.productId)}>{pCard["unpublish"]}</button>}
-                </p>}
-                {!selectedProduct.published &&
-                <p className="text-yellow-700 border-yellow-700 border rounded-lg p-1">
-                    <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
-                    {pCard["notVisible"]}
-                </p>}
-            </div>
-            <div className='flex justify-between items-center'>
-                <h2>{selectedProduct?.name} / {selectedProduct?.arName}</h2>
-                <h4 className='uppercase primary-color border border-green-300 rounded-lg px-1 mx-3'>
-                    {selectedProduct?.category.name}
-                </h4>
-                <h4 className='uppercase primary-color border border-green-300 rounded-lg px-1 mx-3'>
-                    {`${tOptionInfo["companyProfit"]} ${selectedProduct?.companyProfit} %`}
-                </h4>
-                <button className='bg-danger-200 mx-1' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
-                <button className='bg-primary-200 mx-1' onClick={()=>setShowEditModal(true)}><FaPen /></button>
-            </div>
-            <div className='flex justify-between items-start w-full'>
-                <div className='flex flex-col w-3/4 space-y-10'>
-                    <p className='text-gray-400'>{selectedProduct?.description}.</p>
-                    <p className='text-gray-400'>{selectedProduct?.arDescription}.</p>
-                    <p className='text-6xl'>{selectedProductPrice}<span className='text-2xl'>{tCard["aedUnit"]}</span></p>
-                    <div>  
-                        <h4>{tOptionInfo["productChar"]}</h4>
-                        {groups.map(group=>{
-                        return <div key={group} className='options my-7 border-2 border-slate-200 border-dashed rounded-3xl p-4'>
-                            <div className='flex flex-wrap items-center'>
-                                <p className='text-gray-500 capitalize w-full'>{group}</p>
-                                {selectedProduct?.options
-                                .filter(op=>op.groupFlag===group)
-                                .map(option =>{
-                                    return <div key={option.optionId}><div className='px-1 flex justify-between items-center min-w-16 capitalize bg-secondary-color text-white text-center rounded-lg pl-1 m-2'>
-                                            <span>{option.name}</span>
-                                            <IoMdCloseCircleOutline className='inline cursor-pointer' onClick={()=>handleDeleteOption(option.optionId)}/>
-                                        </div></div>
-                                })}
-                                <button className='border border-green-300 mx-3' onClick={()=>handleToggleOptionForm(group)}><span><FaRegPlusSquare className='primary-color' size={20}/></span></button>
-                            </div>
-                            {(openedOptionGroup===group) && <form onSubmit={(e)=>handleAddOptionToProduct(e)} className="flex items-start" method='post'>
-                                <FormInput
-                                {...{...optionInputs[0], containerstyle: "w-1/2 mx-2"}}
-                                />
-                                <button type="submit" className="font-extrabold uppercase text-white bg-primary-color px-2 py-1 my-5 shadow-lg" disabled={isLoading} >{tOptionInfo["addBtn"]}</button>
-                            </form>}
-                            </div>
-                            })}
-                            {newGroup && <form onSubmit={(e)=>handleAddOptionToProduct(e)} className="flex items-start" method='post'>
-                                <FormInput
-                                {...{...optionInputs[0], containerstyle: "w-1/4 mx-2"}}
-                                />
-                                {newGroup&&
-                                <FormInput
-                                {...{...optionInputs[2], containerstyle: "w-1/4 mx-2"}}
-                                />}
-                                <button type="submit" className="font-extrabold uppercase text-white bg-primary-color px-2 py-1 my-5 shadow-lg">{tOptionInfo["addBtn"]}</button>
-                            </form>}
-                            <button className='border border-green-300' onClick={handleToggleNewGroup}><span>{tOptionInfo["newGroupBtn"]}</span></button>
+        <div className='container mx-auto px-4 py-8'>
+            <div className='flex flex-col space-y-8'>
+                {/* Alerts */}
+                <div className='flex flex-wrap gap-3'>
+                    {selectedProduct.quantity <= 5 &&
+                    <p className="text-red-700 border-red-700 border rounded-lg p-1">
+                        <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
+                        {pCard["quantityAboutAlert"]}
+                        <button onClick={()=>setShowEditModal(true)} className='font-bold mx-2'>{pCard["update"]}</button>
+                        {selectedProduct.published&&<button className='font-bold mx-2' 
+                        onClick={()=>isLoading?null:toggleProductPublishing(selectedProduct.productId)}>{pCard["unpublish"]}</button>}
+                    </p>}
+                    {!selectedProduct.published &&
+                    <p className="text-yellow-700 border-yellow-700 border rounded-lg p-1">
+                        <IoWarningOutline className="inline-block mx-1 text-lg" title={"Published Prodcut"}/>
+                        {pCard["notVisible"]}
+                    </p>}
+                </div>
+
+                {/* Product Header */}
+                <div className='flex flex-wrap items-center justify-between gap-4'>
+                    <h2 className='text-2xl font-bold'>{selectedProduct?.name} / {selectedProduct?.arName}</h2>
+                    <div className='flex flex-wrap items-center gap-2'>
+                        <h4 className='uppercase primary-color border border-green-300 rounded-lg px-2 py-1'>
+                            {selectedProduct?.category.name}
+                        </h4>
+                        <h4 className='uppercase primary-color border border-green-300 rounded-lg px-2 py-1'>
+                            {`${tOptionInfo["companyProfit"]} ${selectedProduct?.companyProfit} %`}
+                        </h4>
+                        <button className='bg-danger-200 p-2 rounded' onClick={() => setShowDeleteModal(true)}><FaTrash /></button>
+                        <button className='bg-primary-200 p-2 rounded' onClick={() => setShowEditModal(true)}><FaPen /></button>
                     </div>
-                    <div>
-                        <h4 className='mb-1'>{tOptionInfo["productAddons"]}</h4>
-                        <div className='flex flex-wrap items-start options border-2 border-slate-200 border-dashed rounded-3xl p-4'>
-                            
-                            {selectedProduct?.options
-                            .filter(option=>option.groupFlag==null)
-                            .map((option) =>{
-                                return <div key={option.optionId} className='flex items-center capitalize bg-secondary-color text-white rounded-lg m-2'>
-                                        <span className='p-1'>{option.name}</span>
-                                        <span className='bg-white text-black p-1 border border-green-400 rounded-lg text-sm'>
-                                            {option.fee} {tCard["aedUnit"]}
-                                        </span>
-                                        <span className="p-1 cursor-pointer" onClick={()=>handleDeleteOption(option.optionId)}><IoMdCloseCircleOutline className='inline'/></span>
-                                    </div>
-                            })}
-                            <button className='border border-green-300 mt-2' onClick={()=>handleToggleOptionForm("addons")}><span><FaRegPlusSquare className='primary-color' size={20}/></span></button>
-                            <div className='flex items-start mb-10'>
-                                {(openedOptionGroup==="addons") && <form className='flex items-start' method='post' onSubmit={(e)=>handleAddOptionToProduct(e, null)}>
-                                <FormInput
-                                {...{...optionInputs[0], containerstyle: "mx-2 rounded-sm w-1/3"}}
-                                />
-                                <FormInput
-                                {...{...optionInputs[1], containerstyle: "mx-2 rounded-sm w-1/3"}}
-                                />
-                                <button type="submit" className="mx-2 mt-7 w-1/5 font-extrabold uppercase text-white bg-primary-color px-2 py-1 shadow-lg" disabled={isLoading}>{tOptionInfo["addBtn"]}</button>
-                            </form>}
+                </div>
+
+                {/* Main Content */}
+                <div className='flex flex-col lg:flex-row gap-8'>
+                    {/* Product Details */}
+                    <div className='flex-grow space-y-6'>
+                        <div className='space-y-2'>
+                            <p className='text-gray-600'>{selectedProduct?.description}</p>
+                            <p className='text-gray-600'>{selectedProduct?.arDescription}</p>
+                        </div>
+                        <p className='text-4xl font-bold'>{selectedProductPrice}<span className='text-xl'>{tCard["aedUnit"]}</span></p>
+                        
+                        {/* Product Characteristics */}
+                        <div className='space-y-4'>
+                            <h4 className='text-xl font-semibold'>{tOptionInfo["productChar"]}</h4>
+                            {groups.map(group=>{
+                            return <div key={group} className='options my-7 border-2 border-slate-200 border-dashed rounded-3xl p-4'>
+                                <div className='flex flex-wrap items-center'>
+                                    <p className='text-gray-500 capitalize w-full'>{group}</p>
+                                    {selectedProduct?.options
+                                    .filter(op=>op.groupFlag===group)
+                                    .map(option =>{
+                                        return <div key={option.optionId}><div className='px-1 flex justify-between items-center min-w-16 capitalize bg-secondary-color text-white text-center rounded-lg pl-1 m-2'>
+                                                <span>{option.name}</span>
+                                                <IoMdCloseCircleOutline className='inline cursor-pointer' onClick={()=>handleDeleteOption(option.optionId)}/>
+                                            </div></div>
+                                    })}
+                                    <button className='border border-green-300 mx-3' onClick={()=>handleToggleOptionForm(group)}><span><FaRegPlusSquare className='primary-color' size={20}/></span></button>
+                                </div>
+                                {(openedOptionGroup===group) && <form onSubmit={(e)=>handleAddOptionToProduct(e)} className="flex items-start" method='post'>
+                                    <FormInput
+                                    {...{...optionInputs[0], containerstyle: "w-1/2 mx-2"}}
+                                    />
+                                    <button type="submit" className="font-extrabold uppercase text-white bg-primary-color px-2 py-1 my-5 shadow-lg" disabled={isLoading} >{tOptionInfo["addBtn"]}</button>
+                                </form>}
+                                </div>
+                                })}
+                                {newGroup && <form onSubmit={(e)=>handleAddOptionToProduct(e)} className="flex items-start" method='post'>
+                                    <FormInput
+                                    {...{...optionInputs[0], containerstyle: "w-1/4 mx-2"}}
+                                    />
+                                    {newGroup&&
+                                    <FormInput
+                                    {...{...optionInputs[2], containerstyle: "w-1/4 mx-2"}}
+                                    />}
+                                    <button type="submit" className="font-extrabold uppercase text-white bg-primary-color px-2 py-1 my-5 shadow-lg">{tOptionInfo["addBtn"]}</button>
+                                </form>}
+                                <button className='border border-green-300' onClick={handleToggleNewGroup}><span>{tOptionInfo["newGroupBtn"]}</span></button>
+                        </div>
+
+                        {/* Product Addons */}
+                        <div className='space-y-4'>
+                            <h4 className='text-xl font-semibold'>{tOptionInfo["productAddons"]}</h4>
+                            <div className='flex flex-wrap items-start options border-2 border-slate-200 border-dashed rounded-3xl p-4'>
+                                
+                                {selectedProduct?.options
+                                .filter(option=>option.groupFlag==null)
+                                .map((option) =>{
+                                    return <div key={option.optionId} className='flex items-center capitalize bg-secondary-color text-white rounded-lg m-2'>
+                                            <span className='p-1'>{option.name}</span>
+                                            <span className='bg-white text-black p-1 border border-green-400 rounded-lg text-sm'>
+                                                {option.fee} {tCard["aedUnit"]}
+                                            </span>
+                                            <span className="p-1 cursor-pointer" onClick={()=>handleDeleteOption(option.optionId)}><IoMdCloseCircleOutline className='inline'/></span>
+                                        </div>
+                                })}
+                                <button className='border border-green-300 mt-2' onClick={()=>handleToggleOptionForm("addons")}><span><FaRegPlusSquare className='primary-color' size={20}/></span></button>
+                                <div className='flex items-start mb-10'>
+                                    {(openedOptionGroup==="addons") && <form className='flex items-start' method='post' onSubmit={(e)=>handleAddOptionToProduct(e, null)}>
+                                    <FormInput
+                                    {...{...optionInputs[0], containerstyle: "mx-2 rounded-sm w-1/3"}}
+                                    />
+                                    <FormInput
+                                    {...{...optionInputs[1], containerstyle: "mx-2 rounded-sm w-1/3"}}
+                                    />
+                                    <button type="submit" className="mx-2 mt-7 w-1/5 font-extrabold uppercase text-white bg-primary-color px-2 py-1 shadow-lg" disabled={isLoading}>{tOptionInfo["addBtn"]}</button>
+                                </form>}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className='product-details flex flex-wrap justify-end'>
-                    {!selectedProduct?.images ? "Loading..." :
-                    selectedProduct.images.map((image)=>{
-                    return <img key={image} className="rounded-xl h-[10rem] w-5/12 m-1" 
-                    src={image
-                        ?`${baseURL}/files/get/file/${image}`
-                        :productProfile}
-                    alt={`${selectedProduct?.name}`} />})}
+
+                    {/* Product Images */}
+                    <div className='w-full lg:w-1/3'>
+                        {!selectedProduct?.images ? (
+                            "Loading..."
+                        ) : (
+                            <ProductImageList
+                                images={selectedProduct.images}
+                                baseURL={baseURL}
+                                productProfile={productProfile}
+                                onAddImage={handleAddImage}
+                                onRemoveImage={handleRemoveImage}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
+
+        {/* Modals */}
         <EditProductModal showModal={showEditModal} setShowModal={setShowEditModal} target="Product">
             <AddOrEditProduct key={selectedProduct?.productId}
             isEdit={true}
@@ -267,9 +337,10 @@ const ProductDetails = () => {
             title={"Confirm Product Delete"}
             btnColor={"bg-danger"}
             message={"Are you sure for deleting this product?"}
-            onAction={()=>{handleOnProductDelete(selectedProduct?.productId); setShowDeleteModal(false)}}
+            onAction={() => {handleOnProductDelete(selectedProduct?.productId); setShowDeleteModal(false)}}
             showModal={showDeleteModal}
-            setShowModal={setShowDeleteModal}/>
+            setShowModal={setShowDeleteModal}
+        />
     </>
   )
 }
