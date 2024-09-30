@@ -191,32 +191,32 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
             </div>
           </div>
           {!isEdit&&<div className='flex flex-col md:flex-row flex-wrap justify-between items-start rounded-lg border border-green-400 p-4'>
-            <h3>Add Options</h3>
+            <h3>{tProductInfo["optionHeading"]}</h3>
             <div className="md:w-1/4 my-6">
-              <label htmlFor="opName" className="text-lg">{tProductInfo.opName?.label||'Option Name'}</label>
+              <label htmlFor="opName" className="text-lg">{tProductInfo.opName?.label}</label>
               <input type="text" name="opName" id="opName" 
               value={newOption.opName || ''}
               onChange={handleOptionChange}
-              className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.opName?.placeholder||'Option Name'} />
-              {!newOption.opName&& <div className="text-red-600 text-sm mt-1">Please enter Option Name</div>}
+              className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.opName?.placeholder} />
+              {!newOption.opName&& <div className="text-red-600 text-sm mt-1">{tProductInfo["nameRequired"]}</div>}
             </div>
             <div className="md:w-1/4 my-6">
-              <label htmlFor="fee" className="text-lg">{tProductInfo.fee?.label||'Fee (optional)'}</label>
+              <label htmlFor="fee" className="text-lg">{tProductInfo.fee?.label}</label>
               <input type="number" name="fee" id="fee" 
               value={newOption.fee || ''}
               onChange={handleOptionChange}
               disabled={!!newOption.groupFlag}
-              className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.fee?.placeholder||'Fee (optional)'} />
+              className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.fee?.placeholder} />
             </div>
             <div className="md:w-1/4 my-6">
-              <label htmlFor="groupFlag" className="text-lg">{tProductInfo.groupFlag?.label||'Group flag (optional)'}</label>
+              <label htmlFor="groupFlag" className="text-lg">{tProductInfo.groupFlag?.label}</label>
               <input type="text" name="groupFlag" id="groupFlag" 
               value={newOption.groupFlag || ''}
               onChange={handleOptionChange}
               disabled={!!newOption.fee}
               className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.groupFlag?.placeholder||'Group flag (optional)'} />
               {newOption.fee && newOption.groupFlag && (
-              <div className="text-red-600 text-sm mt-1">Please enter either Fee or Group Flag, not both.</div>
+              <div className="text-red-600 text-sm mt-1">{tProductInfo["oneOfThemRequired"]}.</div>
             )}
             </div>
             <button type="button" onClick={addOption} className="w-[10%] bg-primary-color text-white px-5 py-2.5 my-10">{tProductInfo["addBtn"]}</button>

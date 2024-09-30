@@ -256,6 +256,21 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "Arabic Description" ,
                         placeholder: "Arabic Description"
                     },
+                    opName: { 
+                        label: 'Option Name' ,
+                        placeholder: 'Option Name'
+                    },
+                    fee: { 
+                        label: 'Fee (optional)' ,
+                        placeholder: 'Fee (optional)'
+                    },
+                    groupFlag: { 
+                        label: 'Group flag (optional)' ,
+                        placeholder: 'Group flag (optional)'
+                    },
+                    optionHeading: "Add Options",
+                    nameRequired: 'Please enter Option Name',
+                    oneOfThemRequired: 'Please enter either Fee or Group Flag, not both',
                     addBtn: "ADD",
                     editBtn: "EDIT",
                 },
@@ -628,6 +643,21 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "الوصف بالعربي" ,
                         placeholder: "الوصف بالعربي"
                     },
+                    opName: { 
+                        label: 'إسم الإضافة' ,
+                        placeholder: 'إسم الإضافة'
+                    },
+                    fee: { 
+                        label: 'السعر (إختياري)' ,
+                        placeholder: 'السعر (إختياري)'
+                    },
+                    groupFlag: { 
+                        label: 'الفئة (إختياري)' ,
+                        placeholder: 'الفئة (إختياري)'
+                    },
+                    optionHeading: "إضافة خيارات",
+                    nameRequired: 'إسم الإضافة مطلوب',
+                    oneOfThemRequired: 'الرجاء أدخال السعر أو الفئة وليس كلاهما',
                     addBtn: "إضافة",
                     editBtn: "تعديل",
                 },
