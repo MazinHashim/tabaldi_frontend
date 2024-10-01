@@ -79,7 +79,7 @@ const CategoriesList = ({routeRole}) => {
             );
             setLoading(false)
             const otherCategories=categoryList.filter(cate=>cate.category.categoryId!==categoryId)
-            setChangeData(otherCategories)
+            setChangeData({list: otherCategories})
             toast.success(categoryDeletedResponse?.data.message);
         } catch (error) {
             setLoading(false)
@@ -194,7 +194,7 @@ const CategoriesList = ({routeRole}) => {
             <AddOrEditCategory key={editModal.category?.categoryId}
             isEdit={editModal.category!=null}
             userRole={routeRole}
-            setChangeData={onSetChangedData}
+            onChangeData={onSetChangedData}
             currentCategory={editModal.category}/>
         </EditModal>
         <ConfirmationModal

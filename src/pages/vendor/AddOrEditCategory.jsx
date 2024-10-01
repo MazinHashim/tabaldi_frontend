@@ -8,7 +8,7 @@ import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { ValidationError } from 'yup';
 const ADD_CATEGORY_INFO_URL = "/categories/save";
 
-const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false, userRole}) => {
+const AddOrEditCategory = ({currentCategory, onChangeData, isEdit=false, userRole}) => {
   const { auth } = useAuth();
   const{t, i18n} = useTranslation();
   const axiosPrivate = useAxiosPrivate()
@@ -32,7 +32,7 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false, userRo
         const infoResponse = await axiosPrivate.post(ADD_CATEGORY_INFO_URL, formData,
             {headers: {'Accept-Language': i18n.language}}
         );
-        setChangeData(infoResponse?.data.category, isEdit)
+        onChangeData(infoResponse?.data.category, isEdit)
         if(!isEdit){ 
           e.target.querySelectorAll('input').forEach(input => {
               input.value = '';
