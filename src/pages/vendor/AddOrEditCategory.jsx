@@ -22,7 +22,7 @@ const AddOrEditCategory = ({currentCategory, setChangeData, isEdit=false, userRo
     var vendorId = auth.vendorId;
     var categoryId = (isEdit?currentCategory?.categoryId:null);
     const formData = {...data,
-      published: isEdit ? null : data.published==="true" ? true : false,
+      published: isEdit ? currentCategory.published : data.published==="true" ? true : false,
       vendorId, categoryId}
       try {
         console.log(formData)

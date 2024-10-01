@@ -247,7 +247,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
           </div>
 
           {!isEdit&&<div>
-            <h4 className='my-2'>{tProductInfo["addedOptions"]||'Added Options'}</h4>
+            <h4 className='my-2'>{tProductInfo["addedOptions"]}</h4>
             <ul>
               {options
               .map((option, index) => (

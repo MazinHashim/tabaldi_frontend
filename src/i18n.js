@@ -269,6 +269,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         placeholder: 'Group flag (optional)'
                     },
                     optionHeading: "Add Options",
+                    addedOptions: "Added Options",
                     nameRequired: 'Please enter Option Name',
                     oneOfThemRequired: 'Please enter either Fee or Group Flag, not both',
                     addBtn: "ADD",
@@ -656,6 +657,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         placeholder: 'الفئة (إختياري)'
                     },
                     optionHeading: "إضافة خيارات",
+                    addedOptions: "الخيارات المضافة",
                     nameRequired: 'إسم الإضافة مطلوب',
                     oneOfThemRequired: 'الرجاء أدخال السعر أو الفئة وليس كلاهما',
                     addBtn: "إضافة",

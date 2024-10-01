@@ -88,7 +88,7 @@ const AdvertisementsList = () => {
         //     : availableBanners[oldAdvertisement.vendor?.vendorType || "EXTERNAL_ADS"]
         //         .replace(oldAdvertisement.priority.toString(), advertisement.priority.toString())
         // };
-        setChangeData({ availableBanners, advertisements });
+        setChangeData({ availableBanners, advertisements: advertisements||advertisementList });
         // advertisements: [...otherAdvertisements, advertisement],
     }
 
