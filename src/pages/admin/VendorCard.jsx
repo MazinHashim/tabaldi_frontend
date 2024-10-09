@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {HiOutlinePaperClip} from 'react-icons/hi'
-import {FaTrash, FaPen, FaShare} from 'react-icons/fa'
+import {FaTrash, FaPen, FaShare, FaUser} from 'react-icons/fa'
 import vendorProfile from '../../img/vendor_profile.png'
 import vendorCover from '../../img/vendor_cover.jfif'
 import EditVendorModal from '../modals/EditModal';
@@ -105,6 +105,7 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
                 <button className='border border-gray-400 shadow-none p-2 rounded' onClick={()=>setShowIdentityModal(true)}><HiOutlinePaperClip /></button>
                 <button className='border border-gray-400 shadow-none p-2 rounded' onClick={()=>{setShowEditModal(true)}}><FaPen /></button>
                 <button className='border border-gray-400 shadow-none p-2 rounded' onClick={()=>setShowDeleteModal(true)}><FaTrash /></button>
+                <Link className='border border-gray-400 shadow-none p-2 rounded' to={"users"} state={{vendor}}><FaUser /></Link>
             </div>
         </div>
         <div className="flex-col space-y-2 justify-self-end">

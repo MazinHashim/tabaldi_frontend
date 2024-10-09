@@ -16,7 +16,7 @@ const HOME_DETAILS_URL = "/details/vendor/home/{id}";
 
 const VendorHome = () => {
   const { auth } = useAuth();
-  const homeDetailsUrl = HOME_DETAILS_URL.replace("{id}", `${auth?.vendorId}`);
+  const homeDetailsUrl = HOME_DETAILS_URL.replace("{id}", `${auth?.vendor?.vendorId}`);
   const [state, setUrl] = useAxiosFetchApi(null, {}, auth?.token);
   const details = state.data?.details;
   const {t, i18n} = useTranslation();
@@ -24,7 +24,8 @@ const VendorHome = () => {
   const tHome= t("vendorHomeInfo")
   useEffect(()=>{
     setUrl(homeDetailsUrl)
-  }, [auth?.vendorId, homeDetailsUrl, setUrl])
+  }, [auth?.vendor?.vendorId, homeDetailsUrl, setUrl])
+  const homeVendor=auth?.vendor;
 
   return (
     <div className='flex flex-col mb-6'>
@@ -33,15 +34,15 @@ const VendorHome = () => {
         <div className='flex justify-center items-center'>
           <img src={vendorProfile} alt="vendor" className='rounded-full' width={100}/>
           <div>
-            <h2 className='font-medium mx-3'>{auth?.fullName}</h2>
+            <h2 className='font-medium mx-3'>{homeVendor?.fullName}</h2>
             <span className='px-3 ms-2 text-gray-500 text-sm'>
-              {`${tCard['openingTxt']} ${auth?.fopeningTime} - ${tCard['closingTxt']} ${auth?.fclosingTime}`}
+              {`${tCard['openingTxt']} ${homeVendor?.fopeningTime} - ${tCard['closingTxt']} ${homeVendor?.fclosingTime}`}
             </span>
           </div>
-          <span className='px-3 ms-2 rounded-lg bg-gray-600 text-white text-sm'>{auth?.vendorType}</span>
+          <span className='px-3 ms-2 rounded-lg bg-gray-600 text-white text-sm'>{homeVendor?.vendorType}</span>
         </div>
-        <p className={`px-2 ${auth?.working?"bg-green-700":"bg-red-700"} text-white rounded-lg text-sm inline-block`}>
-          {auth?.working?tCard["working"]:tCard["outOfService"]}
+        <p className={`px-2 ${homeVendor?.working?"bg-green-700":"bg-red-700"} text-white rounded-lg text-sm inline-block`}>
+          {homeVendor?.working?tCard["working"]:tCard["outOfService"]}
         </p>
       </div>
       <hr />

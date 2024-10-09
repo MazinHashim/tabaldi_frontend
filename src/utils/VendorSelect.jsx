@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-const VendorSelect = ({ currentAdvertisement, vendorList, tAdvertisementInfo }) => {
-  const [searchTerm, setSearchTerm] = useState(currentAdvertisement?.vendor?.fullName); // For input search
+const VendorSelect = ({ currentData, vendorList, tDataInfo }) => {
+  const [searchTerm, setSearchTerm] = useState(currentData?.vendor?.fullName); // For input search
   const [showDropdown, setShowDropdown] = useState(false); // Toggle dropdown
-  const [selectedVendor, setSelectedVendor] = useState(currentAdvertisement?.vendor?.vendorId); // Store selected value
+  const [selectedVendor, setSelectedVendor] = useState(currentData?.vendor?.vendorId); // Store selected value
 
   // Filter vendors based on the search term
   const filteredVendors = vendorList
@@ -25,7 +25,7 @@ const VendorSelect = ({ currentAdvertisement, vendorList, tAdvertisementInfo }) 
       {/* Search Input */}
       <input
         type="text"
-        placeholder={tAdvertisementInfo.vendorId?.label}
+        placeholder={tDataInfo.vendorId?.label}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
         onFocus={() => setShowDropdown(true)} // Show dropdown when input is focused
@@ -57,7 +57,7 @@ const VendorSelect = ({ currentAdvertisement, vendorList, tAdvertisementInfo }) 
         value={selectedVendor}
         className="hidden"
       >
-        <option key={0} value={-1}>{tAdvertisementInfo.vendorId?.label}</option>
+        <option key={0} value={-1}>{tDataInfo.vendorId?.label}</option>
         {vendorList && vendorList.map(vendor => (
           <option key={vendor.vendorId} value={vendor.vendorId}>
             {vendor.fullName}

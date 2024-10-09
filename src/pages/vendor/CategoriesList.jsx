@@ -28,27 +28,19 @@ const CategoriesList = ({routeRole}) => {
     const [isLoading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const sessionToken = auth.token;
-    const refreshToken = auth.refreshToken;
     const [state, setUrl, setChangeData] = useAxiosFetchApi(null, {}, sessionToken);
   
     useEffect(()=>{
-        const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${vendor?.vendorId??auth.vendorId}`);
+        const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`);
         setUrl(vendorCategoriesUrl)
-    }, [auth.vendorId, setUrl, vendor])
-    useEffect(()=>{
-        if(vendor){
-            console.log(sessionToken)
-            setAuth({...vendor, token: sessionToken, refreshToken})
+    }, [auth.vendor?.vendorId, setUrl, vendor])
+    useEffect(() => {
+        if (vendor) {
+            setAuth((prev)=>({ ...prev, vendor }));
         }
-    }, [vendor, sessionToken, refreshToken, setAuth])
+    }, [vendor, setAuth]);
 
     const categoryList = state.data?.list;
-    // const { setCategories } = useCategoriesData();
-
-    // useEffect(()=>{
-    //     setCategories(state.data?.list)
-    //     console.log(JSON.stringify(state.data?.list))
-    // }, [state.data, setCategories])
 
     async function toggleCategoryPublishing(categoryId){
         try{
@@ -145,7 +137,7 @@ const CategoriesList = ({routeRole}) => {
                             : !state.data?.list
                             ? <tr><td colSpan={7} className='p-10'>{state.data?.message??state.error?.message}</td></tr>
                             : queryCategories?.length===0
-                            ? <tr><td colSpan={7} className='p-10'>{"categoryInfo.noCategory"}</td></tr>
+                            ? <tr><td colSpan={7} className='p-10'>{tCategoryInfo.noCategory}</td></tr>
                             : queryCategories.sort((a, b) => {
                                 if (a.category.name < b.category.name) return -1;
                                 if (a.category.name > b.category.name) return 1;

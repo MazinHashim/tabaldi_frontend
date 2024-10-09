@@ -92,13 +92,13 @@ const OrderDetails = () => {
                         <select ref={statusRef} className='p-1 rounded-lg border' name="status" id="status">
                             <option value={""}>{tOrder["status"]}</option>
                             {allStatuses.map(status=>{
-                                if(status==="DELIVERED" && auth.role==="VENDOR")
+                                if(status==="DELIVERED" && auth.role?.includes("VENDOR"))
                                     return "";
                                 return <option key={status}>{status}</option>
                             })}
                         </select>
                         <button className={`${isLoading?'invisible':''} bg-primary-color text-white`} onClick={handleChangeOrderStatus}>{tOrder["save"]}</button>
-                        <a href={`${baseURL}/invoices/${invoice.invoiceId}/download`} target='_blank' className="border border-gray-300">{tOrder["downloadInv"]}</a>
+                        <a href={`${baseURL}/invoices/${invoice.invoiceId}/download`} target='_blank' rel="noreferrer" className="border border-gray-300">{tOrder["downloadInv"]}</a>
                     </div>
                 </div>
                 <div className="flex w-full justify-between my-10">
@@ -160,9 +160,9 @@ const OrderDetails = () => {
                         <td className="whitespace-nowrap capitalize text-start">
                             <IoCheckmarkDone className='inline p-1 secondary-color' size={25}/>
                             {option.name}</td>
-                        <td className="whitespace-nowrap px-2">_</td>
+                        <td className="whitespace-nowrap px-2">{item.quantity}</td>
                         <td className="whitespace-nowrap px-2">{option.fee??"_"}</td>
-                        <td className="whitespace-nowrap px-2 text-end">{option.fee??"_"} {t("aedUnit")}</td>
+                        <td className="whitespace-nowrap px-2 text-end">{option.fee*item.quantity??"_"} {t("aedUnit")}</td>
                     </tr>
                 })}
                 </>

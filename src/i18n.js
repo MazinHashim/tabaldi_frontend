@@ -73,10 +73,13 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     numOfOpt: "Number of Options",
                     numOfOrd: "Number of Orders"
                 },
-                vendorFormIfno: {
+                vendorFormInfo: {
                     addVendorTitle: "Add New Vendor",
                     editVendorTitle: "Edit Vendor",
                     vendors: "Vendors",
+                    vendor: "Vendor",
+                    addNewBtn: "Add New User",
+                    noUsers: "Users Not Found",
                     fullName: {
                         label: "English Name*",
                         most3Words: "Must be 3 names and only 2 to 16 characters per name",
@@ -96,6 +99,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "Email*",
                         emailFormat: "Must be a valid email address",
                         placeholder: "Eg: example@email.com",
+                    },
+                    vendorId: {
+                        label: "Choose Vendor",
+                        notSupported: "Not exist in the list",
                     },
                     maxKilometerDelivery: {
                         label: "Max Kilometer Delivery",
@@ -307,6 +314,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 categoryFormInfo: {
                     addCategoryTitle: "Add Category",
                     editCategoryTitle: "Edit Category",
+                    noCategory: "Categories Not Found",
                     name: {
                         label: "Engilsh Name*",
                         errorMessage: "Name should not be empty"
@@ -341,6 +349,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     processedDate: { label: "Processed Date" },
                     deliveredDate: { label: "Delivered Date" },
                     vendorName: { label: "Vendor Name" },
+                    selectVendorType: "Select Vendor Type",
                     viewDetails: "View",
                     noOrders: "No Available Orders",
                     notYet: "Not Yet",
@@ -460,10 +469,13 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     createdAt: "تاريخ الإنشاء",
                     numOfOrd: "عدد الطلبات",
                 },
-                vendorFormIfno: {
+                vendorFormInfo: {
                     addVendorTitle: "إضافة بائع",
                     editVendorTitle: "تعديل البائع",
                     vendors: "قائمة البائعيين",
+                    vendor: "البائع",
+                    addNewBtn: "إضافة مستخدم جديد",
+                    noUsers: "لا يوجد مستخدمين",
                     fullName: {
                         label: "الإسم بالإنجليزي*",
                         most3Words: "يجب أن يكون ثلاثي ويتراوح عدد الأحرف من 2 إلى 16 حرفًا فقط لكل اسم",
@@ -483,6 +495,10 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                         label: "البريد الإلكتروني*",
                         eamilFormat: "يجب أن تكون صيغة البريد إلكتروني صحيحة",
                         placeholder: "مثال: example@email.com",
+                    },
+                    vendorId: {
+                        label: "إختر البائع",
+                        notSupported: "غير موجود في القائمة",
                     },
                     maxKilometerDelivery: {
                         label: "أقصي مسافة توصيل (بالكيلومترات)",
@@ -695,6 +711,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                 categoryFormInfo: {
                     addCategoryTitle: "إضافة صنف",
                     editCategoryTitle: "تعديل صنف",
+                    noCategory: "لا يوجد أصناف",
                     name: {
                         label: "الإسم بالإنجليزي*",
                         errorMessage: "يجب أن لا يكون فارغاً"
@@ -729,6 +746,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     processedDate: { label: "تاريخ المعالجة" },
                     deliveredDate: { label: "تاريخ التوصيل" },
                     vendorName: { label: "إسم البائع" },
+                    selectVendorType: "إختر نوع البائع",
                     viewDetails: "عرض التفاصيل",
                     noOrders: "لا توجد طلبات",
                     notYet: "لم يتم بعد",
@@ -754,7 +772,7 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     numOfItems: "عدد العناصر",
                     orderTotal: "إجمالي الطلب",
                     product: "المنتج",
-                    quantity: "المية",
+                    quantity: "الكمية",
                     price: "السعر",
                     total: "الإجمالي",
                     subtotal: "السعر",

@@ -16,7 +16,7 @@ const VendorsList = () => {
     const{ t, i18n} = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
     const axiosPrivate = useAxiosPrivate()
-    const tVendorInfo = t("vendorFormIfno")
+    const tVendorInfo = t("vendorFormInfo")
     const [state, _,setChangeData] = useAxiosFetchApi(VENDOR_LIST_URL.concat("?roleName=VENDOR"), {}, sessionToken);
     const vendorList = state.data?.list;
     const queryVendors = vendorList?.filter((data) =>

@@ -16,12 +16,11 @@ const ProductsList = ({routeRole}) => {
     const { auth, setAuth } = useAuth();
     const [showEditModal, setShowEditModal] = useState(false);
     const token = auth.token;
-    const refreshToken = auth.refreshToken;
     const location = useLocation();
     const{t, i18n} = useTranslation();
     const pInfo = t("productFormInfo")
     const vendor = location?.state?.vendor;
-    const vendorProductsUrl = PRODUCT_LIST_URL.replace("{id}", `${vendor?.vendorId??auth.vendorId}`).concat("?roleName=VENDOR");
+    const vendorProductsUrl = PRODUCT_LIST_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`).concat("?roleName=VENDOR");
     const sessionToken = auth.token;
     const [state, _, setChangeData] = useAxiosFetchApi(vendorProductsUrl, {}, sessionToken);
     const productList = state.data?.list;
@@ -31,11 +30,11 @@ const ProductsList = ({routeRole}) => {
         setProducts(state.data?.list)
     }, [state.data, setProducts])
 
-    useEffect(()=>{
-        if(vendor){
-            setAuth({...vendor, token, refreshToken})
+    useEffect(() => {
+        if (vendor) {
+            setAuth((prev)=>({ ...prev, vendor }));
         }
-    }, [vendor, token, refreshToken, setAuth])
+    }, [vendor, setAuth]);
 
     function onTogglePublishing(published, productId) {
         const otherProducts=productList.filter(prod=>prod.productId!==productId);

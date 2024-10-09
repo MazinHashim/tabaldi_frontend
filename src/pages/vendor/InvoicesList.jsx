@@ -12,7 +12,7 @@ const InvoicesList = () => {
     const{t, i18n} = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
     const tInvoice = t("invoiceInfo")
-    const vendorInvoicesUrl = INVOICE_LIST_URL.replace("{id}", `${auth.vendorId}`);
+    const vendorInvoicesUrl = INVOICE_LIST_URL.replace("{id}", `${auth.vendor?.vendorId}`);
     const sessionToken = auth.token;
     const [state] = useAxiosFetchApi(vendorInvoicesUrl, {}, sessionToken);
     const invoiceList = state.data?.list;

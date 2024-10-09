@@ -100,8 +100,8 @@ const AddOrEditAdvertisement = ({currentAdvertisement, isEdit=false, onEdit}) =>
             {!currentAdvertisement?.vendor?.vendorId && isEdit?"":
             <div className="md:w-1/4 my-6">
               <label htmlFor="vendorId" className="text-lg">{tAdvertisementInfo.vendorId?.label}</label>
-              <VendorSelect currentAdvertisement={currentAdvertisement}
-               vendorList={vendorList} tAdvertisementInfo={tAdvertisementInfo} />
+              <VendorSelect currentData={currentAdvertisement}
+               vendorList={vendorList} tDataInfo={tAdvertisementInfo} />
               {/* <select
                 name={"vendorId"}
                 defaultValue={currentAdvertisement?.vendor?.vendorId}

@@ -33,9 +33,9 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
   });
 
   useEffect(()=>{
-    const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${auth.vendorId}`);
+    const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${auth.vendor?.vendorId}`);
     setUrl(vendorCategoriesUrl)
-  }, [auth.vendorId, setUrl])
+  }, [auth.vendor?.vendorId, setUrl])
 
   const categoryList = state.data?.list;
   
@@ -50,7 +50,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
       var companyProfit = !auth.role
       ? formData.companyProfit
       :currentProduct?.companyProfit;
-      var vendorId = auth.vendorId;
+      var vendorId = auth.vendor?.vendorId;
       var productId = (isEdit?currentProduct.productId:null);
       const fd = new FormData();
       validator.fillProductFormData(fd, formDataWithOptions, images, companyProfit, productId, vendorId)

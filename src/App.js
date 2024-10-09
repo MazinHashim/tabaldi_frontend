@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import './App.css';
 import { AuthProvider } from './providers/AuthProvider';
 import RequiredAuth from './layouts/RequiredAuth';
+import UsersList from './pages/vendor/UsersList';
 import AdminHome from './pages/admin/AdminHome';
 import AddOrEditVendorProfile from './pages/admin/AddOrEditVendorProfile';
 import VendorsList from './pages/admin/VendorsList';
@@ -34,6 +35,7 @@ const router = createBrowserRouter(
         <Route path='advertisements' element={<AdvertisementsList />} />
         <Route path='vendors/products' element={<ProductsList routeRole={"SUPERADMIN"}/>} />
         <Route path='vendors/categories' element={<CategoriesList routeRole={"SUPERADMIN"}/>}/>
+        <Route path='vendors/users' element={<UsersList routeRole={"SUPERADMIN"}/>}/>
         <Route path='vendors/products/product-details' element={<ProductDetails/>} />
         <Route path='vendor-info' element={<AddOrEditVendorProfile />} />
         <Route path='orders/pending' element={<OrdersList routeRole={"SUPERADMIN"}/>}/>
@@ -47,6 +49,7 @@ const router = createBrowserRouter(
         <Route path='product-details' element={<ProductDetails/>} />
         <Route path='product-info' element={<AddOrEditProduct />}/>
         <Route path='categories' element={<CategoriesList/>}/>
+        <Route path='users' element={<UsersList />}/>
         <Route path='orders' element={<OrdersList/>}/>
         <Route path='order-details' element={<OrderDetails/>}/>
         <Route path='invoices' element={<InvoicesList />}/>

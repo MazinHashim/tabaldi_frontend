@@ -38,7 +38,7 @@ const PhoneVerification = () => {
             localStorage.setItem("session_token", response?.data.token)
             localStorage.setItem("refresh_token", response?.data.refreshToken)
             setAuth(response?.data);
-            const from = response?.data.role==="VENDOR"?"/vendor" : "/admin" // "/" to navigate to admin -- "/vendor" to navigate to vendors
+            const from = response?.data.role.includes("VENDOR")?"/vendor" : "/admin" // "/" to navigate to admin -- "/vendor" to navigate to vendors
             navigate(from, { replace: true })
             toast.success(response?.data.message);
         } catch (error) {

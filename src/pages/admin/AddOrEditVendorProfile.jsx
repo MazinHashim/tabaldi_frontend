@@ -13,7 +13,7 @@ const VENDOR_ADD_INFO_URL = "/vendors/save";
 const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
   const{t, i18n} = useTranslation();
   const axiosPrivate = useAxiosPrivate()
-  const tVendorInfo = t("vendorFormIfno")
+  const tVendorInfo = t("vendorFormInfo")
   const [errors, setErrors] = useState();
   const [previewUrls, setPreviewUrls] = useState({});
   const [marker, setMarker] = useState(isEdit?{lat: currentVendor.lat, lng: currentVendor.lng}:null);
@@ -26,7 +26,7 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
       await validator.validationSchema(tVendorInfo, isEdit, t("requiredMessage"))
       .validate(formDataWithCoord, {abortEarly: false});
       // userId will initialize after add user response
-      var userId = (isEdit?currentVendor.user.userId:null);
+      var userId = (isEdit?currentVendor.userId:null);
       var vendorId = (isEdit?currentVendor.vendorId:null);
       const fd = new FormData();
       validator.fillVendorFormData(fd, formDataWithCoord, userId, vendorId)
@@ -82,14 +82,14 @@ const AddOrEditVendorProfile = ({currentVendor, isEdit=false, onEdit}) => {
             </div>
             <div className="md:w-1/4 my-6">
               <label htmlFor="phone" className="text-lg">{tVendorInfo.phone?.label}</label>
-              <input type="text" name="phone" id="phone" defaultValue={currentVendor?.user.phone??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.phone?.placeholder}/>
+              <input type="text" name="phone" id="phone" defaultValue={currentVendor?.userPhone??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.phone?.placeholder}/>
               {errors?.phone&&<div className='text-red-600'>{errors?.phone}</div>}
             </div>
           </div>
           <div className="flex flex-col md:flex-row flex-wrap justify-between">
             <div className="md:w-1/4 my-6">
               <label htmlFor="email" className="text-lg">{tVendorInfo.email?.label}</label>
-              <input type="email" name="email" id="email" defaultValue={currentVendor?.user.email??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.email?.placeholder} />
+              <input type="email" name="email" id="email" defaultValue={currentVendor?.userEmail??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tVendorInfo.email?.placeholder} />
               {errors?.email&&<div className='text-red-600'>{errors?.email}</div>}
             </div>
             <div className="md:w-1/4 my-6">

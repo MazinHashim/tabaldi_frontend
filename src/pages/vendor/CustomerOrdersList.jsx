@@ -13,7 +13,7 @@ const OrdersList = ({routeRole}) => {
     var ordersUrl = PENDING_ORDER_LIST_URL;
     const { auth } = useAuth();
     if(routeRole!=="SUPERADMIN"){
-        ordersUrl = ORDER_LIST_URL.replace("{id}", `${auth.vendorId}`);
+        ordersUrl = ORDER_LIST_URL.replace("{id}", `${auth.vendor?.vendorId}`);
     }
     const sessionToken = auth.token;
     const [state] = useAxiosFetchApi(ordersUrl, {}, sessionToken);

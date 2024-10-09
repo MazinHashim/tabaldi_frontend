@@ -31,8 +31,8 @@ const FrequentVendorsTable = ({state, title, labels}) => {
                 : state.data?.details.frequentVendors.map((frequentVendor)=>{
                   return <tr key={frequentVendor.vendor.vendorId}>
                       <td className="whitespace-nowrap p-4 font-medium">{frequentVendor.vendor.fullName}</td>
-                      <td className="whitespace-nowrap p-4 text-start">{frequentVendor.vendor.user.email}</td>
-                      <td className="whitespace-nowrap p-4">{frequentVendor.vendor.user.phone}</td>
+                      <td className="whitespace-nowrap p-4 text-start">{frequentVendor.vendor.userEmail}</td>
+                      <td className="whitespace-nowrap p-4">{frequentVendor.vendor.userPhone}</td>
                       <td className="whitespace-nowrap p-4">2024-05-03 21:00:54</td>
                       <td className="whitespace-nowrap p-4">{frequentVendor.vendor.vendorType}</td>
                       <td className="whitespace-nowrap p-4">{frequentVendor.frequency}</td>

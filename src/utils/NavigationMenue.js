@@ -7,6 +7,7 @@ export const vendorMenue =
     { screenId: 4, arTitle: "الأصناف", title: "Categories", route: "categories" },
     { screenId: 5, arTitle: "الطلبات", title: "Orders", route: "orders" },
     { screenId: 6, arTitle: "الفواتير", title: "Invoices", route: "invoices" },
+    { screenId: 7, arTitle: "قائمة المستخدمين", title: "Users", route: "users" },
 ];
 
 export const adminMenue =

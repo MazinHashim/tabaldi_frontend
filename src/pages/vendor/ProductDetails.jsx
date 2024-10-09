@@ -147,8 +147,8 @@ const ProductDetails = () => {
             toast.error(error.response?.data.message);
         }
     }
-    const totalPrice = selectedProduct.price + (selectedProduct.price * selectedProduct.companyProfit / 100);
-    const selectedProductPrice = (Math.round(totalPrice * 2) / 2).toFixed(2);
+    // const totalPrice = selectedProduct.price + (selectedProduct.price * selectedProduct.companyProfit / 100);
+    const selectedProductPrice = (Math.round(selectedProduct.finalPrice * 2) / 2).toFixed(2);
     const handleAddImage = async (file) => {
         try {
             const formData = new FormData();
