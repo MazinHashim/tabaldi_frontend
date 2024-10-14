@@ -96,63 +96,6 @@ nav.rtl a.active::after {
   transition-duration: 0.25s;
   transition-timing-function: linear;
 }
-/* 
-.home-card {
-  box-shadow: rgba(158, 154, 154, 0.4) 0px 10px 30px;
-}
-
-.home-card .actions,
-.files-card .actions {
-  visibility: hidden;
-  opacity: 0;
-  transition-duration: 0.25s;
-  transition-timing-function: ease-in-out;
-}
-
-.home-card:hover .actions,
-.files-card:hover .actions {
-  visibility: visible;
-  opacity: 1;
-}
-
-.files-card,
-.new-file-btn .z-10 {
-  border: 1px solid var(--primarycolor);
-  border-style: dashed;
-  transition: all 0.5s;
-}
-
-.files-card:hover {
-  border: none;
-  background-color: var(--primarycolor);
-}
-
-.files-card .z-20 {
-  right: 1.25rem;
-  transition: all 0.5s;
-}
-
-.files-card:hover .z-20 {
-  right: 0.6rem;
-  top: 0.6rem
-}
-
-.new-file-btn .z-20 {
-  color: #fff;
-  right: 0.5rem;
-  background-color: var(--primarycolor);
-  transition: all 0.5s;
-}
-
-.new-file-btn .z-20:hover {
-  color: var(--primarycolor);
-  top: 0;
-  right: 0;
-  cursor: pointer;
-  border: 1px solid var(--primarycolor);
-  border-style: dashed;
-  background-color: #fff;
-} */
 .nav-height{
   min-height: calc(100vh - 12.3vh);
 }

@@ -24,7 +24,7 @@ const RequiredAuth = ({routeRole}) => {
     const location = useLocation();
     const navigate = useNavigate();
     const userProfile = state.data?.user;
-    var userRole = {};
+    var userRole = "";
     const tMain = t("main")
     useEffect(() => {
         if (state.data?.user) {
@@ -77,14 +77,20 @@ const RequiredAuth = ({routeRole}) => {
                         </div>
                         {userRole?.includes("VENDOR") &&
                             <nav className={`${i18n.dir()} pt-20 nav-height font-bold flex flex-col py-3 px-8`}>
-                                {vendorMenue.map((navigator) =>
-                                    <NavLink key={navigator.screenId} to={navigator.route}>{i18n.dir()==='rtl'?navigator.arTitle:navigator.title}</NavLink>)
-                                }
+                            {userRole?.includes("VENDOR_USER") 
+                                ? vendorMenue
+                                    .filter(navigator => navigator.route !== "users") // Exclude "users" route
+                                    .map((navigator) =>
+                                        <NavLink key={navigator.screenId} to={navigator.route}>{i18n.dir()==='rtl'?navigator.arTitle:navigator.title}</NavLink>)
+                                : vendorMenue
+                                    .map((navigator) =>
+                                        <NavLink key={navigator.screenId} to={navigator.route}>{i18n.dir()==='rtl'?navigator.arTitle:navigator.title}</NavLink>)
+                            }
                             </nav>}
                         {userRole === "SUPERADMIN" &&
                             <nav className={`${i18n.dir()} pt-20 nav-height font-bold flex flex-col py-3 px-8`}>
-                                {adminMenue.map(navigator =>
-                                    <NavLink key={navigator.screenId} to={navigator.route}>{i18n.dir()==='rtl'?navigator.arTitle:navigator.title}</NavLink>)
+                                {adminMenue.map((navigator) => {
+                                    return <NavLink key={navigator.screenId} to={navigator.route}>{i18n.dir()==='rtl'?navigator.arTitle:navigator.title}</NavLink>})
                                 }
                             </nav>}
                     </div>

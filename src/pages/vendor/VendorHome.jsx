@@ -70,6 +70,7 @@ const VendorHome = () => {
         <NavLink to={"/orders"} className='border-0 bg-primary-color rounded-xl shadow-lg py-2 px-5 text-white'>
           <h2 className='text-2xl font-medium'>5</h2> {tHome["trackCustTxt"]}</NavLink>
       </div>
+      {!auth.role?.includes("VENDOR_USER") &&
       <div className="flex justify-between my-6">
         <div className="flex flex-col w-[30%] p-4 rounded-2xl shadow-lg bg-gray-50 border border-gray-100">
           {state.isLoading && !details
@@ -113,7 +114,7 @@ const VendorHome = () => {
             <h2 className='font-semibold mt-3'>{details?.numberOfProducts}</h2>
           </div>}
         </div>
-      </div>
+      </div>}
       <RecentOrdersTable className="my-6" state={state} orders={state.data?.details?.pendingOrders?.orders} title={tHome["pendingTxt"]}/>
       <FrequentProductsTable className="my-6" state={state} title={tHome["freqProdTxt"]} labels={tHome}/>
     </div>

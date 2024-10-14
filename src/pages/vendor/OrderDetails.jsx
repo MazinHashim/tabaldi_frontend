@@ -13,12 +13,15 @@ import useAxiosFetchApi from '../../hooks/useFetch';
 import AppLoading from '../../utils/AppLoading';
 import { baseURL } from '../../apis/axios';
 const CHANGE_STATUS_URL="/orders/change/status"
+const SAVE_NOTE_URL = "/orders/save/note"
 const INVOICE_URL = "/invoices/order"
 const OrderDetails = () => {
     const{t, i18n} = useTranslation();
     const tOrder = t("orderDetailsInfo")
     const { auth } = useAuth();
     const statusRef = useRef(null)
+    const noteRef = useRef(null)
+    const tCard = t("vendorCard")
     const axiosPrivate = useAxiosPrivate();
     const [isLoading, setLoading] = useState(false);
     const location = useLocation();
@@ -66,6 +69,38 @@ const OrderDetails = () => {
     }
     const bgColor=invoice?.status==="PAID"?"bg-green-200":"bg-red-200";
     const txtColor=invoice?.status==="PAID"?"text-green-600":"text-red-600";
+    const vendorCoordinates = { lat: selectedOrder[0].vendor.lat, lng: selectedOrder[0].vendor.lng };
+    const customerCoordinates = { lat: selectedOrder[0].address.latitude, lng: selectedOrder[0].address.longitude };
+
+    const shareCoordinates = (coordinates) => {
+        if(coordinates.lat && coordinates.lng){
+            const url = `https://www.google.com/maps/search/?api=1&query=${coordinates.lat},${coordinates.lng}`;
+            navigator.clipboard.writeText(url).then(() => {
+                toast.success(tCard["locationCopied"]);
+            }).catch(err => {
+                toast.error(tCard["copyFailed"]);
+            });
+        } else {
+            toast.error(tCard["noLocationAvailable"]);
+        }
+    };
+    async function handleSaveNote() {
+        if(noteRef.current.value){
+            try{
+                setLoading(true)
+                const orderChangedResponse = await axiosPrivate.post(SAVE_NOTE_URL+`/${selectedOrder[0].orderId}`,
+                    {vendorNote: noteRef.current.value},{headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
+                );
+                setLoading(false)
+                const otherOrders=orders.filter(ord=>ord.orderId!==selectedOrder[0].orderId);
+                setOrders([...otherOrders, {...selectedOrder[0], vendorNote: noteRef.current.value}])
+                toast.success(orderChangedResponse?.data.message);
+            } catch (error) {
+                setLoading(false)
+                toast.error(error.response?.data.message);
+            }
+        }
+    }
   return (
     <>
     <ToastContainer />
@@ -126,21 +161,29 @@ const OrderDetails = () => {
                     </div>
                 </div>
             </div>
+            <div className="flex mb-4 justify-end">
+                <button className="text-sm bg-secondary-color text-white py-1 px-2 rounded" onClick={() => shareCoordinates(vendorCoordinates)}>
+                    {tCard.shareLocationVendorBtn}
+                </button>
+                <button className="text-sm mx-7 bg-secondary-color text-white py-1 px-2 rounded" onClick={() => shareCoordinates(customerCoordinates)}>
+                    {tCard.shareLocationCustomerBtn}
+                </button>
+            </div>
             <table className="min-w-full text-center text-sm font-light">
             <thead
                 className="bg-neutral-100 rounded-lg font-medium dark:border-neutral-500 dark:text-neutral-800">
                 <tr>
-                <th scope="col" className="p-4 text-start" colSpan={2}>{tOrder["product"]}</th>
+                <th scope="col" className="py-4 px-9 text-start" colSpan={2}>{tOrder["product"]}</th>
                 <th scope="col" className="p-4">{tOrder["quantity"]}</th>
                 <th scope="col" className="p-4">{tOrder["price"]}</th>
-                <th scope="col" className="p-4 text-end">{tOrder["total"]}</th>
+                <th scope="col" className="py-4 px-9 text-end">{tOrder["total"]}</th>
                 </tr>
             </thead>
             <tbody>
                 {selectedOrder[0].cartItems.map((item)=>{
                     const img = productImages?productImages.filter(image=>image.id.includes(item.product.productId)):null;
                 return <><tr key={item.itemId} className='border-b border-gray-100'>
-                    <td className="whitespace-nowrap">
+                    <td className="whitespace-nowrap py-2 px-7">
                         {!img?"loading...":
                         <img className="rounded-md w-15 h-16 m-2" 
                         src={img[0].data
@@ -148,21 +191,21 @@ const OrderDetails = () => {
                             :orderProfile}
                         alt={`${img[0].id}`} />}
                     </td>
-                    <td className="whitespace-nowrap font-medium text-start ps-7">{item.product.name}</td>
+                    <td className="whitespace-nowrap font-medium text-start">{item.product.name}</td>
                     <td className="whitespace-nowrap font-medium p-2">{item.quantity}</td>
                     <td className="whitespace-nowrap font-medium p-2">{item.price}</td>
-                    <td className="whitespace-nowrap font-medium p-2 text-end">{item.quantity*item.price} AED</td>
+                    <td className="whitespace-nowrap font-medium py-2 px-9 text-end">{item.quantity*item.price} AED</td>
                 </tr>
                 {!item.selectedOptions?"":
                 item.selectedOptions.map(option=>{
-                    return <tr className='border-b border-gray-300'>
+                    return <tr key={option.optionId} className='border-b border-gray-300'>
                         <td className="whitespace-nowrap"></td>
                         <td className="whitespace-nowrap capitalize text-start">
                             <IoCheckmarkDone className='inline p-1 secondary-color' size={25}/>
                             {option.name}</td>
                         <td className="whitespace-nowrap px-2">{item.quantity}</td>
                         <td className="whitespace-nowrap px-2">{option.fee??"_"}</td>
-                        <td className="whitespace-nowrap px-2 text-end">{option.fee*item.quantity??"_"} {t("aedUnit")}</td>
+                        <td className="whitespace-nowrap py-2 px-9 text-end">{option.fee*item.quantity??"_"} {t("aedUnit")}</td>
                     </tr>
                 })}
                 </>
@@ -170,27 +213,27 @@ const OrderDetails = () => {
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
                     <td className="border-b border-gray-300 capitalize text-start">{tOrder["subtotal"]} </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.subtotal} {t("aedUnit")}</td>
+                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.subtotal} {t("aedUnit")}</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
                     <td className="border-b border-gray-300 capitalize text-start">{tOrder["discount"]} </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.discount} {t("aedUnit")}</td>
+                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.discount} {t("aedUnit")}</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
                     <td className="border-b border-gray-300 capitalize text-start">{tOrder["shippingCost"]} </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.shippingCost} {t("aedUnit")}</td>
+                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.shippingCost} {t("aedUnit")}</td>
                 </tr>
-                <tr className='font-bold'>
+                {/* <tr className='font-bold'>
                     <td colSpan={3}></td>
                     <td className="border-b border-gray-300 capitalize text-start">{tOrder["vat"]} </td>
-                    <td className='border-b border-gray-300 p-2 text-end'>{invoice.summary.taxes} {t("aedUnit")}</td>
-                </tr>
+                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.taxes} {t("aedUnit")}</td>
+                </tr> */}
                 <tr className='font-bold'>
                     <td colSpan={3}></td>
                     <td className="capitalize text-start">{tOrder["grandTotal"]}: </td>
-                    <td className='p-2 text-end'>{invoice.summary.total} {t("aedUnit")}</td>
+                    <td className='py-2 px-9 text-end'>{invoice.summary.total} {t("aedUnit")}</td>
                 </tr>
             </tbody>
             </table>
@@ -201,8 +244,11 @@ const OrderDetails = () => {
                 </div>
                 <div className="w-1/2">
                     <h3 className='my-2'>{tOrder["notes"]}</h3>
-                    <textarea placeholder='Write note for order' className='rounded-md border border-gray-200 w-full h-24 p-2' name="note" id="note"></textarea>
-                    <button className="bg-primary-color text-white">{tOrder["saveNotes"]}</button>
+                    <textarea ref={noteRef} defaultValue={selectedOrder[0].vendorNotes||""} placeholder='Write note for order' className='rounded-md border border-gray-200 w-full h-24 p-2' id="note"></textarea>
+                    {selectedOrder[0].status!=="DELIVERED" && selectedOrder[0].status!=="CANCELED"
+                    ? <button onClick={handleSaveNote} className={`${isLoading?'invisible':''} bg-primary-color text-white`}>{tOrder["saveNotes"]}</button>
+                    : <hr style={{border: "1px dashed grey", marginTop: 10, width: "50%"}}/>
+                    }
                 </div>
             </div>
         </div>}

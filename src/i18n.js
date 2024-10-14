@@ -158,6 +158,8 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     viewProducts: "View Products",
                     kmUnit: " KM",
                     aedUnit: " AED",
+                    shareLocationVendorBtn: "Share Vendor Location",
+                    shareLocationCustomerBtn: "Share Customer Location",
                     locationCopied: "Location copied",
                     copyFailed: "Location copy failed",
                     noLocationAvailable: "Vendor Location Not Selected From The Map"
@@ -555,6 +557,8 @@ i18n.use(LanguageDetector).use(initReactI18next).init({
                     working: "يعمل",
                     kmUnit: " كم",
                     aedUnit: " درهم",
+                    shareLocationVendorBtn: "مشاركة موقع البائع",
+                    shareLocationCustomerBtn: "مشاركة موقع الزبون",
                     locationCopied: "تم نسخ رابط الموقع",
                     copyFailed: "لم يتم نسخ الرابط",
                     noLocationAvailable: "موقع المحل غير محددة من الخريطة"
