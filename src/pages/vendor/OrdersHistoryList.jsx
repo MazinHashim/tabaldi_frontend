@@ -122,7 +122,8 @@ const OrdersHistoryList = () => {
         const isInDateRange = (!startDate || orderDate >= new Date(startDate)) &&
             (!endDate || orderDate <= new Date(endDate));
         const matchesVendorType = !vendorType || order.vendor.vendorType === vendorType;
-        const matchesVendorName = !vendorName || order.vendor.fullName.toLowerCase().includes(vendorName.toLowerCase());
+        const matchesVendorName = !vendorName || order.vendor.fullName.toLowerCase().includes(vendorName.toLowerCase())
+                                  || order.vendor.arFullName.toLowerCase().includes(vendorName.toLowerCase());
         return isInDateRange && matchesVendorType && matchesVendorName;
     });
 
