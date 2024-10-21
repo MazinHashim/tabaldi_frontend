@@ -23,7 +23,7 @@ const VendorsList = () => {
         // Object.values(data).some((value) =>
         data.fullName?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
         data.arFullName?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
-        data.user.phone.includes(searchQuery.toLowerCase())
+        data.userPhone.includes(searchQuery.toLowerCase())
         // )
     )
 
