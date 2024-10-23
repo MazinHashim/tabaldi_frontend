@@ -25,11 +25,10 @@ const useAxiosPrivate = () => {
                 return response;
             },
             async (error) => {
-                console.log(error);
                 const prevRequest = error?.config;
                 // console.log(prevRequest);
                 // should access response object and check if its status is 403 instead of ERR_NETWORK
-                if(error?.code === "ERR_NETWORK" && !prevRequest?.sent){
+                if(error?.response?.status===403 && !prevRequest?.sent){
                     console.log(`BREAER TOKEN RESETING ${error?.response?.status}`);  
                     prevRequest.sent = true;
                     const newAuth = await refresh();
