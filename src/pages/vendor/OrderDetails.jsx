@@ -205,7 +205,7 @@ const OrderDetails = () => {
                             {option.name}</td>
                         <td className="whitespace-nowrap px-2">{item.quantity}</td>
                         <td className="whitespace-nowrap px-2">{option.fee??"_"}</td>
-                        <td className="whitespace-nowrap py-2 px-9 text-end">{option.fee*item.quantity??"_"} {t("aedUnit")}</td>
+                        <td className="whitespace-nowrap py-2 px-9 text-end">{item.quantity*option.fee??"_"} {t("aedUnit")}</td>
                     </tr>
                 })}
                 </>
