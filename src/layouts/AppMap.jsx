@@ -52,11 +52,11 @@ function AppMap({marker, setMarker}) {
     <div>
       <input
         type="text"
+        className="sm:text-sm bg-slate-100 rounded-lg p-2.5 mb-2"
         value={locationName}
         onChange={(e) => setLocationName(e.target.value)} // Update location name state
         onBlur={handleBlur} // Call handleBlur on blur
         placeholder="Enter location name"
-        className="mb-2 p-1 border rounded"
       />
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
