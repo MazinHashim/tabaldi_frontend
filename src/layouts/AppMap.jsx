@@ -29,7 +29,8 @@ function AppMap({marker, setMarker}) {
     });
   }, [setMarker]);
 
-  const handleBlur = async () => {
+  const handleBlur = async (e) => {
+    e.preventDefault();
     if (locationName) {
       try {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${locationName}&components=country:AE&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`); // Added components parameter
@@ -59,7 +60,7 @@ function AppMap({marker, setMarker}) {
       />
       <button
         onClick={handleBlur} // Call handleBlur on button click
-        className="bg-primary-color text-white rounded-lg p-2.5 mb-2"
+        className="bg-primary-color text-white rounded-lg p-0.5 mb-2"
       >
         Search Location
       </button>
