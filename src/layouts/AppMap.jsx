@@ -53,14 +53,14 @@ function AppMap({marker, setMarker}) {
     <div>
       <input
         type="text"
-        className="sm:text-sm bg-slate-100 rounded-lg p-2.5 mb-2"
+        className="sm:text-sm bg-slate-100 rounded-lg p-1.5 mb-2"
         value={locationName}
         onChange={(e) => setLocationName(e.target.value)} // Update location name state
         placeholder="Enter location name"
       />
       <button
         onClick={handleBlur} // Call handleBlur on button click
-        className="bg-primary-color text-white rounded-lg p-0.5 mb-2"
+        className="bg-primary-color text-white rounded-lg p-1.5 mb-2"
       >
         Search Location
       </button>
