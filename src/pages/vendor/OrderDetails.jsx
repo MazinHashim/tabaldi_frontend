@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IoCheckmarkDone } from "react-icons/io5";
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import orderProfile from '../../img/vendor_profile.png'
 // import ConfirmationModal from '../modals/ConfirmationModal';
 import { ToastContainer, toast } from 'react-toastify';
@@ -24,9 +24,9 @@ const OrderDetails = () => {
     const tCard = t("vendorCard")
     const axiosPrivate = useAxiosPrivate();
     const [isLoading, setLoading] = useState(false);
-    const location = useLocation();
+    const {orderId} = useParams();
     const navigate = useNavigate();
-    const orderId=location.state.orderId;
+    // const orderId=location.state.orderId;
     const files = useFetchFileData()
     const [productImages, setProductImages] = useState(null);
     const { orders, setOrders } = useOrdersData();

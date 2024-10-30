@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FaPen, FaRegPlusSquare, FaTrash } from "react-icons/fa";
 import { useProductsData } from '../../hooks/appHooks';
@@ -31,12 +31,13 @@ const ProductDetails = () => {
     const [newGroup, setIsNewGroup] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const{t, i18n} = useTranslation();
+    const {productId} = useParams();
     const axiosPrivate = useAxiosPrivate()
     const tCard = t("vendorCard")
     const pCard = t("productCard")
     const tOptionInfo = t("optionFormInfo")
     const optionInputs = validator.translateInputText(tOptionInfo)
-    const productId=location.state.productId;
+    // const productId=location.state.productId;
     const navigate = useNavigate()
     const { products, setProducts } = useProductsData();
     useEffect(() => {

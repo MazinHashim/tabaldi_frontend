@@ -46,12 +46,12 @@ const router = createBrowserRouter(
       <Route path="/" element={<RequiredAuth routeRole={"VENDOR"} />}>
         <Route path='vendor' element={<VendorHome />}/>
         <Route path='products' element={<ProductsList/>} />
-        <Route path='product-details' element={<ProductDetails/>} />
+        <Route path='product-details/{productId}' element={<ProductDetails/>} />
         <Route path='product-info' element={<AddOrEditProduct />}/>
         <Route path='categories' element={<CategoriesList/>}/>
         <Route path='users' element={<UsersList />}/>
         <Route path='orders' element={<OrdersList/>}/>
-        <Route path='order-details' element={<OrderDetails/>}/>
+        <Route path='order-details/{orderId}' element={<OrderDetails/>}/>
         <Route path='invoices' element={<InvoicesList />}/>
       </Route>
     </Route>

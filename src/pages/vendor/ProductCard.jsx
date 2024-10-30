@@ -20,7 +20,7 @@ const ProductCard = ({product, routeRole}) => {
     const tCard = t("productCard")
 
     function goToProductDetails(productId) {
-        navigate((routeRole!=="SUPERADMIN"?"/":"")+'product-details', {state: { productId }});
+        navigate((routeRole!=="SUPERADMIN"?"/":"")+`product-details/${productId}`);
     }
 
     async function toggleProductPublishing(productId){
