@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import axios from 'axios'; // Import axios for making API requests
+import axios from "../apis/axios";
 
 const libraries = ["places"];
 const mapContainerStyle = {
