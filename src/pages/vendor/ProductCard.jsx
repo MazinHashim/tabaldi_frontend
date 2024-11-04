@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import productProfile from '../../img/vendor_profile.png'
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { baseURL } from '../../apis/axios';
 import { GrDeploy } from 'react-icons/gr';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
@@ -13,15 +13,10 @@ import { useProductsData } from '../../hooks/appHooks';
 const TOGGLE_PUBLISH_URL = "/products/toggle/publish"
 const ProductCard = ({product, routeRole}) => {
     const{t, i18n} = useTranslation();
-    const navigate = useNavigate()
     const axiosPrivate = useAxiosPrivate()
     const [isLoading, setLoading] = useState(false);
     const { products, setProducts } = useProductsData();
     const tCard = t("productCard")
-
-    function goToProductDetails(productId) {
-        navigate((routeRole!=="SUPERADMIN"?"/":"")+`product-details/${productId}`);
-    }
 
     async function toggleProductPublishing(productId){
         try{
@@ -81,8 +76,8 @@ const ProductCard = ({product, routeRole}) => {
         <hr/>
         <div className="text-sm flex justify-between items-center p-2 font-thin">
             <h5 className={`${product.quantity<=5?'text-red-500':'text-gray-500'}`}>{`${product.quantity} ` + (tCard["itemText"])}</h5>
-            <button key={product.productId} onClick={()=>goToProductDetails(product.productId)} className='text-white px-1 bg-primary-color rounded-md font-light'>
-                {tCard["showDetails"]}</button>
+            <Link key={product.productId} to={`${product.productId}`} className='text-white px-1 bg-primary-color rounded-md font-light'>
+                {tCard["showDetails"]}</Link>
         </div>
     </div>
     </>

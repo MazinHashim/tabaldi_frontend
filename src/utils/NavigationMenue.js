@@ -18,4 +18,5 @@ export const adminMenue =
     { screenId: 16, arTitle: "إضافة بائع", title: "Add Vendor", route: "vendor-info" },
     { screenId: 17, arTitle: "الطلبات المعلقة", title: "Pending Orders", route: "orders/pending" },
     { screenId: 18, arTitle: "الطلبات السابقة", title: "Orders History", route: "orders/history" },
+    { screenId: 7, arTitle: "قائمة المستخدمين", title: "Users", route: "admins/users" },
 ];

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IoCheckmarkDone } from "react-icons/io5";
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import orderProfile from '../../img/vendor_profile.png'
 // import ConfirmationModal from '../modals/ConfirmationModal';
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,18 +25,19 @@ const OrderDetails = () => {
     const axiosPrivate = useAxiosPrivate();
     const [isLoading, setLoading] = useState(false);
     const {orderId} = useParams();
+    
     const navigate = useNavigate();
     // const orderId=location.state.orderId;
     const files = useFetchFileData()
     const [productImages, setProductImages] = useState(null);
     const { orders, setOrders } = useOrdersData();
-    const selectedOrder = orders.filter((ord)=> ord.orderId===orderId);
     const [state] = useAxiosFetchApi(INVOICE_URL.concat(`/${orderId}`), {}, null);
     const invoice = state.data?.invoice;
+    const selectedOrder = invoice?.order;
     useEffect(()=>{
         const fetchData = async () => {
-            if(!productImages) {
-                const images = [...new Set(selectedOrder[0].cartItems.map(item=>{
+            if(!productImages && selectedOrder) {
+                const images = [...new Set(selectedOrder?.cartItems.map(item=>{
                     return item.product.images.map((img, i)=>
                     {return {id: `product ${item.product.productId}${i}`, path: img}})
                 }))];
@@ -47,19 +48,19 @@ const OrderDetails = () => {
 
         fetchData();
     }, [selectedOrder, files, productImages])
-    const customerName = `${selectedOrder[0].customer.firstName} ${selectedOrder[0].customer.lastName}`;
+    const customerName = `${selectedOrder?.customer.firstName} ${selectedOrder?.customer.lastName}`;
 
     async function handleChangeOrderStatus() {
         if(statusRef.current.value){
             try{
-                const params = `/${selectedOrder[0].orderId}?status=${statusRef.current.value}`;
+                const params = `/${selectedOrder.orderId}?status=${statusRef.current.value}`;
                 setLoading(true)
                 const orderChangedResponse = await axiosPrivate.get(CHANGE_STATUS_URL+params,
                     {headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
                 );
                 setLoading(false)
-                const otherOrders=orders.filter(ord=>ord.orderId!==selectedOrder[0].orderId);
-                setOrders([...otherOrders, {...selectedOrder[0], status: statusRef.current.value}])
+                const otherOrders=orders.filter(ord=>ord.orderId!==selectedOrder.orderId);
+                setOrders([...otherOrders, {...selectedOrder, status: statusRef.current.value}])
                 toast.success(orderChangedResponse?.data.message);
             } catch (error) {
                 setLoading(false)
@@ -69,8 +70,8 @@ const OrderDetails = () => {
     }
     const bgColor=invoice?.status==="PAID"?"bg-green-200":"bg-red-200";
     const txtColor=invoice?.status==="PAID"?"text-green-600":"text-red-600";
-    const vendorCoordinates = { lat: selectedOrder[0].vendor.lat, lng: selectedOrder[0].vendor.lng };
-    const customerCoordinates = { lat: selectedOrder[0].address.latitude, lng: selectedOrder[0].address.longitude };
+    const vendorCoordinates = { lat: selectedOrder?.vendor.lat, lng: selectedOrder?.vendor.lng };
+    const customerCoordinates = { lat: selectedOrder?.address.latitude, lng: selectedOrder?.address.longitude };
 
     const shareCoordinates = (coordinates) => {
         if(coordinates.lat && coordinates.lng){
@@ -88,12 +89,12 @@ const OrderDetails = () => {
         if(noteRef.current.value){
             try{
                 setLoading(true)
-                const orderChangedResponse = await axiosPrivate.post(SAVE_NOTE_URL+`/${selectedOrder[0].orderId}`,
+                const orderChangedResponse = await axiosPrivate.post(SAVE_NOTE_URL+`/${selectedOrder.orderId}`,
                     {vendorNote: noteRef.current.value},{headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json'}}
                 );
                 setLoading(false)
-                const otherOrders=orders.filter(ord=>ord.orderId!==selectedOrder[0].orderId);
-                setOrders([...otherOrders, {...selectedOrder[0], vendorNote: noteRef.current.value}])
+                const otherOrders=orders.filter(ord=>ord.orderId!==selectedOrder.orderId);
+                setOrders([...otherOrders, {...selectedOrder, vendorNote: noteRef.current.value}])
                 toast.success(orderChangedResponse?.data.message);
             } catch (error) {
                 setLoading(false)
@@ -116,11 +117,11 @@ const OrderDetails = () => {
             <div className="m-2 px-4">
                 <div className="flex justify-between">
                     <div className='flex items-center'>
-                        <h3>{tOrder["orderNumber"]} {selectedOrder[0].orderNumber}</h3>
+                        <h3>{tOrder["orderNumber"]} {selectedOrder.orderNumber}</h3>
                         <span className={"font-bold px-1 m-2 text-sm capitalize "
-                        + statusTextColor(selectedOrder[0].status) + " "
-                        + statusBGColor(selectedOrder[0].status) + " rounded-lg"}>
-                            {selectedOrder[0].status.toLowerCase()}
+                        + statusTextColor(selectedOrder.status) + " "
+                        + statusBGColor(selectedOrder.status) + " rounded-lg"}>
+                            {selectedOrder.status.toLowerCase()}
                         </span>
                     </div>
                     <div className='flex space-x-3 text-sm'>
@@ -140,22 +141,22 @@ const OrderDetails = () => {
                     <div className="flex-col space-y-2">
                         <h4>{tOrder["custDetails"]}</h4>
                         <p>{customerName}</p>
-                        <p>{selectedOrder[0].customer.user.email}</p>
-                        <p>{selectedOrder[0].customer.user.phone}</p>
+                        <p>{selectedOrder.customer.user.email}</p>
+                        <p>{selectedOrder.customer.user.phone}</p>
                         <p className='font-bold text-sm primary-color cursor-pointer'>{tOrder["viewProfile"]}</p>
                     </div>
                     <div className="flex-col space-y-2">
                         <h4>{tOrder["shippAddress"]}</h4>
-                        <p>{selectedOrder[0].address.name}</p>
-                        <p>{selectedOrder[0].address.street}</p>
-                        <p>{tOrder["contactNum"]} {selectedOrder[0].address.phone}</p>
+                        <p>{selectedOrder.address.name}</p>
+                        <p>{selectedOrder.address.street}</p>
+                        <p>{tOrder["contactNum"]} {selectedOrder.address.phone}</p>
                     </div>
                     <div className="flex-col space-y-2">
                         <h4>{tOrder["orderDetails"]}</h4>
-                        <p>{tOrder["orderNum"]}: {selectedOrder[0].orderNumber}</p>
-                        <p>{tOrder["orderDate"]}: {selectedOrder[0].orderDate}</p>
-                        <p>{tOrder["numOfItems"]}: {selectedOrder[0].cartItems.length} {"items"}</p>
-                        <p>{tOrder["orderTotal"]}: {selectedOrder[0].total} {t("aedUnit")} 
+                        <p>{tOrder["orderNum"]}: {selectedOrder.orderNumber}</p>
+                        <p>{tOrder["orderDate"]}: {selectedOrder.orderDate}</p>
+                        <p>{tOrder["numOfItems"]}: {selectedOrder.cartItems.length} {"items"}</p>
+                        <p>{tOrder["orderTotal"]}: {selectedOrder.total} {t("aedUnit")} 
                             <span className={`lowercase mx-2 text-sm px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
                                 {invoice.status}</span></p>
                     </div>
@@ -180,7 +181,7 @@ const OrderDetails = () => {
                 </tr>
             </thead>
             <tbody>
-                {selectedOrder[0].cartItems.map((item)=>{
+                {selectedOrder.cartItems.map((item)=>{
                     const img = productImages?productImages.filter(image=>image.id.includes(item.product.productId)):null;
                 return <><tr key={item.itemId} className='border-b border-gray-100'>
                     <td className="whitespace-nowrap py-2 px-7">
@@ -244,8 +245,8 @@ const OrderDetails = () => {
                 </div>
                 <div className="w-1/2">
                     <h3 className='my-2'>{tOrder["notes"]}</h3>
-                    <textarea ref={noteRef} defaultValue={selectedOrder[0].vendorNotes||""} placeholder='Write note for order' className='rounded-md border border-gray-200 w-full h-24 p-2' id="note"></textarea>
-                    {selectedOrder[0].status!=="DELIVERED" && selectedOrder[0].status!=="CANCELED"
+                    <textarea ref={noteRef} defaultValue={selectedOrder.vendorNotes||""} placeholder='Write note for order' className='rounded-md border border-gray-200 w-full h-24 p-2' id="note"></textarea>
+                    {selectedOrder.status!=="DELIVERED" && selectedOrder.status!=="CANCELED"
                     ? <button onClick={handleSaveNote} className={`${isLoading?'invisible':''} bg-primary-color text-white`}>{tOrder["saveNotes"]}</button>
                     : <hr style={{border: "1px dashed grey", marginTop: 10, width: "50%"}}/>
                     }

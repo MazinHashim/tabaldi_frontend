@@ -17,7 +17,7 @@ export const AuthProvider = ({children}) => {
     )
 }
 export const ProductProvider = ({children}) => {
-    const [products, setProducts] = useState({})
+    const [products, setProducts] = useState([])
 
     return (
         <ProductContext.Provider value={{ products, setProducts }}>
@@ -27,7 +27,7 @@ export const ProductProvider = ({children}) => {
 }
 
 export const OrderProvider = ({children}) => {
-    const [orders, setOrders] = useState({})
+    const [orders, setOrders] = useState([])
 
     return (
         <OrderContext.Provider value={{ orders, setOrders }}>
@@ -36,7 +36,7 @@ export const OrderProvider = ({children}) => {
     )
 }
 export const CategoryProvider = ({children}) => {
-    const [categories, setCategories] = useState({})
+    const [categories, setCategories] = useState([])
 
     return (
         <CategoryContext.Provider value={{ categories, setCategories }}>

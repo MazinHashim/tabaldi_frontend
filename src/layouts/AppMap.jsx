@@ -13,10 +13,10 @@ const options = {
 };
 
 function AppMap({marker, setMarker}) {
-  const [locationName, setLocationName] = useState(""); // State for location name
   const [center, setCenter] = useState({ lat: 25.197525, lng: 55.274288 });
-  // const [formattedAddress, setFormattedAddress] = useState("");
-  
+  const [searchResults, setSearchResults] = useState([]); // State for search results
+  const [loading, setLoading] = useState(false); // State for loading indicator
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -29,20 +29,33 @@ function AppMap({marker, setMarker}) {
     });
   }, [setMarker]);
 
-  const handleBlur = async (e) => {
+  const handleSearchLocation = async (e) => {
     e.preventDefault();
-    if (locationName) {
+    if (e.target.value) {
+      setLoading(true); // Set loading to true when starting the API call
+      setSearchResults([]);
       try {
-        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${locationName}&components=country:AE&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`); // Added components parameter
-        const { lat, lng } = response.data.results[0].geometry.location; // Get coordinates from response
-        // setFormattedAddress(response.data.results[0].formatted_address)
-        if(response.data.results[0].address_components.length>1){
-          setMarker({ lat, lng }); // Set marker to new coordinates
-          setCenter({ lat, lng }); // Update camera position to new coordinates
-        }
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.target.value}&components=country:AE&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&language=ar&radius=50000`); // Added language parameter
+        const results = response.data.predictions;
+        setSearchResults(results); // Set search results
       } catch (error) {
         console.error("Error fetching location coordinates:", error);
+      } finally {
+        setLoading(false); // Set loading to false when the API call is complete
       }
+    }
+  };
+
+  const handleSelect = async (result) => {
+    // Fetch place details to get lat and lng
+    try {
+      const response = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${result.place_id}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`);
+      const { lat, lng } = response.data.result.geometry.location; // Get lat and lng from the response
+      setMarker({ lat, lng }); // Set marker to selected coordinates
+      setCenter({ lat, lng }); // Update camera position to selected coordinates
+      setSearchResults([]); // Clear search results
+    } catch (error) {
+      console.error("Error fetching place details:", error);
     }
   };
 
@@ -51,19 +64,35 @@ function AppMap({marker, setMarker}) {
 
   return (
     <div>
-      <input
-        type="text"
-        className="sm:text-sm bg-slate-100 rounded-lg p-1.5 mb-2"
-        value={locationName}
-        onChange={(e) => setLocationName(e.target.value)} // Update location name state
-        placeholder="Enter location name"
-      />
-      <button
-        onClick={handleBlur} // Call handleBlur on button click
-        className="bg-primary-color text-white rounded-lg p-1.5 mb-2"
-      >
-        Search Location
-      </button>
+      <div className="flex">
+        <input
+          type="text"
+          className="sm:text-sm bg-slate-100 rounded-lg p-1.5 mb-2"
+          onClick={(e) => {
+            handleSearchLocation(e); // Call handleSearchLocation on input change
+          }}
+          onBlur={()=> {setSearchResults([])}}
+          placeholder="Enter location name"
+        />
+        {loading && <div className="p-2 text-gray-500">Loading...</div>}
+      </div>
+      {loading
+      ? ""
+      :(
+        <ul className="border border-gray-300 rounded-lg bg-white absolute z-10">
+          {searchResults.map((result) => (
+            <li
+              key={result.place_id}
+              onClick={() => handleSelect(result)} // Call handleSelect on result click
+              className="p-2 hover:bg-gray-200 cursor-pointer"
+            >
+              {result.status==="ZERO_RESULTS"
+              ? "No Result Found"
+              : result.structured_formatting.main_text}
+            </li>
+          ))}
+        </ul>
+      )}
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={16}
@@ -77,7 +106,6 @@ function AppMap({marker, setMarker}) {
         <div>
           <p className="mt-3">Latitude: <span className="bg-green-200 px-1 rounded-md mx-2">{marker.lat}</span>
           Longitude: <span className="bg-green-200 px-1 rounded-md mx-2">{marker.lng}</span></p>
-          {/* <p className="bg-green-200 px-1 mt-3">{formattedAddress}</p> */}
           <a
             href={`https://www.google.com/maps?q=${marker.lat},${marker.lng}`}
             target="_blank"

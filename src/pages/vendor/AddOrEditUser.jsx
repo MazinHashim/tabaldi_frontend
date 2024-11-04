@@ -9,7 +9,8 @@ import { ValidationError } from 'yup';
 // import VendorSelect from '../../utils/VendorSelect';
 import { useAuth } from '../../hooks/appHooks';
 
-const ADD_USER_INFO_URL = "/vendors/add/user";
+const ADD_VENDOR_USER_INFO_URL = "/vendors/add/user";
+const ADD_USER_INFO_URL = "/users/add";
 // const FETCH_VENDORS_URL = "/vendors";
 
 const AddOrEditUser = ({ currentUser, onChangeData, isEdit = false, userRole }) => {
@@ -26,14 +27,16 @@ const AddOrEditUser = ({ currentUser, onChangeData, isEdit = false, userRole }) 
         const form = new FormData(e.target);
         const data = Object.fromEntries(form.entries());
         const userId = isEdit ? currentUser?.userId : null;
-        const vendorId = isEdit ? currentUser?.vendor.vendorId : auth.vendor.vendorId;
-        const formData = { ...data, role: "VENDOR_USER", userId, vendorId };
+        const vendorId = isEdit ? currentUser?.vendor?.vendorId : auth?.vendor?.vendorId;
+        const formData = { ...data, role: vendorId?"VENDOR_USER":"SUPERADMIN", userId, vendorId };
         try {
             await validator.validationSchema(tUserInfo, t("requiredMessage"))
                 .validate(formData, { abortEarly: false });
             setErrors(null);
 
-            const infoResponse = await axiosPrivate.post(ADD_USER_INFO_URL, formData, {
+            const infoResponse = await axiosPrivate.post(userRole==="SUPERADMIN"
+                ? ADD_USER_INFO_URL
+                : ADD_VENDOR_USER_INFO_URL, formData, {
                 headers: { 'Accept-Language': i18n.language }
             });
 

@@ -31,27 +31,29 @@ const router = createBrowserRouter(
       <Route path="/" element={<RequiredAuth routeRole={"SUPERADMIN"}/>}>
         <Route index element={<AdminHome />}/>
         <Route path='admin' element={<AdminHome />}/>
+        <Route path='admins/users' element={<UsersList routeRole={"SUPERADMIN"} />}/>
         <Route path='vendors' element={<VendorsList />} />
         <Route path='advertisements' element={<AdvertisementsList />} />
-        <Route path='vendors/products' element={<ProductsList routeRole={"SUPERADMIN"}/>} />
+        <Route path='vendors/products' element={<ProductsList routeRole={"SUPERADMIN"}/>}/>
+        <Route path='vendors/products/:productId' element={<ProductDetails/>} />
         <Route path='vendors/categories' element={<CategoriesList routeRole={"SUPERADMIN"}/>}/>
         <Route path='vendors/users' element={<UsersList routeRole={"SUPERADMIN"}/>}/>
-        <Route path='vendors/products/product-details' element={<ProductDetails/>} />
         <Route path='vendor-info' element={<AddOrEditVendorProfile />} />
         <Route path='orders/pending' element={<OrdersList routeRole={"SUPERADMIN"}/>}/>
+        <Route path='orders/pending/:orderId' element={<OrderDetails/>}/>
         <Route path='orders/history' element={<OrdersHistoryList />}/>
-        <Route path='orders/order-details' element={<OrderDetails/>}/>
+          <Route path='orders/history/:orderId' element={<OrderDetails/>}/>
       </Route>
 
       <Route path="/" element={<RequiredAuth routeRole={"VENDOR"} />}>
         <Route path='vendor' element={<VendorHome />}/>
         <Route path='products' element={<ProductsList/>} />
-        <Route path='product-details/{productId}' element={<ProductDetails/>} />
+        <Route path='products/:productId' element={<ProductDetails/>} />
         <Route path='product-info' element={<AddOrEditProduct />}/>
         <Route path='categories' element={<CategoriesList/>}/>
         <Route path='users' element={<UsersList />}/>
-        <Route path='orders' element={<OrdersList/>}/>
-        <Route path='order-details/{orderId}' element={<OrderDetails/>}/>
+        <Route path='orders' element={<OrdersList/>} />
+        <Route path='orders/:orderId' element={<OrderDetails/>}/>
         <Route path='invoices' element={<InvoicesList />}/>
       </Route>
     </Route>

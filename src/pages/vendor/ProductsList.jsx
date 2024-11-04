@@ -22,13 +22,14 @@ const ProductsList = ({routeRole}) => {
     const vendor = location?.state?.vendor;
     const vendorProductsUrl = PRODUCT_LIST_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`).concat("?roleName=VENDOR");
     const sessionToken = auth.token;
-    const [state, _, setChangeData] = useAxiosFetchApi(vendorProductsUrl, {}, sessionToken);
+    const [state, setUrl, setChangeData] = useAxiosFetchApi(null, {}, sessionToken);
     const productList = state.data?.list;
     const { products, setProducts } = useProductsData();
 
     useEffect(()=>{
         setProducts(state.data?.list)
-    }, [state.data, setProducts])
+        setUrl(vendorProductsUrl)
+    }, [vendorProductsUrl, state.data, setProducts, setUrl])
 
     useEffect(() => {
         if (vendor) {

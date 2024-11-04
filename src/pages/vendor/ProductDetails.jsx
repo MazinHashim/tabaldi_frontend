@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FaPen, FaRegPlusSquare, FaTrash } from "react-icons/fa";
 import { useProductsData } from '../../hooks/appHooks';
@@ -15,6 +15,7 @@ import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { baseURL } from '../../apis/axios';
 import { IoWarningOutline } from 'react-icons/io5';
 import ProductImageList from '../../components/ProductImageList.jsx';
+import useAxiosFetchApi from '../../hooks/useFetch.js';
 const PRODUCTS_ROUTE_URL = "/products";
 const PRODUCT_DELETE_URL = "/products/delete";
 const ADD_OPTION_INFO_URL = "/options/save"
@@ -24,31 +25,33 @@ const ADD_IIMAGE_URL = "/products/{id}/add-image"
 const REMOVE_IIMAGE_URL = "/products/{id}/remove-image"
 
 const ProductDetails = () => {
-    const location = useLocation();
+    // const location = useLocation();
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [openedOptionGroup, setOpenedOptionGroup] = useState(null);
     const [newGroup, setIsNewGroup] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const{t, i18n} = useTranslation();
-    const {productId} = useParams();
+    const { productId } = useParams();
     const axiosPrivate = useAxiosPrivate()
     const tCard = t("vendorCard")
     const pCard = t("productCard")
     const tOptionInfo = t("optionFormInfo")
     const optionInputs = validator.translateInputText(tOptionInfo)
     // const productId=location.state.productId;
+
     const navigate = useNavigate()
     const { products, setProducts } = useProductsData();
-    useEffect(() => {
-        if(!productId){
-            navigate(PRODUCTS_ROUTE_URL, { replace: true })
-        }
-    }, [navigate, productId])
-    const selectedProduct = products.find((prod)=> prod.productId===productId);
+    const [state] = useAxiosFetchApi(PRODUCTS_ROUTE_URL.concat(`/${productId}`), {}, null);
+    const selectedProduct = products?.find((prod)=> prod.productId===Number(productId));
     const groups = [...new Set(selectedProduct?.options
     .filter(op=>op.groupFlag!=null)
     .map(op=> op.groupFlag))];
+
+    useEffect(()=>{
+        console.log("productId", productId)
+        setProducts([{...state.data?.product}]);
+    }, [state.data?.product, setProducts, productId])
 
     function handleToggleOptionForm(group) {
         if(openedOptionGroup!==group) setOpenedOptionGroup(group);
@@ -149,7 +152,7 @@ const ProductDetails = () => {
         }
     }
     // const totalPrice = selectedProduct.price + (selectedProduct.price * selectedProduct.companyProfit / 100);
-    const selectedProductPrice = (Math.round(selectedProduct.finalPrice * 2) / 2).toFixed(2);
+    const selectedProductPrice = selectedProduct?(Math.round(selectedProduct.finalPrice * 2) / 2).toFixed(2) : 0.0;
     const handleAddImage = async (file) => {
         try {
             const formData = new FormData();
@@ -197,6 +200,7 @@ const ProductDetails = () => {
     <>
     <ToastContainer />
         <div className='container mx-auto px-4 py-8'>
+            {selectedProduct?
             <div className='flex flex-col space-y-8'>
                 {/* Alerts */}
                 <div className='flex flex-wrap gap-3'>
@@ -325,7 +329,7 @@ const ProductDetails = () => {
                         )}
                     </div>
                 </div>
-            </div>
+            </div>:"Loading,,,,,,,,,,,,,,"}
         </div>
 
         {/* Modals */}

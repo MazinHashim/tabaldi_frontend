@@ -11,8 +11,10 @@ import AddOrEditUser from './AddOrEditUser';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { useLocation } from 'react-router-dom';
 
-const FETCH_USERS_URL = "/vendors/{id}/users";
-const USER_DELETE_URL = "/vendors/delete/user";
+const FETCH_USERS_URL = "/users/admin";
+const FETCH_VENDOR_USERS_URL = "/vendors/{id}/users";
+const USER_VENDOR_DELETE_URL = "/vendors/delete/user";
+const USER_DELETE_URL = "/users/delete";
 
 const UsersList = ({ routeRole }) => {
     const { auth, setAuth } = useAuth();
@@ -28,21 +30,28 @@ const UsersList = ({ routeRole }) => {
     const [state, setUrl, setChangeData] = useAxiosFetchApi(null, {}, sessionToken);
 
     useEffect(() => {
-        const vendorUsersUrl = FETCH_USERS_URL.replace("{id}", `${vendor?.vendorId ?? auth.vendor?.vendorId}`);
+        
+        const vendorUsersUrl = routeRole==="SUPERADMIN" && !auth.vendor?.vendorId
+        ? FETCH_USERS_URL
+        : FETCH_VENDOR_USERS_URL.replace("{id}", `${vendor?.vendorId ?? auth.vendor?.vendorId}`);
         setUrl(vendorUsersUrl);
-    }, [auth.vendor?.vendorId, setUrl, vendor]);
+    }, [auth.vendor?.vendorId, setUrl, vendor, routeRole]);
 
     useEffect(() => {
         if (vendor) {
             setAuth((prev)=>({ ...prev, vendor }));
+        } else if(routeRole==="SUPERADMIN") {
+            setAuth((prev)=>({ ...prev, vendor: null }))
         }
-    }, [vendor, setAuth]);
+    }, [vendor, setAuth, routeRole]);
 
     const userList = state.data?.list;
 
     const handleOnUserDelete = async (userId) => {
         try {
-            const userDeletedResponse = await axiosPrivate.delete(USER_DELETE_URL + `/${userId}`,
+            const userDeletedResponse = await axiosPrivate.delete(routeRole==="SUPERADMIN"
+                ? USER_DELETE_URL + `/${userId}`
+                : USER_VENDOR_DELETE_URL + `/${userId}`,
                 { headers: { 'Accept-Language': i18n.language, 'Content-Type': 'application/json' } }
             );
             const otherUsers = userList.filter(user => user.userId !== userId);
@@ -89,7 +98,7 @@ const UsersList = ({ routeRole }) => {
                                         <tr>
                                             <th scope="col" className="py-4">{tUserInfo.email?.label.replace("*","")}</th>
                                             <th scope="col" className="py-4">{tUserInfo.phone?.label.replace("*","")}</th>
-                                            {routeRole === "SUPERADMIN" && <th scope="col" className="py-4">{tUserInfo.vendor}</th>}
+                                            {routeRole === "SUPERADMIN" && auth.vendor?.vendorId ?<th scope="col" className="py-4">{tUserInfo.vendor}</th>:""}
                                             <th scope="col" className="py-1">{t("action")}</th>
                                         </tr>
                                     </thead>
@@ -105,7 +114,7 @@ const UsersList = ({ routeRole }) => {
                                                         <tr key={user.userId}>
                                                             <td className="whitespace-nowrap py-4 font-medium">{user.email}</td>
                                                             <td className="whitespace-nowrap py-4">{user.phone}</td>
-                                                            {routeRole === "SUPERADMIN" && <td className="whitespace-nowrap py-4">{user?.vendor.fullName}</td>}
+                                                            {routeRole === "SUPERADMIN" && auth.vendor?.vendorId ?<td className="whitespace-nowrap py-4">{user?.vendor?.fullName}</td>:""}
                                                             <td className="whitespace-nowrap py-4 w-1/4">
                                                                 <button
                                                                     onClick={() => setShowEditModal({ user, status: true })}

@@ -107,7 +107,7 @@ const OrdersHistoryList = () => {
     }, [state.data, setOrders]);
 
     function goToOrderDetails(orderId) {
-        navigate(`/orders/order-details/${orderId}`);
+        navigate(`${orderId}`);
     }
 
     const queryOrders = orderList?.filter((data) =>

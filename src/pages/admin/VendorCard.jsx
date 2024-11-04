@@ -108,7 +108,7 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
                 <Link className='border border-gray-400 shadow-none p-2 rounded' to={"users"} state={{vendor}}><FaUser /></Link>
             </div>
         </div>
-        <div className="flex-col space-y-2 justify-self-end">
+        <div className="flex-col space-y-2">
             <div className="flex justify-between">
                 <h3>
                     {i18n.language==="en"?vendor.fullName:vendor.arFullName}

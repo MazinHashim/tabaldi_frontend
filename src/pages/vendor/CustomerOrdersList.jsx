@@ -20,7 +20,7 @@ const OrdersList = ({routeRole}) => {
     const orderList = state.data?.list;
     const { setOrders } = useOrdersData();
     const [searchQuery, setSearchQuery] = useState('');
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const{t} = useTranslation();
     const tOrderInfo = t("orderInfo")
 
@@ -29,7 +29,7 @@ const OrdersList = ({routeRole}) => {
     }, [state.data, setOrders])
 
     function goToOrderDetails(orderId) {
-        navigate((routeRole!=="SUPERADMIN"?"":"/orders")+'/order-details', {state: {orderId}});
+        navigate(`${orderId}`);
     }
     const queryOrders = orderList?.filter((data) =>
         Object.values(data).some((value) =>
