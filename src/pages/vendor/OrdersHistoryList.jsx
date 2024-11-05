@@ -168,7 +168,8 @@ const OrdersHistoryList = () => {
                             <option value="STORE">STORE</option>
                         </select>
                         <input type="text" value={vendorName} onChange={(e) => setVendorName(e.target.value)} className='p-2 m-2 rounded-lg border' placeholder={tOrderInfo.vendorName.label} />
-                        {!auth.role?.includes("VENDOR_USER") && <button onClick={exportToExcel} className='bg-primary-color text-white p-2 m-2 rounded-lg'>Export to Excel</button>}
+                        {/* added superadmin condition */}
+                        {auth.superAdmin && <button onClick={exportToExcel} className='bg-primary-color text-white p-2 m-2 rounded-lg'>Export to Excel</button>}
                     </div>
                     <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div className="inline-block min-w-full py-2 px-6">

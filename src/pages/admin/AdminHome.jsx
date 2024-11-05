@@ -32,6 +32,8 @@ const AdminHome = () => {
           <button onClick={()=>navigate("/vendors")} className='bg-secondary-color border-0 my-2 py-2 px-4 rounded-xl text-white'>{tAdmin["viewVendor"]}</button>
         </div>
       </div>
+      {/* added superadmin condition */}
+      {auth.superAdmin &&
       <div className="flex justify-between">
         <div className="flex flex-col w-[30%] p-4 rounded-2xl shadow-lg bg-gray-50 border border-gray-100">
           {state.isLoading && !details
@@ -72,6 +74,7 @@ const AdminHome = () => {
           </div>}
         </div>
       </div>
+      }
       <RecentOrdersTable state={state} orders={state.data?.details?.orders} title={tAdmin["pendingTxt"]}/>
       <FrequentCustomersTable state={state} title={tAdmin["freqCustTxt"]} labels={tAdmin}/>
       <FrequentVendorsTable state={state} title={tAdmin["freqVendorTxt"]} labels={tAdmin}/>

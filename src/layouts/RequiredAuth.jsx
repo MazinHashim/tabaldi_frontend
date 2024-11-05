@@ -89,9 +89,16 @@ const RequiredAuth = ({routeRole}) => {
                             </nav>}
                         {userRole === "SUPERADMIN" &&
                             <nav className={`${i18n.dir()} pt-20 nav-height font-bold flex flex-col py-3 px-8`}>
-                                {adminMenue.map((navigator) => {
-                                    return <NavLink key={navigator.screenId} to={navigator.route}>{i18n.dir()==='rtl'?navigator.arTitle:navigator.title}</NavLink>})
-                                }
+                                {/* added superadmin condition */}
+                            {!userProfile?.superAdmin
+                                ? adminMenue
+                                    .filter(navigator => !navigator.route?.includes("users")) // Exclude "users" route
+                                    .map((navigator) =>
+                                        <NavLink key={navigator.screenId} to={navigator.route}>{i18n.dir()==='rtl'?navigator.arTitle:navigator.title}</NavLink>)
+                                : adminMenue
+                                    .map((navigator) =>
+                                        <NavLink key={navigator.screenId} to={navigator.route}>{i18n.dir()==='rtl'?navigator.arTitle:navigator.title}</NavLink>)
+                            }
                             </nav>}
                     </div>
                     <main className='container me-14 mt-10 w-9/12'>

@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import axios from 'axios'; // Import axios for making API requests
+import { axiosPrivate } from "../apis/axios";
+import AppLoading from '../utils/AppLoading'
 
 const libraries = ["places"];
 const mapContainerStyle = {
@@ -16,10 +17,12 @@ function AppMap({marker, setMarker}) {
   const [center, setCenter] = useState({ lat: 25.197525, lng: 55.274288 });
   const [searchResults, setSearchResults] = useState([]); // State for search results
   const [loading, setLoading] = useState(false); // State for loading indicator
+  const queryRef = useRef(); // Added useRef for query
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
+    loading: { async: true },
   });
 
   const onMapClick = useCallback((event) => {
@@ -31,11 +34,11 @@ function AppMap({marker, setMarker}) {
 
   const handleSearchLocation = async (e) => {
     e.preventDefault();
-    if (e.target.value) {
-      setLoading(true); // Set loading to true when starting the API call
+    if (queryRef.current.value) {
+      setLoading(true); 
       setSearchResults([]);
       try {
-        const response = await axios.get(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${e.target.value}&components=country:AE&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&language=ar&radius=50000`); // Added language parameter
+        const response = await axiosPrivate.get(`/vendors/search/location/${queryRef.current.value}`)
         const results = response.data.predictions;
         setSearchResults(results); // Set search results
       } catch (error) {
@@ -48,13 +51,17 @@ function AppMap({marker, setMarker}) {
 
   const handleSelect = async (result) => {
     // Fetch place details to get lat and lng
+    setLoading(true); 
     try {
-      const response = await axios.get(`https://maps.googleapis.com/maps/api/place/details/json?place_id=${result.place_id}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`);
+      const response = await axiosPrivate.get(`/vendors/place/details/${result.place_id}`);
       const { lat, lng } = response.data.result.geometry.location; // Get lat and lng from the response
       setMarker({ lat, lng }); // Set marker to selected coordinates
       setCenter({ lat, lng }); // Update camera position to selected coordinates
-      setSearchResults([]); // Clear search results
+      setSearchResults([]);
+      setLoading(false);  // Clear search results
     } catch (error) {
+      setLoading(false); 
+      setSearchResults([]); // Clear search results
       console.error("Error fetching place details:", error);
     }
   };
@@ -64,20 +71,23 @@ function AppMap({marker, setMarker}) {
 
   return (
     <div>
-      <div className="flex">
+      <div className="flex items-center">
         <input
           type="text"
+          ref={queryRef}
           className="sm:text-sm bg-slate-100 rounded-lg p-1.5 mb-2"
-          onClick={(e) => {
-            handleSearchLocation(e); // Call handleSearchLocation on input change
-          }}
-          onBlur={()=> {setSearchResults([])}}
           placeholder="Enter location name"
         />
-        {loading && <div className="p-2 text-gray-500">Loading...</div>}
+        <button
+          type="submit"
+          onClick={(e)=>handleSearchLocation(e)}
+          className="ms-2 bg-primary-color text-white rounded-lg p-0.5"
+        >
+          Search
+        </button>
+        {loading && <AppLoading width={"w-16"}/>}
       </div>
-      {loading
-      ? ""
+      {loading ? ""
       :(
         <ul className="border border-gray-300 rounded-lg bg-white absolute z-10">
           {searchResults.map((result) => (
@@ -86,9 +96,11 @@ function AppMap({marker, setMarker}) {
               onClick={() => handleSelect(result)} // Call handleSelect on result click
               className="p-2 hover:bg-gray-200 cursor-pointer"
             >
-              {result.status==="ZERO_RESULTS"
-              ? "No Result Found"
-              : result.structured_formatting.main_text}
+              {<div className="text-sm">
+                <p>{result.structured_formatting.main_text}</p>
+                <p>{result.structured_formatting.secondary_text}</p>
+                <hr className="my-0" />
+              </div>}
             </li>
           ))}
         </ul>
