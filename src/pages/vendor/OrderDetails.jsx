@@ -162,13 +162,19 @@ const OrderDetails = () => {
                     </div>
                 </div>
             </div>
-            <div className="flex mb-4 justify-end">
-                <button className="text-sm bg-secondary-color text-white py-1 px-2 rounded" onClick={() => shareCoordinates(vendorCoordinates)}>
-                    {tCard.shareLocationVendorBtn}
-                </button>
-                <button className="text-sm mx-7 bg-secondary-color text-white py-1 px-2 rounded" onClick={() => shareCoordinates(customerCoordinates)}>
-                    {tCard.shareLocationCustomerBtn}
-                </button>
+            <div className="flex mb-4 justify-between">
+                <p className="mx-7 text-green-800">{tOrder["orderFrom"]+" "} 
+                <b>{i18n.language==="en"
+                ? selectedOrder.vendor.fullName ? selectedOrder.vendor.fullName : "Vendor Name"
+                : selectedOrder.vendor.arFullName ? selectedOrder.vendor.arFullName : "إسم المحل"}</b></p>
+                <div className="flex justify-end">
+                    <button className="text-sm bg-secondary-color text-white py-1 px-2 rounded" onClick={() => shareCoordinates(vendorCoordinates)}>
+                        {tCard.shareLocationVendorBtn}
+                    </button>
+                    <button className="text-sm mx-7 bg-secondary-color text-white py-1 px-2 rounded" onClick={() => shareCoordinates(customerCoordinates)}>
+                        {tCard.shareLocationCustomerBtn}
+                    </button>
+                </div>
             </div>
             <table className="min-w-full text-center text-sm font-light">
             <thead
