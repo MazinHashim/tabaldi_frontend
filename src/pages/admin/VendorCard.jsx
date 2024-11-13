@@ -134,6 +134,9 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
 
             <div className="text-sm flex justify-between font-bold">
                 <p className='text-green-600'>{tCard["openingTxt"]} {vendor.fopeningTime}</p>
+                {vendor.stillOpening
+                ? <p className="bg-green-200 shadow-none px-2 rounded">{tCard["openedTxt"]}</p>
+                : <p className="bg-red-200 shadow-none px-2 rounded">{tCard["closedTxt"]}</p>}
                 <p className='text-red-600'>{tCard["closingTxt"]} {vendor.fclosingTime}</p>
             </div>
         </div>
