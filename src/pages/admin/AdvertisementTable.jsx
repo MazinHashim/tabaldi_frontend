@@ -55,19 +55,23 @@ const AdvertisementTable = ({
                                             </td>
                                         </tr>
                                         {ads.sort((a, b) => {
-                                            if (a.title < b.title) return -1;
-                                            if (a.title > b.title) return 1;
-                                            return 0
+                                            if (new Date(a.expireDate) > new Date(b.expireDate)) return -1;
+                                            if (new Date(a.expireDate) < new Date(b.expireDate)) return 1;
+                                            return 0;
                                         }).map((advertisement) => {
-                                            const bgColor=advertisement.shown?"bg-green-200":"bg-red-200";
-                                            const txtColor=advertisement.shown?"text-green-600":"text-red-600";
+                                            const isWithinDateRange = (new Date(advertisement.createdDate) <= new Date() && new Date(advertisement.expireDate) >= new Date());
+                                            const bgColor = isWithinDateRange ? "bg-green-200" : "bg-red-200";
+                                            const txtColor = isWithinDateRange ? "text-green-600" : "text-red-600";
+
+                                            const finalBgColor = isWithinDateRange ? "bg-white" : "bg-red-100";
+
                                             return (
-                                                <tr key={advertisement.advertisementId}>
+                                                <tr key={advertisement.advertisementId} className={finalBgColor}>
                                                     <td className="whitespace-nowrap p-4">{advertisement.priority}</td>
                                                     <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.title}</td>
                                                     <td className="whitespace-nowrap p-4 font-medium capitalize">{advertisement.arTitle}</td>
-                                                    <td className="whitespace-nowrap p-4">{advertisement.subtitle===""?"_":advertisement.subtitle??"_"}</td>
-                                                    <td className="whitespace-nowrap p-4">{advertisement.arSubtitle===""?"_":advertisement.arSubtitle??"_"}</td>
+                                                    <td className="whitespace-nowrap p-4">{advertisement.subtitle === "" ? "_" : advertisement.subtitle ?? "_"}</td>
+                                                    <td className="whitespace-nowrap p-4">{advertisement.arSubtitle === "" ? "_" : advertisement.arSubtitle ?? "_"}</td>
                                                     <td className="whitespace-nowrap p-4">{advertisement.fcreatedDate}</td>
                                                     <td className="whitespace-nowrap p-4">{advertisement.fexpireDate}</td>
                                                     <td className="whitespace-nowrap p-4">{advertisement.fstartTime}</td>
@@ -76,33 +80,33 @@ const AdvertisementTable = ({
                                                         {advertisement.url
                                                         ? <a className='bg-gray-200 text-xs' target='_blank' href={advertisement.url} rel="noreferrer">Visit</a>
                                                         : "_"}</td>
-                                                    <td className="whitespace-nowrap p-4">{advertisement.vendor?.fullName??"_"}</td>
-                                                    <td className="whitespace-nowrap p-4">{advertisement.vendor==null?"External":"Internal"}</td>
+                                                    <td className="whitespace-nowrap p-4">{advertisement.vendor?.fullName ?? "_"}</td>
+                                                    <td className="whitespace-nowrap p-4">{advertisement.vendor == null ? "External" : "Internal"}</td>
                                                     <td className="whitespace-nowrap p-4">
                                                         <button 
-                                                        onClick={()=>setShowImagesModal({advertisement: advertisement, status: true})}
+                                                        onClick={() => setShowImagesModal({ advertisement: advertisement, status: true })}
                                                         className='bg-gray-200 text-xs'>Show Image</button>
                                                     </td>
                                                     <td className="whitespace-nowrap p-4">
-                                                        <span className={`px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
-                                                            {advertisement.shown?"Visiable":"Hidden"}
+                                                        <span className={`px-1 shadow-2 rounded-md ${!advertisement.shown ? "text-red-600" : txtColor} ${!advertisement.shown ? "bg-red-200" : bgColor}`}>
+                                                            {!isWithinDateRange ? "Expired" : advertisement.shown ? "Visiable" : "Hidden"}
                                                         </span>
                                                     </td>
                                                     <td className="whitespace-nowrap py-4 w-1/4">
                                                         <button 
-                                                        onClick={()=>isLoading?null:toggleAdvertisementShowing(advertisement.advertisementId)}
-                                                        className={`${advertisement.shown&&"bg-green-200"} mx-1`}>
-                                                            <GrDeploy/>
+                                                        onClick={() => isLoading ? null : toggleAdvertisementShowing(advertisement.advertisementId)}
+                                                        className={`${advertisement.shown && "bg-green-200"} mx-1`}>
+                                                            <GrDeploy />
                                                         </button>
                                                         <button 
-                                                        onClick={()=>setShowEditModal({advertisement: advertisement, status: true})}
+                                                        onClick={() => setShowEditModal({ advertisement: advertisement, status: true })}
                                                         className='bg-success-200 mx-1'>
-                                                            <FaPen/>
+                                                            <FaPen />
                                                         </button>
                                                         <button 
-                                                        onClick={()=>setShowDeleteModal({advertisementId: advertisement.advertisementId, status: true})}
+                                                        onClick={() => setShowDeleteModal({ advertisementId: advertisement.advertisementId, status: true })}
                                                         className='bg-danger-200 mx-1'>
-                                                            <FaTrash/>
+                                                            <FaTrash />
                                                         </button>
                                                     </td>
                                                 </tr>
