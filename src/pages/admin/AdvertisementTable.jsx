@@ -60,10 +60,10 @@ const AdvertisementTable = ({
                                             return 0;
                                         }).map((advertisement) => {
                                             // const isWithinDateRange = (new Date(advertisement.createdDate) <= new Date() && new Date(advertisement.expireDate) >= new Date());
-                                            const bgColor = advertisement.expiredNow ? "bg-green-200" : "bg-red-200";
-                                            const txtColor = advertisement.expiredNow ? "text-green-600" : "text-red-600";
+                                            const bgColor = advertisement.activatedNow ? "bg-green-200" : "bg-red-200";
+                                            const txtColor = advertisement.activatedNow ? "text-green-600" : "text-red-600";
 
-                                            const finalBgColor = advertisement.expiredNow ? "bg-white" : "bg-red-100";
+                                            const finalBgColor = advertisement.activatedNow ? "bg-white" : "bg-red-100";
 
                                             return (
                                                 <tr key={advertisement.advertisementId} className={finalBgColor}>
@@ -89,7 +89,7 @@ const AdvertisementTable = ({
                                                     </td>
                                                     <td className="whitespace-nowrap p-4">
                                                         <span className={`px-1 shadow-2 rounded-md ${!advertisement.shown ? "text-red-600" : txtColor} ${!advertisement.shown ? "bg-red-200" : bgColor}`}>
-                                                            {advertisement.expiredNow ? "Expired" : advertisement.shown ? "Visiable" : "Hidden"}
+                                                            {advertisement.activatedNow ? "Expired" : advertisement.shown ? "Visiable" : "Hidden"}
                                                         </span>
                                                     </td>
                                                     <td className="whitespace-nowrap py-4 w-1/4">
