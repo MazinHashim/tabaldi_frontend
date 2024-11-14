@@ -89,7 +89,7 @@ const AdvertisementTable = ({
                                                     </td>
                                                     <td className="whitespace-nowrap p-4">
                                                         <span className={`px-1 shadow-2 rounded-md ${!advertisement.shown ? "text-red-600" : txtColor} ${!advertisement.shown ? "bg-red-200" : bgColor}`}>
-                                                            {advertisement.activatedNow ? "Expired" : advertisement.shown ? "Visiable" : "Hidden"}
+                                                            {!advertisement.activatedNow ? "Expired" : advertisement.shown ? "Visiable" : "Hidden"}
                                                         </span>
                                                     </td>
                                                     <td className="whitespace-nowrap py-4 w-1/4">
