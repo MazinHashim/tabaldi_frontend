@@ -143,7 +143,7 @@ const OrderDetails = () => {
                         <p>{customerName}</p>
                         <p>{selectedOrder.customer.user.email}</p>
                         <p>{selectedOrder.customer.user.phone}</p>
-                        <p className='font-bold text-sm primary-color cursor-pointer'>{tOrder["viewProfile"]}</p>
+                        {/* <p className='font-bold text-sm primary-color cursor-pointer'>{tOrder["viewProfile"]}</p> */}
                     </div>
                     <div className="flex-col space-y-2">
                         <h4>{tOrder["shippAddress"]}</h4>

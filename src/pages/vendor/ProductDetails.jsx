@@ -90,7 +90,7 @@ const ProductDetails = () => {
             const afterDelete=products.filter(remain=>remain.productId!==productId);
             setProducts(afterDelete)
             toast.success(productDeletedResponse?.data.message);
-            navigate(PRODUCTS_ROUTE_URL, { replace: true })
+            navigate(-1, { replace: true })
         } catch (error) {
             setLoading(false)
             toast.error(error.response?.data.message);

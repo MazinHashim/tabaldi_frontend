@@ -59,11 +59,11 @@ const AdvertisementTable = ({
                                             if (new Date(a.expireDate) < new Date(b.expireDate)) return 1;
                                             return 0;
                                         }).map((advertisement) => {
-                                            const isWithinDateRange = (new Date(advertisement.createdDate) <= new Date() && new Date(advertisement.expireDate) >= new Date());
-                                            const bgColor = isWithinDateRange ? "bg-green-200" : "bg-red-200";
-                                            const txtColor = isWithinDateRange ? "text-green-600" : "text-red-600";
+                                            // const isWithinDateRange = (new Date(advertisement.createdDate) <= new Date() && new Date(advertisement.expireDate) >= new Date());
+                                            const bgColor = advertisement.visibleNow ? "bg-green-200" : "bg-red-200";
+                                            const txtColor = advertisement.visibleNow ? "text-green-600" : "text-red-600";
 
-                                            const finalBgColor = isWithinDateRange ? "bg-white" : "bg-red-100";
+                                            const finalBgColor = advertisement.visibleNow ? "bg-white" : "bg-red-100";
 
                                             return (
                                                 <tr key={advertisement.advertisementId} className={finalBgColor}>
@@ -89,7 +89,7 @@ const AdvertisementTable = ({
                                                     </td>
                                                     <td className="whitespace-nowrap p-4">
                                                         <span className={`px-1 shadow-2 rounded-md ${!advertisement.shown ? "text-red-600" : txtColor} ${!advertisement.shown ? "bg-red-200" : bgColor}`}>
-                                                            {!isWithinDateRange ? "Expired" : advertisement.shown ? "Visiable" : "Hidden"}
+                                                            {advertisement.shown && advertisement.visibleNow ? "Visiable" : "Hidden"}
                                                         </span>
                                                     </td>
                                                     <td className="whitespace-nowrap py-4 w-1/4">
