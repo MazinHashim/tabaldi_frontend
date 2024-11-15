@@ -189,7 +189,8 @@ const CategoriesList = ({routeRole}) => {
             isEdit={editModal.category!=null}
             userRole={routeRole}
             onChangeData={onSetChangedData}
-            currentCategory={editModal.category}/>
+            currentCategory={editModal.category}
+            selectedVendor={vendor}/>
         </EditModal>
         <ConfirmationModal
             title={"Confirm Category Delete"}
