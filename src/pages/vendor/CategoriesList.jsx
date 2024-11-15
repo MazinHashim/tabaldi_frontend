@@ -85,7 +85,7 @@ const CategoriesList = ({routeRole}) => {
             const selected = categoryList.filter(cate=>cate.category.categoryId===category.categoryId)
             setChangeData({list: [...otherCategories, {...selected[0], category}]})
         } else {
-            setChangeData({list: [...{numberOfProducts:0, category}]})
+            setChangeData({list: [{numberOfProducts:0, category}]})
         }
     }
     const queryCategories = categoryList?.filter((data) =>
