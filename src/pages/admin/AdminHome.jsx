@@ -54,11 +54,11 @@ const AdminHome = () => {
           : <div>
 
             <div className="flex justify-between items-center">
-              <h3 className='font-medium'>{tAdmin["orderTxt"]}</h3>
+              <h3 className='font-medium'>{tAdmin["orderPerDayTxt"]}</h3>
               <HiMiniShoppingCart className='bg-amber-200 text-white p-1.5 rounded-full' size={40}/>
             </div>
-            <h2 className='font-semibold mt-3'>{details?.numberOfOrders}</h2>
-            <p>{details?.newOrdersPerDay}+ {tAdmin["newSales"]}</p>
+            <h2 className='font-semibold mt-3'>{details?.newOrdersPerDay}</h2>
+            <p>{details?.numberOfOrders} {tAdmin["totalOrdersCount"]}</p>
           </div>}
         </div>
         <div className="flex flex-col w-[30%] p-4 rounded-2xl shadow-lg bg-gray-50 border border-gray-100">
