@@ -20,6 +20,7 @@ const createWorksheetData = (filteredOrders, t) => {
             const customerPrice = order?.total || 0;
 
             let vendorPrice = 0;
+            let rateenaProfit = 0;
             if (Array.isArray(order.cartItems)) {
                 vendorPrice = order.cartItems.reduce((sum, item) => {
                     const itemPrice = parseFloat(item.price) || 0;
@@ -30,9 +31,14 @@ const createWorksheetData = (filteredOrders, t) => {
                     }, 0);
                     return sum + (itemPrice * itemQuantity + optionsPrice);
                 }, 0);
-            }
 
-            const rateenaProfit = customerPrice - vendorPrice - order.shippingCost;
+                rateenaProfit = order.cartItems.reduce((sum, item) => {
+                    const finalPrice = parseFloat(item.product.finalPrice) || 0;
+                    const productPrice = parseFloat(item.product.price) || 0;
+                    const itemQuantity = parseInt(item.quantity) || 0;
+                    return sum + ((finalPrice - productPrice) * itemQuantity);
+                }, 0);
+            }
 
             return [
                 order.vendor?.vendorType || '',
