@@ -191,7 +191,7 @@ const OrderDetails = () => {
                 {selectedOrder.cartItems.map((item)=>{
                     const img = productImages?productImages.filter(image=>image.id.includes(item.product.productId)):null;
                 return <><tr key={item.itemId} className='border-b border-gray-100'>
-                    <td className="whitespace-nowrap py-2 px-7">
+                    <td className="whitespace-nowrap py-2 px-4">
                         {!img?"loading...":
                         <img className="rounded-md w-15 h-16 m-2" 
                         src={img[0].data

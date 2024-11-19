@@ -165,14 +165,14 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               <label htmlFor="categoryId" className="text-lg">{tProductInfo.categoryId?.label}</label>
               <select
                 name={"categoryId"}
-                defaultValue={currentProduct?.category.categoryId}
+                value={currentProduct?.category?.categoryId || ''}
                 className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
                 >
-                  {categoryList?categoryList.map(data=>{
-                    const category=data.category;
-                  return <option
-                  key={category.categoryId} value={category.categoryId}>{category.name} / {category.arName}</option>
-                  }):"No Category Found"}
+                  {categoryList ? categoryList.map(data => {
+                    const category = data.category;
+                    return <option
+                      key={category.categoryId} value={category.categoryId}>{category.name} / {category.arName}</option>
+                  }) : "No Category Found"}
                 </select>
               {errors?.categoryId&&<div className='text-red-600'>{errors?.categoryId}</div>}
             </div>
