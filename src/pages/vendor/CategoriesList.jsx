@@ -31,8 +31,8 @@ const CategoriesList = ({routeRole}) => {
     const [state, setUrl, setChangeData] = useAxiosFetchApi(null, {}, sessionToken);
   
     useEffect(()=>{
-        const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`);
-        setUrl(vendorCategoriesUrl.concat("?roleName=VENDOR"))
+        const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`).concat("?roleName=VENDOR");
+        setUrl(vendorCategoriesUrl)
     }, [auth.vendor?.vendorId, setUrl, vendor])
     useEffect(() => {
         if (vendor) {
