@@ -165,12 +165,13 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               <label htmlFor="categoryId" className="text-lg">{tProductInfo.categoryId?.label}</label>
               <select
                 name={"categoryId"}
-                defaultChecked={currentProduct?.category?.categoryId || ''}
+                // defaultChecked={currentProduct?.category?.categoryId || ''}
                 className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
                 >
                   {categoryList ? categoryList.map(data => {
                     const category = data.category;
                     return <option
+                    selected={currentProduct?.category?.categoryId===category.categoryId}
                       key={category.categoryId} value={category.categoryId}>{category.name} / {category.arName}</option>
                   }) : "No Category Found"}
                 </select>

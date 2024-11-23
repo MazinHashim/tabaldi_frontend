@@ -32,7 +32,7 @@ const CategoriesList = ({routeRole}) => {
   
     useEffect(()=>{
         const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`);
-        setUrl(vendorCategoriesUrl)
+        setUrl(vendorCategoriesUrl.concat("?roleName=VENDOR"))
     }, [auth.vendor?.vendorId, setUrl, vendor])
     useEffect(() => {
         if (vendor) {
