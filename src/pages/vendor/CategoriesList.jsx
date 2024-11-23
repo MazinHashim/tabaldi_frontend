@@ -11,7 +11,7 @@ import ConfirmationModal from '../modals/ConfirmationModal';
 import AddOrEditCategory from './AddOrEditCategory';
 import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { useLocation } from 'react-router-dom';
-const FETCH_CATEGORY_URL = "/vendors/{id}/categories";
+const FETCH_CATEGORY_URL = "/vendors/{id}/categories?roleName=VENDOR";
 const TOGGLE_PUBLISH_URL = "/categories/toggle/publish"
 const CATEGORY_DELETE_URL = "/categories/delete"
 
@@ -31,7 +31,7 @@ const CategoriesList = ({routeRole}) => {
     const [state, setUrl, setChangeData] = useAxiosFetchApi(null, {}, sessionToken);
   
     useEffect(()=>{
-        const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`).concat("?roleName=VENDOR");
+        const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`);
         setUrl(vendorCategoriesUrl)
     }, [auth.vendor?.vendorId, setUrl, vendor])
     useEffect(() => {
