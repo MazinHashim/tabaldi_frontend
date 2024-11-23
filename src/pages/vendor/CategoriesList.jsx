@@ -21,8 +21,8 @@ const CategoriesList = ({routeRole}) => {
     const{t, i18n} = useTranslation();
     const axiosPrivate = useAxiosPrivate()
     const location = useLocation();
-    const tCategoryInfo = t("categoryFormInfo")
     const vendor = location?.state?.vendor;
+    const tCategoryInfo = t("categoryFormInfo")
     const [editModal, setShowEditModal] = useState({category: null, status: false});
     const [deleteModal, setShowDeleteModal] = useState({categoryId: null, status: false});
     const [isLoading, setLoading] = useState(false);

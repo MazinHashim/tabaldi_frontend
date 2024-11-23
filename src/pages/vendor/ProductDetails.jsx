@@ -16,6 +16,7 @@ import { baseURL } from '../../apis/axios';
 import { IoWarningOutline } from 'react-icons/io5';
 import ProductImageList from '../../components/ProductImageList.jsx';
 import useAxiosFetchApi from '../../hooks/useFetch.js';
+import AppLoading from '../../utils/AppLoading.jsx';
 const PRODUCTS_ROUTE_URL = "/products";
 const PRODUCT_DELETE_URL = "/products/delete";
 const ADD_OPTION_INFO_URL = "/options/save"
@@ -329,7 +330,7 @@ const ProductDetails = () => {
                         )}
                     </div>
                 </div>
-            </div>:"Loading,,,,,,,,,,,,,,"}
+            </div>:<AppLoading/>}
         </div>
 
         {/* Modals */}

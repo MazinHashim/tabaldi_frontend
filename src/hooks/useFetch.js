@@ -45,7 +45,7 @@ const useAxiosFetchApi = (initialUrl, initialData, authToken) => {
     let didCancel = false;
 
     const fetchData = async () => {
-      if(!url){
+      if(!url || url?.includes("undefined")){
         dispatch({ type: 'FETCH_SUCCESS' });
         return;
       }

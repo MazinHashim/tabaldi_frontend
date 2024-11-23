@@ -9,7 +9,7 @@ import useAxiosPrivate from '../../apis/useAxiosPrivate';
 import { ValidationError } from 'yup';
 import { baseURL } from '../../apis/axios';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-const FETCH_CATEGORY_URL = "/vendors/{id}/categories";
+const FETCH_CATEGORY_URL = "/vendors/{id}/categories?roleName=VENDOR";
 const ADD_PRODUCT_INFO_URL = "/products/save";
 
 const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
@@ -33,9 +33,9 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
   });
 
   useEffect(()=>{
-    const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${auth.vendor?.vendorId}`);
+    const vendorCategoriesUrl = FETCH_CATEGORY_URL.replace("{id}", `${currentProduct?.vendor.vendorId??auth.vendor?.vendorId}`);
     setUrl(vendorCategoriesUrl)
-  }, [auth.vendor?.vendorId, setUrl])
+  }, [auth.vendor?.vendorId, setUrl, currentProduct?.vendor.vendorId])
 
   const categoryList = state.data?.list;
   
