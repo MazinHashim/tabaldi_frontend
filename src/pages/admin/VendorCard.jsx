@@ -114,7 +114,7 @@ const VendorCard = ({vendor, onDelete, onEdit}) => {
                     {i18n.language==="en"?vendor.fullName:vendor.arFullName}
                     {/* {vendor.fullName} */}
                     <sub className="lowercase mx-2 bg-slate-800 text-white text-xs rounded-lg px-2">
-                        {vendor.region}
+                        {vendor.region?.replace("_", " ")}
                     </sub>
                 </h3>
                 <h3 className='capitalize'>{vendor.vendorType}</h3>

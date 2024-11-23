@@ -165,7 +165,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               <label htmlFor="categoryId" className="text-lg">{tProductInfo.categoryId?.label}</label>
               <select
                 name={"categoryId"}
-                value={currentProduct?.category?.categoryId || ''}
+                defaultChecked={currentProduct?.category?.categoryId || ''}
                 className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5"
                 >
                   {categoryList ? categoryList.map(data => {

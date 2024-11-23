@@ -6,9 +6,15 @@ export const supportedVendorType=[
   {id: 3, name: "Store / متجر", value: "STORE"}];
 
   export const supportedRegions=[
-  {id: 1, name: "Dubai / دبي", value: "DUBAI"},
-  {id: 2, name: "Sharjah / الشارقة", value: "SHARJAH"},
-  {id: 3, name: "Ajman / عجمان", value: "AJMAN"}]
+  {id: 1, name: "Abu Dhabi / أبوظبي", value: "ABU_DHABI"},
+  {id: 2, name: "Al-Ain / العين", value: "AL_AIN"},
+  {id: 3, name: "Dubai / دبي", value: "DUBAI"},
+  {id: 4, name: "Sharjah / الشارقة", value: "SHARJAH"},
+  {id: 5, name: "Ajman / عجمان", value: "AJMAN"},
+  {id: 6, name: "Umm Al-Quwain / أم القويين", value: "UMM_ALQUWAIN"},
+  {id: 7, name: "Ras Al-Khaimah / رأس الخيمة", value: "RAS_ALKHAIMAH"},
+  {id: 8, name: "Fujairah / الفجيرة", value: "FUJAIRAH"},
+]
 
 export const validationSchema =(vendorData, isEditing, requiredMessage)=> {return Yup.object({
     fullName: Yup.string().required(requiredMessage),
