@@ -50,7 +50,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
       var companyProfit = !auth.role
       ? formData.companyProfit
       :currentProduct?.companyProfit;
-      var vendorId = auth.vendor?.vendorId;
+      var vendorId = currentProduct?.vendor.vendorId??auth.vendor?.vendorId;
       var productId = (isEdit?currentProduct.productId:null);
       const fd = new FormData();
       validator.fillProductFormData(fd, formDataWithOptions, images, companyProfit, productId, vendorId)
