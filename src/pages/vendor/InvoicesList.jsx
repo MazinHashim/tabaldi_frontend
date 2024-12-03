@@ -74,7 +74,7 @@ const InvoicesList = () => {
                         <td className="whitespace-nowrap p-5 font-medium capitalize">{invoice.invoiceNumber}</td>
                         <td className="whitespace-nowrap p-5">{invoice.paymentMethod}</td>
                         <td className="whitespace-nowrap p-5">{invoice.fissueDate}</td>
-                        <td className="whitespace-nowrap p-5">{invoice.summary.total} {t("aedUnit")}</td>
+                        <td className="whitespace-nowrap p-5">{invoice.summary.total?.toFixed(2)} {t("aedUnit")}</td>
                         <td className="whitespace-nowrap p-5">
                                 <span className={`px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
                                     {invoice.status.toLowerCase()}

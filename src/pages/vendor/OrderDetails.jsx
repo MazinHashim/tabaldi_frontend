@@ -156,7 +156,7 @@ const OrderDetails = () => {
                         <p>{tOrder["orderNum"]}: {selectedOrder.orderNumber}</p>
                         <p>{tOrder["orderDate"]}: {selectedOrder.forderDate}</p>
                         <p>{tOrder["numOfItems"]}: {selectedOrder.cartItems.length} {"items"}</p>
-                        <p>{tOrder["orderTotal"]}: {selectedOrder.total} {t("aedUnit")} 
+                        <p>{tOrder["orderTotal"]}: {selectedOrder.total?.toFixed(2)} {t("aedUnit")} 
                             <span className={`lowercase mx-2 text-sm px-1 shadow-2 rounded-md ${txtColor} ${bgColor}`}>
                                 {invoice.status}</span></p>
                     </div>

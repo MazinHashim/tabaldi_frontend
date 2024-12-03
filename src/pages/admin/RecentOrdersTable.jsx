@@ -41,7 +41,7 @@ const RecentOrdersTable = ({state, orders, title}) => {
                       <td className="whitespace-nowrap p-4 text-start">{order.cartItems[0]?.product.name}</td>
                       <td className="whitespace-nowrap p-4">{order.vendor.fullName}</td>
                       <td className="whitespace-nowrap p-4">{order.forderDate}</td>
-                      <td className="whitespace-nowrap p-4">{order.total} {t("aedUnit")}</td>
+                      <td className="whitespace-nowrap p-4">{order.total?.toFixed(2)} {t("aedUnit")}</td>
                       <td className="whitespace-nowrap p-4">
                           <span className={"font-bold py-1 px-2 "
                           + statusTextColor(order.status) + " "
