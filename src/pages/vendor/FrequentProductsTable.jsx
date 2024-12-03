@@ -37,7 +37,7 @@ const FrequentProductsTable = ({state, title, labels}) => {
                       <td className="whitespace-nowrap p-4 text-start">{frequentProduct.product.category.name}</td>
                       <td className="whitespace-nowrap p-4">{frequentProduct.product.quantity}</td>
                       <td className="whitespace-nowrap p-4">{frequentProduct.product.companyProfit}</td>
-                      <td className="whitespace-nowrap p-4">{frequentProduct.product.price} AED</td>
+                      <td className="whitespace-nowrap p-4">{frequentProduct.product.finalPrice?.toFixed(2)} AED</td>
                       <td className="whitespace-nowrap p-4">{frequentProduct.product.options?.length}</td>
                       <td className="whitespace-nowrap p-4">{frequentProduct.frequency}</td>
                   </tr>

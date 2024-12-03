@@ -36,7 +36,7 @@ const ProductCard = ({product, routeRole}) => {
             toast.error(error.response?.data.message);
         }
     }
-    const selectedProductPrice = Math.round(product.finalPrice).toFixed(2);
+    const selectedProductPrice = product.finalPrice.toFixed(2);
   return (
     <>
     <div key={product.productId} className='flex flex-col text-sm justify-between h-[27rem] bg-gray-50 mb-16 w-full lg:w-1/5 m-1 shadow-xl rounded-xl'>

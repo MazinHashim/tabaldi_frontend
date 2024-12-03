@@ -201,9 +201,9 @@ const OrderDetails = () => {
                     </td>
                     <td className="whitespace-nowrap font-medium text-start">{item.product.name}</td>
                     <td className="whitespace-nowrap font-medium p-2">{item.quantity}</td>
-                    <td className="whitespace-nowrap font-medium p-2">{item.price}</td>
+                    <td className="whitespace-nowrap font-medium p-2">{item.price?.toFixed(2)}</td>
                     <td className="font-medium py-2 text-start">{item.comment===""?"-":item.comment}</td>
-                    <td className="whitespace-nowrap font-medium py-2 px-9 text-end">{item.quantity*item.price} AED</td>
+                    <td className="whitespace-nowrap font-medium py-2 px-9 text-end">{(item.quantity*item.price).toFixed(2)} AED</td>
                 </tr>
                 {!item.selectedOptions?"":
                 item.selectedOptions.map(option=>{
@@ -223,17 +223,17 @@ const OrderDetails = () => {
                 <tr className='font-bold'>
                     <td colSpan={4}></td>
                     <td className="border-b border-gray-300 capitalize text-start">{tOrder["subtotal"]} </td>
-                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.subtotal} {t("aedUnit")}</td>
+                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.subtotal?.toFixed(2)} {t("aedUnit")}</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={4}></td>
                     <td className="border-b border-gray-300 capitalize text-start">{tOrder["discount"]} </td>
-                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.discount} {t("aedUnit")}</td>
+                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.discount?.toFixed(2)} {t("aedUnit")}</td>
                 </tr>
                 <tr className='font-bold'>
                     <td colSpan={4}></td>
                     <td className="border-b border-gray-300 capitalize text-start">{tOrder["shippingCost"]} </td>
-                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.shippingCost} {t("aedUnit")}</td>
+                    <td className='border-b border-gray-300 py-2 px-9 text-end'>{invoice.summary.shippingCost?.toFixed(2)} {t("aedUnit")}</td>
                 </tr>
                 {/* <tr className='font-bold'>
                     <td colSpan={4}></td>
@@ -243,7 +243,7 @@ const OrderDetails = () => {
                 <tr className='font-bold'>
                     <td colSpan={4}></td>
                     <td className="capitalize text-start">{tOrder["grandTotal"]}: </td>
-                    <td className='py-2 px-9 text-end'>{invoice.summary.total} {t("aedUnit")}</td>
+                    <td className='py-2 px-9 text-end'>{invoice.summary.total?.toFixed(2)} {t("aedUnit")}</td>
                 </tr>
             </tbody>
             </table>
