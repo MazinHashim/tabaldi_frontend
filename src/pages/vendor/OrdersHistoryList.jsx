@@ -222,7 +222,7 @@ const OrdersHistoryList = () => {
                                                             {order.status}
                                                         </span>
                                                     </td>
-                                                    <td className="whitespace-nowrap p-4">{order.total.toFixed(2)} {t("aedUnit")}</td>
+                                                    <td className="whitespace-nowrap p-4">{order.total?.toFixed(2)} {t("aedUnit")}</td>
                                                     <td className="whitespace-nowrap p-4">
                                                         <button onClick={() => goToOrderDetails(order.orderId)} className='bg-secondary-color text-white'>{tOrderInfo.viewDetails}</button>
                                                     </td>
