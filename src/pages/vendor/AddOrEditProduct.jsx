@@ -156,9 +156,9 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
             </div>
             <div className="md:w-1/4 my-6">
               <label htmlFor="price" className="text-lg">{tProductInfo.price?.label}</label>
-              <input type="number" name="price" id="price" defaultValue={Math.round(currentProduct?.price)??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.price?.placeholder}
+              <input type="number" min={1} name="price" id="price" defaultValue={Math.round(currentProduct?.price)??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.price?.placeholder}
               onChange={handleProfitAndPriceChange} />
-              {<div className='text-red-600'>{finalPrice}</div>}
+              {<div className='text-red-600'>{isNaN(finalPrice)?finalPrice:""}</div>}
               {errors?.price&&<div className='text-red-600'>{errors?.price}</div>}
             </div>
             <div className="md:w-1/4 my-6">
@@ -180,11 +180,11 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
           </div>
           <div className="flex flex-col md:flex-row flex-wrap justify-between items-start">
             <div className="md:w-1/4 my-6">
-              {!auth.role||!isEdit ?<><label htmlFor="companyProfit" className="text-lg">{tProductInfo.companyProfit?.label}</label>
+              <label htmlFor="companyProfit" className="text-lg">{tProductInfo.companyProfit?.label}</label>
               <input type="number" name="companyProfit" id="companyProfit" defaultValue={currentProduct?.companyProfit??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.companyProfit?.placeholder}
               onChange={handleProfitAndPriceChange} />
               {errors?.companyProfit&&<div className='text-red-600'>{errors?.companyProfit}</div>}
-            </>:""}</div>
+            </div>
             <div className="md:w-1/4 my-6">
               <label htmlFor="duration" className="text-lg">{tProductInfo.duration?.label}</label>
               <input type="text" name="duration" id="duration" defaultValue={currentProduct?.duration??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.duration?.placeholder} />
