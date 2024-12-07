@@ -158,7 +158,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
               <label htmlFor="price" className="text-lg">{tProductInfo.price?.label}</label>
               <input type="number" min={1} name="price" id="price" defaultValue={Math.round(currentProduct?.price)??''} className="sm:text-sm bg-slate-100 rounded-lg w-full p-2.5" placeholder={tProductInfo.price?.placeholder}
               onChange={handleProfitAndPriceChange} />
-              {<div className='text-red-600'>{isNaN(finalPrice)?finalPrice:""}</div>}
+              {<div className='text-red-600'>{isNaN(finalPrice)?"":finalPrice}</div>}
               {errors?.price&&<div className='text-red-600'>{errors?.price}</div>}
             </div>
             <div className="md:w-1/4 my-6">
