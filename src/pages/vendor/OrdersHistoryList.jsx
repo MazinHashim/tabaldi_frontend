@@ -161,8 +161,14 @@ const OrdersHistoryList = () => {
                             <option value="DELIVERED">DELIVERED</option>
                             <option value="CANCELED">CANCELED</option>
                         </select>
-                        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='p-2 m-2 rounded-lg border' placeholder="Start Date" />
-                        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='p-2 m-2 rounded-lg border' placeholder="End Date" />
+                        <div className="m-2">
+                            <label htmlFor="startDate" className='text-xs'>Start Date</label>
+                            <input type="date" id="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='p-2 rounded-lg border' placeholder="Start Date" />
+                        </div>
+                        <div className="m-2">
+                            <label htmlFor="endDate" className='text-xs'>End Date</label>
+                            <input type="date" id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='p-2 rounded-lg border' placeholder="End Date" />
+                        </div>
                         <select 
                             value={vendorType} 
                             onChange={(e) => setVendorType(e.target.value)} 
