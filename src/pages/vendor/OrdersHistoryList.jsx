@@ -161,11 +161,11 @@ const OrdersHistoryList = () => {
                             <option value="DELIVERED">DELIVERED</option>
                             <option value="CANCELED">CANCELED</option>
                         </select>
-                        <div className="m-2">
+                        <div className="flex flex-col m-2">
                             <label htmlFor="startDate" className='text-xs'>Start Date</label>
                             <input type="date" id="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} className='p-2 rounded-lg border' placeholder="Start Date" />
                         </div>
-                        <div className="m-2">
+                        <div className="flex flex-col m-2">
                             <label htmlFor="endDate" className='text-xs'>End Date</label>
                             <input type="date" id="endDate" value={endDate} onChange={(e) => setEndDate(e.target.value)} className='p-2 rounded-lg border' placeholder="End Date" />
                         </div>
