@@ -150,7 +150,7 @@ const OrdersHistoryList = () => {
         <>
             <div className='flex flex-col w-full'>
                 <div className="flex flex-col shadow-4 p-2 rounded-2xl">
-                    <div className="flex justify-between flex-wrap">
+                    <div className="flex justify-between items-end flex-wrap">
                         <input type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
