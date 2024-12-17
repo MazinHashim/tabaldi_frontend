@@ -12,6 +12,9 @@ module.exports = {
       fontFamily: {
         'sans': ['IBM Plex Sans Arabic', 'Roboto', 'Arial', 'sans-serif'],
       },
+      screens: {
+        'custom': '2500px', // Add your custom breakpoint here
+      },
     },
   },
   darkMode: "class",

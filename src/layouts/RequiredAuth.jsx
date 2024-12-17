@@ -68,10 +68,10 @@ const RequiredAuth = ({routeRole}) => {
                     </button>
                 </div>
             </header>
-            <div className='flex flex-col'>
+            {/* <div className='flex flex-col'> */}
                 
                 <div className='flex flex-row justify-between'>
-                    <div className='w-2/12 bg-primary-color rounded-se-3xl'>
+                    <div className='w-2/12 custom:w-1/12 bg-primary-color rounded-se-3xl'>
                         <div className={`mx-10 -mt-10 border-8 border-white self-start h-20 bg-green-50 p-3 rounded-full flex justify-center items-center`}>
                             <img width={100} src={logo} alt='logo' />
                         </div>
@@ -101,7 +101,7 @@ const RequiredAuth = ({routeRole}) => {
                             }
                             </nav>}
                     </div>
-                    <main className='container me-14 mt-10 w-9/12'>
+                    <main className='me-14 custom:ms-14 w-9/12 custom:w-11/12'>
                         <ProductProvider>
                             <OrderProvider>
                                 <CategoryProvider>
@@ -111,7 +111,7 @@ const RequiredAuth = ({routeRole}) => {
                         </ProductProvider>
                     </main>
                 </div>
-            </div>
+            {/* </div> */}
             {/* <footer className='self-stretch h-[200px] w-full bg-slate-800 mx-auto'>Footer</footer> */}
         </div>
     )

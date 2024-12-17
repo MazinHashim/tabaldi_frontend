@@ -7,7 +7,6 @@ import ProductCard from './ProductCard';
 import { useEffect, useState } from 'react';
 import AppLoading from '../../utils/AppLoading';
 import { useLocation } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 const PRODUCT_LIST_URL = "/vendors/{id}/products";
 
@@ -15,9 +14,8 @@ const ProductsList = ({routeRole}) => {
 
     const { auth, setAuth } = useAuth();
     const [showEditModal, setShowEditModal] = useState(false);
-    const token = auth.token;
     const location = useLocation();
-    const{t, i18n} = useTranslation();
+    const{t} = useTranslation();
     const pInfo = t("productFormInfo")
     const vendor = location?.state?.vendor;
     const vendorProductsUrl = PRODUCT_LIST_URL.replace("{id}", `${vendor?.vendorId??auth.vendor?.vendorId}`).concat("?roleName=VENDOR");
@@ -44,7 +42,6 @@ const ProductsList = ({routeRole}) => {
     }
   return (
     <>
-        <ToastContainer />
         <div className="flex justify-between mb-10">
             <h2>{pInfo.products}</h2>
             <button className="bg-secondary-color text-white"

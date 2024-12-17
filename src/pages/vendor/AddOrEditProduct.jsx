@@ -125,7 +125,7 @@ const AddOrEditProduct = ({currentProduct, isEdit=false}) => {
 
   return (
     <>
-      {/* {!isEdit && <ToastContainer/>} */}
+      {!isEdit && <ToastContainer/>}
       <div>
         <h1 className='font-normal'>{tProductInfo[isEdit?"editProductTitle":"addProductTitle"]}</h1>
         <form className='w-full' onSubmit={handleAddOrEditProduct} method='post'>

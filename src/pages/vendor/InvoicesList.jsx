@@ -9,7 +9,7 @@ const INVOICE_LIST_URL = "/vendors/{id}/invoices";
 
 const InvoicesList = () => {
   const {auth} = useAuth()
-    const{t, i18n} = useTranslation();
+    const{t} = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
     const tInvoice = t("invoiceInfo")
     const vendorInvoicesUrl = INVOICE_LIST_URL.replace("{id}", `${auth.vendor?.vendorId}`);
